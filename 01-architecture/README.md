@@ -18,6 +18,7 @@ Se decide una vez, se escribe, y se hace cumplir en la revisión.
 | [layers-and-state.md](./layers-and-state.md) | Capas Presentation/Domain/Data y patrón de estado |
 | [navigation.md](./navigation.md) | Modelo de rutas y reglas de navegación |
 | [decisions/](./decisions/) | Registros de decisiones de arquitectura (ADRs) |
+| [plan-implementacion-login-catalogo.md](./plan-implementacion-login-catalogo.md) | Plan de trabajo para construir `auth` y `catalog` en el repo de código `beauty-salon` |
 | [flows/](./flows/) | Diagramas de apoyo: BPMN anotado, mapa de navegación y cadena de trazabilidad |
 | [mockups/](./mockups/) | Las diez pantallas dibujadas, sus estados clave, los componentes y los tokens |
 | [features/](./features/) | Un documento por feature |

@@ -20,6 +20,10 @@ Es la **documentación de diseño** de ManiCita, escrita antes del código sigui
 SDD descrito en [`00-sdd-guide.md`](./00-sdd-guide.md): primero se decide y se escribe, después
 se implementa.
 
+Este es el único repo de documentación del proyecto: `beauty-salon` (el repo original) se limpió
+el 2026-09-17 para convertirse en el código del frontend. El [`DISCOVERY.md`](./DISCOVERY.md) de
+esta sección (entregable HU-02) se preservó y se trasladó aquí desde ese repo.
+
 **Estudiantes:** Lilly Signey Puentes Rincon y Lizeth Caicedo
 **Asignatura:** Programación Móvil [G1] — 2026-B · CORHUILA
 
