@@ -1,6 +1,6 @@
-# Beauty Salon
+# Beauty Salon — ManiCita
 
-Beauty salon appointment booking and management app
+Aplicación móvil de agendamiento de servicios de manicure en Neiva.
 
 ---
 
@@ -14,90 +14,102 @@ Beauty salon appointment booking and management app
 
 ---
 
-## Manual de documentación — Mobile Governance Framework
+## Qué es este repositorio
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![jesusarielgb-works](https://img.shields.io/badge/org-jesusarielgb--works-blue)](https://github.com/jesusarielgb-works)
+Es la **documentación de diseño** de ManiCita, escrita antes del código siguiendo el enfoque
+SDD descrito en [`00-sdd-guide.md`](./00-sdd-guide.md): primero se decide y se escribe, después
+se implementa.
 
-> Documentation manual and governance scaffold for **mobile applications** — stack-agnostic
-> (Flutter, React Native, native iOS, native Android). A lighter companion to the
-> microservices framework: the same manual-with-templates approach, fewer sections.
-
-**Author:** [Jesus Ariel Gonzalez Bonilla](https://github.com/jesusarielgb-works)
-
-This repository is a **documentation scaffold** for any mobile project. It contains no
-project-specific information. Its purpose is to teach how to govern and document a mobile
-app professionally — showing what goes in each section, why it matters, and how the
-sections relate.
+**Estudiantes:** Lilly Signey Puentes Rincon y Lizeth Caicedo
+**Asignatura:** Programación Móvil [G1] — 2026-B · CORHUILA
 
 ---
 
-## How to use this framework
+## El producto en una frase
 
-1. **Fork** (or copy the structure) into your project repository.
-2. **Read** [`00-sdd-guide.md`](./00-sdd-guide.md) for the fill-in order and methodology.
-3. **Read each section `README.md`** before filling in its documents — they explain what is expected.
-4. **Copy the `_template-*` files** when you need to document a concrete feature, screen,
-   decision, endpoint, entity, test case, or release. Fill in, rename, keep the original template.
-5. **Adapt every neutral rule** to your concrete stack (Flutter / React Native / native).
-6. Once a document is complete, remove the instruction blocks.
+En Neiva agendar una manicure todavía se hace por WhatsApp: la clienta pregunta precios, pregunta
+qué días hay libres y espera horas, mientras la manicurista lleva la agenda en un cuaderno y a veces
+cruza dos clientas a la misma hora. **ManiCita es un producto de dos lados**: el negocio publica sus
+servicios con precio, duración, profesional y horario, y la clienta agenda sobre un cupo que existe
+de verdad.
+
+La decisión de diseño que sostiene todo el proyecto: **el lado del negocio es parte del MVP**, porque
+sin servicios publicados el catálogo de la clienta abre vacío y no hay nada que agendar. Y **los cupos
+no se crean a mano, se calculan**: `horario de atención ÷ duración del servicio`.
 
 ---
 
-## Build flow — section dependencies
+## Decisiones que rigen toda la documentación
 
-> `00-governance` wraps the entire project and applies to every section.
+Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR en
+[`01-architecture/decisions/`](./01-architecture/decisions/).
+
+| # | Decisión | Elegido | ADR |
+|---|----------|---------|-----|
+| 1 | Patrón de estado | Store unidireccional con estado inmutable (Zustand) | [ADR-006](./01-architecture/decisions/records/ADR-006-state-management-pattern.md) |
+| 2 | Stack móvil | Ionic React + TypeScript sobre Capacitor, **solo Android** en la primera entrega | [ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md) |
+| 3 | Almacenamiento local | SQLite (`@capacitor-community/sqlite`) con Drizzle ORM | [ADR-007](./01-architecture/decisions/records/ADR-007-local-storage-capacitor.md) |
+| 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
+| 5 | Idioma de la documentación | Español en todo lo que se adapta al proyecto; los nombres de archivo, las claves de i18n y los términos técnicos estándar (`loading`, `offline-first`, DTO) se mantienen en inglés | — |
+| 6 | Backend | No existe todavía: el contrato de API se **diseña aquí** (stubbed), como lo permite la [Definition of Ready](./00-governance/definition-of-ready.md) | — |
+
+> **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
+> React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
+> definirse que la primera entrega de ManiCita sale **solo para Android**, esa restricción dejó de
+> aplicar y el stack se revisó a Ionic + Capacitor en [ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md).
+> Las decisiones 1 y 4 no cambiaron de fondo, pero se reafirmaron en ADR-006 y ADR-008 porque, según la
+> convención propia de este repo, cambiar el stack obliga a revisar todo lo que dependía de él.
+
+> Las secciones `04-quality` y `05-release` se conservan tal como vienen del framework original,
+> en inglés: quedan fuera del alcance de esta entrega.
+
+---
+
+## Orden de lectura
 
 ```mermaid
 graph TD
-    subgraph PROCESS["🔵 PROCESS"]
-        G0["00-governance\nagile · git · DoR/DoD · security rules"]
+    subgraph PROCESO["🔵 PROCESO"]
+        G0["00-governance\nágil · git · DoR/DoD · reglas de seguridad"]
     end
 
-    subgraph DESIGN["🟢 DESIGN"]
-        A1["01-architecture\nstructure · layers · state · navigation · ADRs"]
-        A2["02-code-and-ui\ncoding standards · design system · a11y · i18n"]
+    subgraph DISENO["🟢 DISEÑO"]
+        A1["01-architecture\nestructura · capas · estado · navegación · ADRs"]
+        A2["02-code-and-ui\nestándares · design system · a11y · i18n"]
     end
 
-    subgraph RULES["🟣 RULES"]
-        A3["03-api-and-data\nnetworking · auth · persistence · offline"]
+    subgraph REGLAS["🟣 REGLAS"]
+        A3["03-api-and-data\nred · auth · persistencia · offline"]
     end
 
-    subgraph DELIVERY["🟠 DELIVERY"]
-        A4["04-quality\ntesting · performance · security"]
-        A5["05-release\nCI/CD · signing · stores · observability"]
+    subgraph ENTREGA["🟠 ENTREGA (fuera de alcance)"]
+        A4["04-quality"]
+        A5["05-release"]
     end
 
     G0 --> A1 --> A2 --> A3 --> A4 --> A5
 ```
 
----
+## Secciones
 
-## Sections
-
-| # | Section | Content |
-|---|---------|---------|
-| [00](./00-governance/) | Governance | Agile process, git conventions, DoR/DoD, security rules |
-| [01](./01-architecture/) | Architecture | Project structure, layers, state, navigation, ADRs |
-| [02](./02-code-and-ui/) | Code & UI | Coding standards, design system, accessibility, i18n |
-| [03](./03-api-and-data/) | API & Data | Networking, auth, persistence, offline & sync |
-| [04](./04-quality/) | Quality | Testing strategy, performance budgets, mobile security |
-| [05](./05-release/) | Release | CI/CD, signing, store distribution, observability |
-
-Companions:
-[monolith-governance-framework](https://github.com/jesusarielgb-works/monolith-governance-framework) ·
-[microservices-governance-framework](https://github.com/jesusarielgb-works/microservices-governance-framework)
+| # | Sección | Contenido |
+|---|---------|-----------|
+| [00](./00-governance/) | Governance | Proceso ágil, convenciones de git, DoR/DoD, reglas de seguridad |
+| [01](./01-architecture/) | Architecture | Estructura, capas, estado, navegación, ADRs, features y pantallas |
+| [02](./02-code-and-ui/) | Code & UI | Estándares de código, design system, accesibilidad, i18n, componentes |
+| [03](./03-api-and-data/) | API & Data | Red, autenticación, persistencia, offline, endpoints y entidades |
+| [04](./04-quality/) | Quality | *Sin adaptar — fuera del alcance de esta entrega* |
+| [05](./05-release/) | Release | *Sin adaptar — fuera del alcance de esta entrega* |
 
 ---
 
-## How to Cite
+## Framework base
+
+Este repositorio parte del **Mobile Governance Framework v1.0.0** de
+[Jesus Ariel Gonzalez Bonilla](https://github.com/jesusarielgb-works), licencia MIT.
 
 > Gonzalez Bonilla, J. A. (2026). *Mobile Governance Framework* (v1.0.0). jesusarielgb-works. https://github.com/jesusarielgb-works/mobile-governance-framework
 
-## Contributing
+## Licencia
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-MIT — Jesus Ariel Gonzalez Bonilla. See [LICENSE](LICENSE).
+MIT — ver [LICENSE](LICENSE).

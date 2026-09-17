@@ -1,37 +1,48 @@
 # 00 — Governance
 
-> This section defines the agreements the team commits to follow throughout the project.
-> Every team member must read all documents here before their first commit.
+> Esta sección define los acuerdos de trabajo del proyecto ManiCita.
+> Todo lo que está aquí aplica antes del primer commit y por encima de cualquier convención local.
 
 ---
 
-## Documents in this section
+## Documentos de esta sección
 
-| File | Purpose |
-|------|---------|
-| [agile-conventions.md](./agile-conventions.md) | Sprint structure, ceremonies, estimation |
-| [git-conventions.md](./git-conventions.md) | Branch strategy, commit format, PR & release policy |
-| [definition-of-ready.md](./definition-of-ready.md) | Checklist for a story to enter a sprint |
-| [definition-of-done.md](./definition-of-done.md) | Checklist every completed story must satisfy |
-| [security-rules.md](./security-rules.md) | Code-level security rules for mobile apps |
-| [_template-sprint-retro.md](./_template-sprint-retro.md) | Template to capture a sprint retrospective |
-
----
-
-## How governance applies
-
-Governance rules apply to **the entire project** — every section, every feature, every team
-member. If a rule conflicts with a local convention, governance wins unless a new ADR
-(`01-architecture/decisions/`) overrides it.
-
-> Change a governance rule only through team agreement. Document the change and the reason,
-> and announce it before the next sprint.
+| Archivo | Para qué sirve |
+|---------|----------------|
+| [agile-conventions.md](./agile-conventions.md) | Sprints, ceremonias y estimación |
+| [git-conventions.md](./git-conventions.md) | Estrategia de ramas, formato de commits, PR y releases |
+| [definition-of-ready.md](./definition-of-ready.md) | Checklist para que una historia entre al sprint |
+| [definition-of-done.md](./definition-of-done.md) | Checklist que toda historia terminada debe cumplir |
+| [security-rules.md](./security-rules.md) | Reglas de seguridad no negociables |
+| [_template-sprint-retro.md](./_template-sprint-retro.md) | Plantilla para registrar una retrospectiva |
 
 ---
 
-## Questions this section must answer
+## Cómo aplica la gobernanza
 
-- How does the team plan, estimate, and close work?
-- What does "ready" and "done" mean for a story?
-- How are branches, commits, and releases named?
-- What are the non-negotiable security rules?
+Estas reglas aplican a **todo el proyecto**: todas las secciones, todas las features. Si una regla
+choca con una convención local, gana la gobernanza, salvo que una ADR nueva
+(`01-architecture/decisions/`) la reemplace explícitamente.
+
+> Una regla de gobernanza solo cambia por acuerdo, y el cambio se documenta con su motivo antes
+> del siguiente sprint.
+
+---
+
+## Retrospectivas registradas
+
+| Sprint | Documento | Fecha |
+|--------|-----------|-------|
+| — | Ninguna todavía: los sprints aún no se han ejecutado | — |
+
+> Cuando se cierre el Sprint 1 se copia `_template-sprint-retro.md` a `retros/sprint-01.md`
+> y se agrega la fila aquí. La plantilla original no se toca.
+
+---
+
+## Preguntas que esta sección debe responder
+
+- ¿Cómo se planea, se estima y se cierra el trabajo? → [agile-conventions.md](./agile-conventions.md)
+- ¿Qué significa "lista" y "terminada" para una historia? → [DoR](./definition-of-ready.md) y [DoD](./definition-of-done.md)
+- ¿Cómo se nombran ramas, commits y releases? → [git-conventions.md](./git-conventions.md)
+- ¿Cuáles son las reglas de seguridad innegociables? → [security-rules.md](./security-rules.md)

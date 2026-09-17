@@ -1,0 +1,1269 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ManiCita — Mockups de las diez pantallas</title>
+<style>
+/* ============================================================
+   TABLERO — la voz del documento. Gris y verde laca.
+   La app es lo unico que habla en rosa.
+   Sin dependencias externas: tipografias del sistema.
+   ============================================================ */
+:root{
+  --paper:#E6E7E3;
+  --paper-2:#EDEEEB;
+  --ink:#22242A;
+  --ink-2:#5F646C;
+  --ink-3:#8A9098;
+  --rule:#CDD0CA;
+  --lacquer:#1F4D3D;
+
+  --sans:system-ui,"Segoe UI Variable Text","Segoe UI",Roboto,-apple-system,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+
+  /* ---- Tokens reales de ManiCita, tema claro ---- */
+  --brand:#A8456B; --brandSoft:#F7E8EE; --bg:#FBF7F8; --surface:#FFFFFF;
+  --tp:#1F1A1D; --ts:#6B5F65; --border:#E7DDE1;
+  --success:#2F6B4F; --warning:#8A5C00; --error:#A32B2B; --disabled:#9A9096;
+
+  --s-xs:4px; --s-sm:8px; --s-md:12px; --s-lg:16px; --s-xl:24px; --s-xxl:32px;
+  --r-sm:8px; --r-md:12px; --r-pill:999px;
+}
+.dark{
+  --brand:#E8A0BC; --brandSoft:#3A2630; --bg:#0F0C0E; --surface:#1A1518;
+  --tp:#F5EFF2; --ts:#B7A9AF; --border:#2E262A;
+  --success:#7FBF9E; --warning:#E2B25C; --error:#F09A9A; --disabled:#6E646A;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ---------- Cabecera ---------- */
+.masthead{padding:64px 0 0}
+.kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--ink-2);
+  margin:0 0 20px;
+}
+.kicker b{color:var(--ink);font-weight:600}
+h1{
+  font-size:clamp(38px,6.2vw,68px); line-height:1.02; letter-spacing:-.028em;
+  font-weight:700; margin:0 0 20px; max-width:16ch;
+}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:56ch;margin:0}
+.lede em{font-style:normal;color:var(--ink);font-weight:600}
+
+/* ---------- Hero: la cuadricula de horas ---------- */
+.hero{
+  margin:52px 0 0; border-top:1px solid var(--rule); padding-top:40px;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,420px); gap:56px; align-items:start;
+}
+.hero-note h2{font-size:26px;line-height:1.2;letter-spacing:-.02em;margin:0 0 14px;font-weight:650;max-width:20ch}
+.hero-note p{color:var(--ink-2);margin:0 0 14px;max-width:46ch}
+.formula{
+  font-family:var(--mono);font-size:13.5px;line-height:1.7;color:var(--lacquer);
+  background:var(--paper-2);border-left:2px solid var(--lacquer);
+  padding:14px 16px;margin:22px 0 0;white-space:pre-wrap;
+}
+.grid-demo{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:22px}
+.grid-demo .gd-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.grid-demo .gd-day{font:600 17px/1.2 var(--sans);color:var(--tp)}
+.grid-demo .gd-dur{font:400 13px/1.2 var(--sans);color:var(--ts)}
+.gd-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gd-slot{
+  border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);
+  color:var(--tp);font:500 16px/1 var(--sans);padding:15px 0;text-align:center;
+  opacity:0;animation:pop .34s ease forwards;
+}
+.gd-slot.sel{background:var(--brand);border-color:var(--brand);color:#fff}
+.gd-slot.off{border-color:transparent;color:var(--disabled);text-decoration:line-through}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gd-slot{animation:none;opacity:1}}
+
+/* ---------- Secciones ---------- */
+section{margin:96px 0 0}
+.sec-head{border-top:2px solid var(--ink);padding-top:14px;margin-bottom:8px;
+  display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.sec-head h2{font-size:23px;letter-spacing:-.02em;margin:0;font-weight:650}
+.sec-head .count{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.sec-intro{color:var(--ink-2);max-width:64ch;margin:0 0 34px}
+
+.band{margin:0 0 46px}
+.band-title{
+  display:flex;align-items:baseline;gap:12px;margin:0 0 22px;
+  padding-bottom:9px;border-bottom:1px solid var(--rule);
+}
+.band-title h3{margin:0;font-size:16.5px;font-weight:650;letter-spacing:-.01em}
+.band-title span{color:var(--ink-2);font-size:14px}
+
+.plates{display:flex;flex-wrap:wrap;gap:34px 30px}
+
+/* ---------- Placa: rotulo + telefono ---------- */
+.plate{width:340px}
+.plate-cap{margin:0 0 12px}
+.plate-cap .nm{font-weight:650;font-size:15px;letter-spacing:-.01em;display:block}
+.plate-cap .rt{font-family:var(--mono);font-size:12.5px;color:var(--lacquer);display:block;margin-top:2px;word-break:break-all}
+.plate-cap .ds{font-size:13.5px;color:var(--ink-2);display:block;margin-top:5px;line-height:1.45}
+
+.phone{
+  width:340px;height:684px;border:1px solid var(--rule);border-radius:26px;
+  background:var(--bg);overflow:hidden;position:relative;
+  box-shadow:0 1px 0 rgba(34,36,42,.05);
+}
+.phone.dark{border-color:#3A3F44}
+.statusbar{
+  height:30px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--s-lg);font:600 12px/1 var(--sans);color:var(--tp);background:var(--bg);
+}
+.statusbar .dots{display:flex;gap:3px;align-items:center}
+.statusbar i{width:4px;height:4px;border-radius:50%;background:var(--tp);display:block;opacity:.75}
+.screen{height:654px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg)}
+.scroll{flex:1;overflow:hidden;padding:0 var(--s-lg)}
+.pad{padding:0 var(--s-lg)}
+
+/* ---------- Primitivas de la app (tokens, nada quemado) ---------- */
+.t-display{font:700 28px/34px var(--sans);color:var(--tp);letter-spacing:-.4px}
+.t-title{font:600 20px/26px var(--sans);color:var(--tp)}
+.t-body{font:400 16px/24px var(--sans);color:var(--tp)}
+.t-label{font:500 14px/20px var(--sans);color:var(--tp)}
+.t-caption{font:400 12px/16px var(--sans);color:var(--ts)}
+.muted{color:var(--ts)}
+
+.appbar{display:flex;align-items:center;gap:var(--s-md);padding:var(--s-sm) var(--s-lg) var(--s-md)}
+.back{width:32px;height:32px;border:1px solid var(--border);border-radius:var(--r-pill);
+  background:var(--surface);color:var(--tp);display:grid;place-items:center;font-size:15px;flex:none}
+
+.btn{
+  display:block;width:100%;border:0;border-radius:var(--r-sm);
+  background:var(--brand);color:#fff;font:600 14px/20px var(--sans);
+  padding:14px var(--s-lg);text-align:center;
+}
+.btn.off{background:var(--disabled)}
+.btn.load{opacity:1}
+.btn-2{
+  display:block;width:100%;border:1px solid var(--error);border-radius:var(--r-sm);
+  background:transparent;color:var(--error);font:600 14px/20px var(--sans);
+  padding:13px var(--s-lg);text-align:center;
+}
+.btn-2.off{border-color:var(--border);color:var(--disabled)}
+.foot{padding:var(--s-md) var(--s-lg) var(--s-lg);background:var(--bg);border-top:1px solid var(--border)}
+.linkline{text-align:center;font:400 13px/18px var(--sans);color:var(--ts);margin-top:var(--s-md)}
+.linkline b{color:var(--brand);font-weight:600}
+
+.field{margin-bottom:var(--s-lg)}
+.field label{display:block;font:500 14px/20px var(--sans);color:var(--tp);margin-bottom:var(--s-xs)}
+.input{
+  border:1px solid var(--border);background:var(--surface);border-radius:var(--r-sm);
+  padding:12px var(--s-md);font:400 16px/24px var(--sans);color:var(--tp);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;
+}
+.input.focus{border:2px solid var(--brand);padding:11px 11px}
+.input.err{border-color:var(--error)}
+.input.dis{background:var(--bg);color:var(--disabled)}
+.input .ph{color:var(--ts)}
+.help{font:400 12px/16px var(--sans);color:var(--ts);margin-top:var(--s-xs)}
+.help.bad{color:var(--error);display:flex;gap:5px;align-items:flex-start}
+
+.chips{display:flex;gap:var(--s-sm);overflow:hidden;padding-bottom:var(--s-md)}
+.chip{
+  border:1px solid var(--border);background:var(--surface);color:var(--ts);
+  border-radius:var(--r-pill);padding:7px 13px;font:500 13px/16px var(--sans);white-space:nowrap;flex:none;
+}
+.chip.on{background:var(--brandSoft);border-color:var(--brand);color:var(--brand)}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:var(--s-md);display:flex;gap:var(--s-md);margin-bottom:var(--s-md);
+  box-shadow:0 1px 2px rgba(31,26,29,.05);
+}
+.thumb{width:74px;height:74px;border-radius:var(--r-sm);background:var(--brandSoft);flex:none;
+  display:grid;place-items:center;color:var(--brand);font:600 11px/1.3 var(--sans);text-align:center}
+.card .meta{min-width:0;flex:1}
+.card .nm{font:500 14px/20px var(--sans);color:var(--tp);margin:0 0 3px}
+.card .pr{font:600 14px/20px var(--sans);color:var(--brand)}
+.card .sub{font:400 12px/16px var(--sans);color:var(--ts);margin:2px 0 0}
+
+.badge{display:inline-block;border-radius:var(--r-pill);padding:3px 9px;font:500 12px/16px var(--sans)}
+.b-warn{background:#FBF0DA;color:var(--warning)}
+.b-ok{background:#E2F0E8;color:var(--success)}
+.b-err{background:#F7E1E1;color:var(--error)}
+.b-mut{background:var(--bg);color:var(--ts);border:1px solid var(--border)}
+.dark .b-warn{background:#3A2E14;color:var(--warning)}
+.dark .b-ok{background:#173226;color:var(--success)}
+.dark .b-err{background:#3A1D1D;color:var(--error)}
+
+.tabs{display:flex;gap:var(--s-xl);border-bottom:1px solid var(--border);margin-bottom:var(--s-md)}
+.tab{padding:var(--s-sm) 0;font:500 14px/20px var(--sans);color:var(--ts)}
+.tab.on{color:var(--brand);box-shadow:inset 0 -2px 0 var(--brand)}
+
+.days{display:flex;gap:var(--s-sm);padding-bottom:var(--s-md);overflow:hidden}
+.day{
+  flex:none;width:50px;border:1px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface);text-align:center;padding:7px 0;
+}
+.day .d1{font:400 11px/14px var(--sans);color:var(--ts)}
+.day .d2{font:600 16px/20px var(--sans);color:var(--tp)}
+.day.on{background:var(--brand);border-color:var(--brand)}
+.day.on .d1,.day.on .d2{color:#fff}
+.day.off .d1,.day.off .d2{color:var(--disabled)}
+.day .dot{width:4px;height:4px;border-radius:50%;background:var(--brand);margin:3px auto 0}
+
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-sm)}
+.slot{
+  border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);
+  color:var(--tp);font:500 14px/20px var(--sans);padding:11px 0;text-align:center;
+}
+.slot.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.slot.no{border-color:transparent;color:var(--disabled);text-decoration:line-through}
+
+.rowline{display:flex;justify-content:space-between;gap:var(--s-md);
+  padding:var(--s-md) 0;border-bottom:1px solid var(--border)}
+.rowline .k{font:400 12px/16px var(--sans);color:var(--ts)}
+.rowline .v{font:400 16px/24px var(--sans);color:var(--tp);text-align:right}
+
+.banner{
+  background:var(--brandSoft);border-radius:var(--r-sm);padding:var(--s-sm) var(--s-md);
+  font:400 12px/16px var(--sans);color:var(--tp);margin-bottom:var(--s-md);
+  display:flex;gap:var(--s-sm);align-items:flex-start;
+}
+.banner.warn{background:#FBF0DA;color:#5A3D00}
+.dark .banner.warn{background:#3A2E14;color:var(--warning)}
+
+.empty{padding:var(--s-xxl) var(--s-sm);text-align:center}
+.empty .art{width:96px;height:96px;border-radius:var(--r-pill);background:var(--brandSoft);
+  margin:0 auto var(--s-lg);display:grid;place-items:center;font-size:34px}
+.empty h4{font:600 20px/26px var(--sans);color:var(--tp);margin:0 0 var(--s-sm)}
+.empty p{font:400 16px/24px var(--sans);color:var(--ts);margin:0 auto var(--s-lg);max-width:26ch}
+
+.switch{width:44px;height:26px;border-radius:var(--r-pill);background:var(--brand);
+  position:relative;flex:none}
+.switch.off{background:var(--disabled)}
+.switch::after{content:"";position:absolute;top:3px;left:21px;width:20px;height:20px;
+  border-radius:50%;background:#fff}
+.switch.off::after{left:3px}
+
+.skel{background:var(--border);border-radius:var(--r-sm);height:12px;margin-bottom:8px}
+
+.roles{display:flex;gap:var(--s-md);margin-bottom:var(--s-lg)}
+.role{
+  flex:1;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-md);text-align:center;
+}
+.role.on{border:2px solid var(--brand);background:var(--brandSoft);padding:11px}
+.role .ic{font-size:22px;display:block;margin-bottom:4px}
+.role .tx{font:500 13px/17px var(--sans);color:var(--tp)}
+
+.agenda-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:var(--s-md);margin-bottom:var(--s-md)}
+.agenda-row .hr{font:600 16px/20px var(--sans);color:var(--tp)}
+.mini{display:flex;gap:var(--s-sm);margin-top:var(--s-md)}
+.mini button{flex:1;border-radius:var(--r-sm);padding:9px 0;font:600 13px/16px var(--sans);border:1px solid}
+.mini .ok{background:var(--brand);border-color:var(--brand);color:#fff}
+.mini .no{background:transparent;border-color:var(--border);color:var(--tp)}
+
+/* ---------- Anotacion del tablero sobre una placa ---------- */
+.ann{
+  border-left:2px solid var(--lacquer);padding:2px 0 2px 12px;margin:0 0 12px;
+  font-size:13.5px;line-height:1.5;color:var(--ink-2);
+}
+.ann b{color:var(--lacquer);font-weight:650}
+
+/* ---------- Componentes ---------- */
+.comp{border-top:1px solid var(--rule);padding:22px 0 0;margin:0 0 34px;
+  display:grid;grid-template-columns:210px minmax(0,1fr);gap:30px}
+.comp h4{margin:0 0 6px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.comp .who{font-size:13.5px;color:var(--ink-2);margin:0}
+.comp .who code{font-family:var(--mono);font-size:12px;color:var(--lacquer)}
+.states{display:flex;flex-wrap:wrap;gap:22px}
+.st{width:186px}
+.st .lb{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-bottom:7px}
+.stage{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:14px}
+
+/* ---------- Tokens: carta de esmaltes ---------- */
+.deck{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px}
+.polish{width:132px}
+.polish .cap{height:88px;border-radius:10px 10px 3px 3px;border:1px solid rgba(34,36,42,.14)}
+.polish .base{height:34px;border-radius:3px 3px 10px 10px;border:1px solid rgba(34,36,42,.14);
+  border-top:0;background:var(--paper-2);display:grid;place-items:center}
+.polish .base span{font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.polish .nm{font-family:var(--mono);font-size:11.5px;color:var(--ink);margin-top:7px;display:block}
+.polish .us{font-size:12px;color:var(--ink-2);line-height:1.4;display:block;margin-top:1px}
+
+.ratios{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px}
+.ratios th,.ratios td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule)}
+.ratios th{font-size:12.5px;color:var(--ink-2);font-weight:600}
+.ratios td:first-child{font-family:var(--mono);font-size:12.5px}
+.ratios .yes{color:var(--lacquer);font-weight:600}
+.ratios .lim{color:#8A5C00;font-weight:600}
+
+.scale{border-top:1px solid var(--rule);margin-top:34px;padding-top:22px}
+.scale-row{display:grid;grid-template-columns:172px minmax(0,1fr);gap:22px;align-items:baseline;
+  padding:11px 0;border-bottom:1px solid var(--rule)}
+.scale-row .tk{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.spaces{display:flex;align-items:flex-end;gap:16px;margin-top:22px;flex-wrap:wrap}
+.sp{text-align:center}
+.sp .bar{background:var(--lacquer);border-radius:2px;margin:0 auto 7px}
+.sp .tk{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+
+footer{margin:104px 0 0;border-top:2px solid var(--ink);padding:18px 0 72px;
+  font-size:13.5px;color:var(--ink-2);max-width:78ch;line-height:1.6}
+footer code{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+footer b{color:var(--ink)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .comp{grid-template-columns:1fr;gap:16px}
+  .wrap{padding:0 20px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">ManiCita &nbsp;/&nbsp; Mockups de interfaz &nbsp;/&nbsp; <b>Programación Móvil [G1] 2026-B</b> &nbsp;/&nbsp; CORHUILA</p>
+  <h1>Diez pantallas, un solo sistema.</h1>
+  <p class="lede">Ninguna de estas pantallas se diseñó aquí: todas estaban ya decididas en
+  <em>screens/</em> y en <em>design-system.md</em>. Esta lámina solo las dibuja, con los tokens
+  exactos, para poder mirarlas juntas y comprobar que se parecen entre sí.</p>
+
+  <div class="hero">
+    <div class="hero-note">
+      <h2>La pantalla que reemplaza el cuaderno</h2>
+      <p>Una manicurista de Neiva lleva su agenda a mano y a veces cruza dos clientas a la misma
+      hora. ManiCita no le pide que cree sus horas disponibles: le pide su horario una vez, y las
+      calcula.</p>
+      <p>Por eso el componente central del producto no es una lista ni un formulario, sino esta
+      cuadrícula. Es lo primero que hay que ver bien.</p>
+      <div class="formula">cupos del día = horario de la profesional ÷ duración del servicio
+                 − los bloques ya tomados</div>
+    </div>
+
+    <div class="grid-demo" aria-label="Cuadrícula de cupos del viernes 12">
+      <div class="gd-head">
+        <span class="gd-day">Viernes 12 de septiembre</span>
+        <span class="gd-dur">60 min</span>
+      </div>
+      <div class="gd-slots">
+        <div class="gd-slot" style="animation-delay:.05s">9:00</div>
+        <div class="gd-slot off" style="animation-delay:.10s">10:00</div>
+        <div class="gd-slot" style="animation-delay:.15s">11:00</div>
+        <div class="gd-slot sel" style="animation-delay:.20s">12:00</div>
+        <div class="gd-slot off" style="animation-delay:.25s">13:00</div>
+        <div class="gd-slot" style="animation-delay:.30s">14:00</div>
+        <div class="gd-slot" style="animation-delay:.35s">15:00</div>
+        <div class="gd-slot off" style="animation-delay:.40s">16:00</div>
+        <div class="gd-slot" style="animation-delay:.45s">17:00</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== PANTALLAS ============================== -->
+<section>
+  <div class="sec-head">
+    <h2>Las diez pantallas</h2>
+    <span class="count">Diez rutas repartidas en cinco features</span>
+  </div>
+  <p class="sec-intro">Agrupadas por los dos lados del marketplace, no por orden alfabético. Esa
+  división es la decisión que sostiene el proyecto: sin el lado del negocio, el catálogo de la
+  clienta abre vacío y no hay nada que agendar.</p>
+
+  <!-- ---------- BANDA: cuenta ---------- -->
+  <div class="band">
+    <div class="band-title">
+      <h3>Cuenta</h3>
+      <span>Se pide solo al agendar o al publicar, nunca al abrir la app</span>
+    </div>
+    <div class="plates">
+
+      <!-- LOGIN -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">LoginScreen</span>
+          <span class="rt">/login</span>
+          <span class="ds">Entrar con correo y contraseña. El encabezado dice por qué se está pidiendo la sesión.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="scroll" style="padding-top:32px">
+              <div style="text-align:center;margin-bottom:32px">
+                <div style="width:56px;height:56px;border-radius:16px;background:var(--brandSoft);
+                     margin:0 auto 16px;display:grid;place-items:center;font-size:26px">💅</div>
+                <div class="t-display" style="margin-bottom:4px">ManiCita</div>
+                <div class="t-body muted">Inicia sesión para agendar</div>
+              </div>
+              <div class="field">
+                <label>Correo</label>
+                <div class="input"><span>laura@correo.com</span></div>
+              </div>
+              <div class="field">
+                <label>Contraseña</label>
+                <div class="input"><span>••••••••</span><span class="muted t-caption">Mostrar</span></div>
+              </div>
+            </div>
+            <div class="foot">
+              <div class="btn">Entrar</div>
+              <div class="linkline">¿No tienes cuenta? <b>Crear cuenta</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTRO -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">SignUpScreen</span>
+          <span class="rt">/registro</span>
+          <span class="ds">El rol es la primera decisión del formulario, no la última: cambia todo lo que sigue.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="scroll" style="padding-top:20px">
+              <div class="t-display" style="margin-bottom:16px">Crear cuenta</div>
+              <div class="roles">
+                <div class="role on"><span class="ic">🙋‍♀️</span><span class="tx">Quiero agendar</span></div>
+                <div class="role"><span class="ic">💼</span><span class="tx">Ofrezco servicios</span></div>
+              </div>
+              <div class="field">
+                <label>Nombre</label>
+                <div class="input"><span>Laura Gómez</span></div>
+              </div>
+              <div class="field">
+                <label>Celular</label>
+                <div class="input err"><span>310555123</span></div>
+                <div class="help bad"><span>⚠</span><span>Debe tener 10 dígitos</span></div>
+              </div>
+              <div class="field">
+                <label>Correo</label>
+                <div class="input"><span class="ph">tu@correo.com</span></div>
+              </div>
+            </div>
+            <div class="foot">
+              <div class="btn">Crear cuenta</div>
+              <div class="linkline">¿Ya tienes cuenta? <b>Iniciar sesión</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ---------- BANDA: clienta ---------- -->
+  <div class="band">
+    <div class="band-title">
+      <h3>El lado de la clienta</h3>
+      <span>Explorar, agendar y llevar el control de sus citas</span>
+    </div>
+    <div class="plates">
+
+      <!-- CATALOGO -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">CatalogScreen</span>
+          <span class="rt">/servicios</span>
+          <span class="ds">Pantalla de entrada. Se explora sin cuenta: pedir registro aquí es perder a quien solo mira precios.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="pad" style="padding-top:8px">
+              <div class="t-display" style="margin-bottom:12px">Servicios</div>
+              <div class="chips">
+                <span class="chip on">Todos</span>
+                <span class="chip">Tradicional</span>
+                <span class="chip">Semiperm.</span>
+                <span class="chip">Acrílicas</span>
+              </div>
+            </div>
+            <div class="scroll">
+              <div class="card">
+                <div class="thumb">foto</div>
+                <div class="meta">
+                  <p class="nm">Manicure semipermanente</p>
+                  <span class="pr">$45.000</span>
+                  <p class="sub">60 min · Nails Neiva</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="thumb">foto</div>
+                <div class="meta">
+                  <p class="nm">Manicure tradicional</p>
+                  <span class="pr">$28.000</span>
+                  <p class="sub">45 min · Estudio Bella</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="thumb">foto</div>
+                <div class="meta">
+                  <p class="nm">Uñas acrílicas</p>
+                  <span class="pr">$95.000</span>
+                  <p class="sub">120 min · Glam Huila</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="thumb">foto</div>
+                <div class="meta">
+                  <p class="nm">Retiro de semipermanente</p>
+                  <span class="pr">$15.000</span>
+                  <p class="sub">30 min · Nails Neiva</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="thumb">foto</div>
+                <div class="meta">
+                  <p class="nm">Decoración por uña</p>
+                  <span class="pr">$6.000</span>
+                  <p class="sub">15 min · Estudio Bella</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETALLE SERVICIO -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">ServiceDetailScreen</span>
+          <span class="rt">/servicio/:servicioId</span>
+          <span class="ds">Recibe el enlace que una clienta comparte por WhatsApp, así que funciona sin sesión.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div style="height:168px;background:var(--brandSoft);position:relative;display:grid;place-items:center">
+              <span style="color:var(--brand);font:600 12px/1 var(--sans)">FOTO DEL SERVICIO</span>
+              <div class="back" style="position:absolute;top:12px;left:16px">←</div>
+            </div>
+            <div class="scroll" style="padding-top:16px">
+              <div class="t-title" style="margin-bottom:6px">Manicure semipermanente</div>
+              <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+                <span style="font:700 22px/26px var(--sans);color:var(--brand)">$45.000</span>
+                <span class="t-caption">60 minutos</span>
+              </div>
+              <p class="t-body" style="margin:0 0 16px">Incluye limado, cutícula, esmaltado
+                semipermanente y decoración sencilla.</p>
+              <div class="rowline"><span class="k">Atiende</span><span class="v">Marcela Ruiz</span></div>
+              <div class="rowline"><span class="k">Salón</span><span class="v">Nails Neiva</span></div>
+              <div class="rowline" style="border:0"><span class="k">Dirección</span><span class="v">Calle 8 # 5-32</span></div>
+            </div>
+            <div class="foot"><div class="btn">Agendar</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENDAR -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">BookAppointmentScreen</span>
+          <span class="rt">/agendar/:servicioId</span>
+          <span class="ds">Los días sin cupos se ven deshabilitados. Si esto funciona una vez de punta a punta, el MVP cumplió.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="appbar"><div class="back">←</div>
+              <div style="min-width:0">
+                <div class="t-label" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Manicure semipermanente</div>
+                <div class="t-caption">$45.000 · 60 min</div>
+              </div>
+            </div>
+            <div class="pad">
+              <div class="days">
+                <div class="day off"><div class="d1">jue</div><div class="d2">11</div></div>
+                <div class="day on"><div class="d1">vie</div><div class="d2">12</div></div>
+                <div class="day"><div class="d1">sáb</div><div class="d2">13</div><div class="dot"></div></div>
+                <div class="day off"><div class="d1">dom</div><div class="d2">14</div></div>
+                <div class="day"><div class="d1">lun</div><div class="d2">15</div><div class="dot"></div></div>
+              </div>
+            </div>
+            <div class="scroll">
+              <div class="t-caption" style="margin-bottom:10px">Horas libres del viernes 12</div>
+              <div class="slots">
+                <div class="slot">9:00</div><div class="slot no">10:00</div><div class="slot">11:00</div>
+                <div class="slot on">12:00</div><div class="slot no">13:00</div><div class="slot">14:00</div>
+                <div class="slot">15:00</div><div class="slot no">16:00</div><div class="slot">17:00</div>
+              </div>
+            </div>
+            <div class="foot"><div class="btn">Confirmar cita</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIS CITAS -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">MyAppointmentsScreen</span>
+          <span class="rt">/mis-citas</span>
+          <span class="ds">Se abre camino al salón, muchas veces sin buena señal. Por eso las citas se cachean.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="pad" style="padding-top:8px">
+              <div class="t-display" style="margin-bottom:12px">Mis citas</div>
+              <div class="tabs"><span class="tab on">Próximas</span><span class="tab">Pasadas</span></div>
+            </div>
+            <div class="scroll">
+              <div class="card" style="display:block">
+                <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px">
+                  <span class="t-label">Viernes 12, 12:00 p. m.</span>
+                  <span class="badge b-ok">Confirmada</span>
+                </div>
+                <p class="t-body" style="margin:0">Manicure semipermanente</p>
+                <p class="sub">Nails Neiva · Marcela Ruiz</p>
+              </div>
+              <div class="card" style="display:block">
+                <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px">
+                  <span class="t-label">Martes 23, 3:00 p. m.</span>
+                  <span class="badge b-warn">Pendiente</span>
+                </div>
+                <p class="t-body" style="margin:0">Uñas acrílicas</p>
+                <p class="sub">Glam Huila · Diana Losada</p>
+              </div>
+              <div class="card" style="display:block">
+                <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px">
+                  <span class="t-label">Sábado 27, 10:00 a. m.</span>
+                  <span class="badge b-warn">Pendiente</span>
+                </div>
+                <p class="t-body" style="margin:0">Retiro de semipermanente</p>
+                <p class="sub">Nails Neiva · Marcela Ruiz</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETALLE CITA -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">AppointmentDetailScreen</span>
+          <span class="rt">/cita/:citaId</span>
+          <span class="ds">Se abre justo después de agendar, así que también funciona como comprobante.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="appbar"><div class="back">←</div><div class="t-label">Tu cita</div></div>
+            <div class="scroll">
+              <div style="text-align:center;padding:var(--s-md) 0 var(--s-xl)">
+                <span class="badge b-ok" style="font-size:14px;padding:6px 14px">✓ Confirmada</span>
+                <div class="t-display" style="margin-top:14px">Viernes 12</div>
+                <div class="t-title muted" style="font-weight:400">12:00 p. m.</div>
+              </div>
+              <div class="rowline"><span class="k">Servicio</span><span class="v">Manicure semipermanente</span></div>
+              <div class="rowline"><span class="k">Precio</span><span class="v">$45.000</span></div>
+              <div class="rowline"><span class="k">Duración</span><span class="v">60 minutos</span></div>
+              <div class="rowline"><span class="k">Atiende</span><span class="v">Marcela Ruiz</span></div>
+              <div class="rowline" style="border:0"><span class="k">Salón</span><span class="v">Nails Neiva<br><span class="t-caption">Calle 8 # 5-32</span></span></div>
+            </div>
+            <div class="foot"><div class="btn-2">Cancelar cita</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ---------- BANDA: negocio ---------- -->
+  <div class="band">
+    <div class="band-title">
+      <h3>El lado del negocio</h3>
+      <span>La mitad del MVP, no una función secundaria</span>
+    </div>
+    <div class="plates">
+
+      <!-- SERVICIOS DEL NEGOCIO -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">BusinessServicesScreen</span>
+          <span class="rt">/negocio/servicios</span>
+          <span class="ds">Pantalla de inicio del negocio. El interruptor pausa sin borrar: las citas ya agendadas se respetan.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="pad" style="padding-top:8px">
+              <div class="t-display">Mis servicios</div>
+              <div class="t-caption" style="margin-bottom:12px">Nails Neiva</div>
+            </div>
+            <div class="scroll">
+              <div class="card" style="align-items:center">
+                <div class="meta">
+                  <p class="nm">Manicure semipermanente</p>
+                  <span class="pr">$45.000</span>
+                  <p class="sub">60 min · Marcela Ruiz</p>
+                  <span class="badge b-ok" style="margin-top:6px">Publicado</span>
+                </div>
+                <div class="switch"></div>
+              </div>
+              <div class="card" style="align-items:center">
+                <div class="meta">
+                  <p class="nm">Retiro de semipermanente</p>
+                  <span class="pr">$15.000</span>
+                  <p class="sub">30 min · Marcela Ruiz</p>
+                  <span class="badge b-ok" style="margin-top:6px">Publicado</span>
+                </div>
+                <div class="switch"></div>
+              </div>
+              <div class="card" style="align-items:center">
+                <div class="meta">
+                  <p class="nm">Uñas acrílicas</p>
+                  <span class="pr">$95.000</span>
+                  <p class="sub">120 min · Marcela Ruiz</p>
+                  <span class="badge b-mut" style="margin-top:6px">Pausado</span>
+                </div>
+                <div class="switch off"></div>
+              </div>
+            </div>
+            <div class="foot"><div class="btn">Crear servicio</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">ServiceFormScreen</span>
+          <span class="rt">/negocio/servicio/nuevo</span>
+          <span class="ds">El formulario más largo de la app. Si la manicurista no logra llenarlo sola, no hay catálogo.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="appbar"><div class="back">←</div><div class="t-label">Nuevo servicio</div></div>
+            <div class="scroll">
+              <div class="field">
+                <label>Nombre del servicio</label>
+                <div class="input"><span>Manicure semipermanente</span></div>
+              </div>
+              <div style="display:flex;gap:var(--s-md)">
+                <div class="field" style="flex:1">
+                  <label>Precio</label>
+                  <div class="input"><span>$45.000</span></div>
+                </div>
+                <div class="field" style="flex:1">
+                  <label>Duración</label>
+                  <div class="input focus"><span>60 min</span></div>
+                  <div class="help">Múltiplo de 15</div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Profesional que atiende</label>
+                <div class="input"><span>Marcela Ruiz</span><span class="muted">▾</span></div>
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label>Horario de atención</label>
+                <div class="input" style="margin-bottom:8px"><span class="t-label">Lunes</span><span class="t-label muted">9:00 – 18:00</span></div>
+                <div class="input"><span class="t-label">Martes</span><span class="t-label muted">9:00 – 18:00</span></div>
+              </div>
+            </div>
+            <div class="foot"><div class="btn">Publicar servicio</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENDA -->
+      <div class="plate">
+        <div class="plate-cap">
+          <span class="nm">BusinessAgendaScreen</span>
+          <span class="rt">/negocio/agenda</span>
+          <span class="ds">Confirmar y rechazar se distinguen por etiqueta, no solo por verde y rojo. Rechazar pide el motivo.</span>
+        </div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+          <div class="screen">
+            <div class="pad" style="padding-top:8px">
+              <div class="t-display" style="margin-bottom:12px">Agenda</div>
+              <div class="days">
+                <div class="day"><div class="d1">jue</div><div class="d2">11</div><div class="dot"></div></div>
+                <div class="day on"><div class="d1">vie</div><div class="d2">12</div></div>
+                <div class="day"><div class="d1">sáb</div><div class="d2">13</div><div class="dot"></div></div>
+                <div class="day"><div class="d1">dom</div><div class="d2">14</div></div>
+                <div class="day"><div class="d1">lun</div><div class="d2">15</div><div class="dot"></div></div>
+              </div>
+            </div>
+            <div class="scroll">
+              <div class="agenda-row">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <span class="hr">9:00 a. m.</span>
+                  <span class="badge b-ok">Confirmada</span>
+                </div>
+                <p class="t-body" style="margin:6px 0 0">Manicure tradicional</p>
+                <p class="sub">Ana Perdomo</p>
+              </div>
+              <div class="agenda-row">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <span class="hr">12:00 p. m.</span>
+                  <span class="badge b-warn">Pendiente</span>
+                </div>
+                <p class="t-body" style="margin:6px 0 0">Manicure semipermanente</p>
+                <p class="sub">Laura Gómez</p>
+                <div class="mini">
+                  <button class="ok">Confirmar</button>
+                  <button class="no">Rechazar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ESTADOS ============================== -->
+<section>
+  <div class="sec-head">
+    <h2>Los estados que hay que dibujar</h2>
+    <span class="count">Los cuatro que más hay que defender</span>
+  </div>
+  <p class="sec-intro">Cada documento de pantalla exige cinco o seis estados. Estos cuatro son los
+  que deciden si la app se siente terminada: son los que la usuaria ve en el peor momento, y los que
+  casi nunca aparecen en un mockup.</p>
+
+  <div class="plates">
+
+    <!-- CATALOGO VACIO -->
+    <div class="plate">
+      <div class="plate-cap">
+        <span class="nm">Catálogo · vacío</span>
+        <span class="rt">CatalogScreen, estado empty</span>
+      </div>
+      <p class="ann"><b>Es el primer día de la app.</b> Ningún negocio ha publicado todavía.
+      El mensaje no dice «sin resultados»: invita a traer a su manicurista.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="screen">
+          <div class="pad" style="padding-top:8px">
+            <div class="t-display" style="margin-bottom:12px">Servicios</div>
+          </div>
+          <div class="scroll">
+            <div class="empty">
+              <div class="art">🔎</div>
+              <h4>Todavía no hay servicios</h4>
+              <p>Estamos empezando en Neiva. Si tienes manicurista de confianza, cuéntale de ManiCita.</p>
+              <div class="btn" style="max-width:220px;margin:0 auto">Compartir la app</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEGOCIO VACIO -->
+    <div class="plate">
+      <div class="plate-cap">
+        <span class="nm">Mis servicios · vacío</span>
+        <span class="rt">BusinessServicesScreen, estado empty</span>
+      </div>
+      <p class="ann"><b>La pantalla más importante del onboarding del negocio.</b> Explica la
+      consecuencia real de no publicar: nadie la encuentra.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="screen">
+          <div class="pad" style="padding-top:8px">
+            <div class="t-display">Mis servicios</div>
+            <div class="t-caption" style="margin-bottom:12px">Nails Neiva</div>
+          </div>
+          <div class="scroll">
+            <div class="empty">
+              <div class="art">✳️</div>
+              <h4>Publica tu primer servicio</h4>
+              <p>Mientras no tengas servicios publicados, las clientas no pueden encontrarte ni agendar contigo.</p>
+            </div>
+          </div>
+          <div class="foot"><div class="btn">Crear servicio</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUPO TOMADO -->
+    <div class="plate">
+      <div class="plate-cap">
+        <span class="nm">Agendar · cupo tomado</span>
+        <span class="rt">BookAppointmentScreen, estado slotTaken</span>
+      </div>
+      <p class="ann"><b>El caso que ocurre de verdad</b> cuando dos clientas miran el mismo
+      servicio a la misma hora. Merece un mensaje propio, no un «algo salió mal».</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="screen">
+          <div class="appbar"><div class="back">←</div>
+            <div style="min-width:0">
+              <div class="t-label">Manicure semipermanente</div>
+              <div class="t-caption">$45.000 · 60 min</div>
+            </div>
+          </div>
+          <div class="scroll">
+            <div class="banner warn">
+              <span>⏱</span>
+              <span>Alguien acaba de tomar las 12:00. Estas son las horas que quedan libres.</span>
+            </div>
+            <div class="t-caption" style="margin-bottom:10px">Horas libres del viernes 12</div>
+            <div class="slots">
+              <div class="slot">9:00</div><div class="slot no">10:00</div><div class="slot">11:00</div>
+              <div class="slot no">12:00</div><div class="slot no">13:00</div><div class="slot">14:00</div>
+              <div class="slot">15:00</div><div class="slot no">16:00</div><div class="slot">17:00</div>
+            </div>
+          </div>
+          <div class="foot"><div class="btn off">Confirmar cita</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OFFLINE -->
+    <div class="plate">
+      <div class="plate-cap">
+        <span class="nm">Mis citas · sin conexión</span>
+        <span class="rt">MyAppointmentsScreen, estado offline</span>
+      </div>
+      <p class="ann"><b>Se lee todo, no se cancela nada.</b> El banner dice cuándo se actualizó, y
+      el botón deshabilitado explica por qué lo está.</p>
+      <div class="phone">
+        <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="screen">
+          <div class="pad" style="padding-top:8px">
+            <div class="t-display" style="margin-bottom:12px">Mis citas</div>
+            <div class="tabs"><span class="tab on">Próximas</span><span class="tab">Pasadas</span></div>
+          </div>
+          <div class="scroll">
+            <div class="banner">
+              <span>📶</span>
+              <span>Sin conexión. Última actualización: hoy 8:12 a. m.</span>
+            </div>
+            <div class="card" style="display:block">
+              <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px">
+                <span class="t-label">Viernes 12, 12:00 p. m.</span>
+                <span class="badge b-ok">Confirmada</span>
+              </div>
+              <p class="t-body" style="margin:0">Manicure semipermanente</p>
+              <p class="sub">Nails Neiva · Calle 8 # 5-32</p>
+            </div>
+          </div>
+          <div class="foot">
+            <div class="btn-2 off">Cancelar cita</div>
+            <div class="linkline">Necesitas conexión para cancelar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================== TEMA OSCURO ============================== -->
+<section>
+  <div class="sec-head">
+    <h2>El mismo componente, el otro tema</h2>
+    <span class="count">Una lámina de comprobación</span>
+  </div>
+  <p class="sec-intro">Los dos temas salen del mismo conjunto de tokens: cambian los valores, no los
+  componentes. Un componente que pregunte si el tema es oscuro para decidir un color está mal
+  escrito, y esta lámina es la forma de verlo.</p>
+
+  <div class="plates">
+    <div class="plate">
+      <div class="plate-cap">
+        <span class="nm">ServiceDetailScreen</span>
+        <span class="rt">tema oscuro</span>
+        <span class="ds">El rosa de marca se aclara a #E8A0BC para sostener el contraste sobre fondo oscuro.</span>
+      </div>
+      <div class="phone dark">
+        <div class="statusbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="screen">
+          <div style="height:168px;background:var(--brandSoft);position:relative;display:grid;place-items:center">
+            <span style="color:var(--brand);font:600 12px/1 var(--sans)">FOTO DEL SERVICIO</span>
+            <div class="back" style="position:absolute;top:12px;left:16px">←</div>
+          </div>
+          <div class="scroll" style="padding-top:16px">
+            <div class="t-title" style="margin-bottom:6px">Manicure semipermanente</div>
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+              <span style="font:700 22px/26px var(--sans);color:var(--brand)">$45.000</span>
+              <span class="t-caption">60 minutos</span>
+            </div>
+            <p class="t-body" style="margin:0 0 16px">Incluye limado, cutícula, esmaltado
+              semipermanente y decoración sencilla.</p>
+            <div class="rowline"><span class="k">Atiende</span><span class="v">Marcela Ruiz</span></div>
+            <div class="rowline"><span class="k">Salón</span><span class="v">Nails Neiva</span></div>
+            <div class="rowline" style="border:0"><span class="k">Dirección</span><span class="v">Calle 8 # 5-32</span></div>
+          </div>
+          <div class="foot"><div class="btn" style="color:#1A1518">Agendar</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plate" style="width:auto;max-width:520px;padding-top:28px">
+      <p class="ann" style="margin-bottom:18px"><b>Lo que hay que mirar en esta lámina.</b>
+      El botón primario invierte el color de su texto: sobre el rosa claro del tema oscuro, un texto
+      blanco no alcanzaría 4.5:1. Es el único punto donde el tema cambia algo más que un valor de
+      token, y por eso está anotado.</p>
+      <p class="ann"><b>El fondo de la foto también se invierte.</b> <code
+      style="font-family:var(--mono);font-size:12.5px">brandSoft</code> pasa de rosa pálido a un
+      vinotinto oscuro: sigue siendo el fondo de marca detrás de texto de marca, que es lo que el
+      token promete.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== COMPONENTES ============================== -->
+<section>
+  <div class="sec-head">
+    <h2>Los cinco componentes compartidos</h2>
+    <span class="count">Estilo y disposición, cero lógica de negocio</span>
+  </div>
+  <p class="sec-intro">Un componente entra a <code style="font-family:var(--mono);font-size:13px">shared/</code>
+  cuando lo usan dos o más features. Estos cinco se repiten en las diez pantallas de arriba: es la
+  razón por la que se parecen entre sí.</p>
+
+  <div class="comp">
+    <div>
+      <h4>BotonPrimario</h4>
+      <p class="who">Uno solo por pantalla. Si parecen hacer falta dos, la pantalla tiene dos propósitos.<br>
+      <code>disabledReason</code> se anuncia al lector de pantalla.</p>
+    </div>
+    <div class="states">
+      <div class="st"><div class="lb">default</div><div class="stage"><div class="btn">Agendar</div></div></div>
+      <div class="st"><div class="lb">loading</div><div class="stage"><div class="btn" style="opacity:.9">◍ Agendando…</div></div></div>
+      <div class="st"><div class="lb">disabled</div><div class="stage"><div class="btn off">Agendar</div>
+        <div class="help" style="text-align:center">Necesitas conexión</div></div></div>
+      <div class="st"><div class="lb">secundario, destructivo</div><div class="stage"><div class="btn-2">Cancelar cita</div></div></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div>
+      <h4>CampoFormulario</h4>
+      <p class="who">La etiqueta es visible y obligatoria: el texto dentro del campo desaparece
+      apenas se escribe, y en un formulario largo deja a cualquiera sin saber qué llenaba.</p>
+    </div>
+    <div class="states">
+      <div class="st"><div class="lb">default</div><div class="stage">
+        <div class="field" style="margin:0"><label>Duración</label><div class="input"><span class="ph">60</span></div></div></div></div>
+      <div class="st"><div class="lb">focused</div><div class="stage">
+        <div class="field" style="margin:0"><label>Duración</label><div class="input focus"><span>60</span></div></div></div></div>
+      <div class="st"><div class="lb">error</div><div class="stage">
+        <div class="field" style="margin:0"><label>Duración</label><div class="input err"><span>50</span></div>
+        <div class="help bad"><span>⚠</span><span>Debe ser múltiplo de 15</span></div></div></div></div>
+      <div class="st"><div class="lb">disabled</div><div class="stage">
+        <div class="field" style="margin:0"><label>Duración</label><div class="input dis"><span>60</span></div></div></div></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div>
+      <h4>TarjetaServicio</h4>
+      <p class="who">El componente que más se repite en pantalla, así que su rendimiento y su
+      accesibilidad importan más que los de cualquier otro. Se anuncia como una sola unidad.</p>
+    </div>
+    <div class="states">
+      <div class="st" style="width:280px"><div class="lb">en el catálogo</div><div class="stage">
+        <div class="card" style="margin:0">
+          <div class="thumb">foto</div>
+          <div class="meta"><p class="nm">Manicure semipermanente</p>
+            <span class="pr">$45.000</span><p class="sub">60 min · Nails Neiva</p></div>
+        </div></div></div>
+      <div class="st" style="width:280px"><div class="lb">en la vista del negocio</div><div class="stage">
+        <div class="card" style="margin:0">
+          <div class="thumb">foto</div>
+          <div class="meta"><p class="nm">Uñas acrílicas</p>
+            <span class="pr">$95.000</span><p class="sub">120 min · Marcela Ruiz</p>
+            <span class="badge b-mut" style="margin-top:6px">Pausado</span></div>
+        </div></div></div>
+      <div class="st" style="width:280px"><div class="lb">skeleton, misma altura</div><div class="stage">
+        <div class="card" style="margin:0">
+          <div class="thumb" style="background:var(--border)"></div>
+          <div class="meta" style="padding-top:6px">
+            <div class="skel" style="width:85%"></div><div class="skel" style="width:45%"></div>
+            <div class="skel" style="width:65%;margin:0"></div></div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div>
+      <h4>SelectorHorario</h4>
+      <p class="who">No calcula nada: recibe los cupos ya resueltos por <code>getAvailability</code>
+      y solo los dibuja. Es el componente con mayor riesgo de accesibilidad de la app.</p>
+    </div>
+    <div class="states">
+      <div class="st"><div class="lb">libre, elegido y ocupado</div><div class="stage">
+        <div class="slots">
+          <div class="slot">9:00</div><div class="slot on">12:00</div><div class="slot no">16:00</div>
+        </div></div></div>
+      <div class="st"><div class="lb">loading</div><div class="stage">
+        <div class="slots">
+          <div class="slot" style="background:var(--border);border-color:var(--border);color:transparent">·</div>
+          <div class="slot" style="background:var(--border);border-color:var(--border);color:transparent">·</div>
+          <div class="slot" style="background:var(--border);border-color:var(--border);color:transparent">·</div>
+        </div></div></div>
+      <div class="st"><div class="lb">con la fuente más grande</div><div class="stage">
+        <div class="slots" style="grid-template-columns:repeat(2,1fr)">
+          <div class="slot" style="font-size:18px;padding:14px 0">9:00</div>
+          <div class="slot on" style="font-size:18px;padding:14px 0">12:00</div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div>
+      <h4>EstadoVacio</h4>
+      <p class="who">Vacío y error no son el mismo estado. Vacío es que la respuesta llegó bien y no
+      traía nada; error es que no se pudo saber. Si se pasa una acción, tiene que llevar a algún lado.</p>
+    </div>
+    <div class="states">
+      <div class="st" style="width:280px"><div class="lb">con acción de salida</div><div class="stage">
+        <div class="empty" style="padding:var(--s-lg) 0">
+          <div class="art" style="width:64px;height:64px;font-size:24px">📅</div>
+          <h4 style="font-size:17px;line-height:22px">Aún no tienes citas</h4>
+          <p style="font-size:14px;line-height:20px">Busca un servicio y agenda tu primera cita.</p>
+          <div class="btn" style="max-width:180px;margin:0 auto">Ver servicios</div>
+        </div></div></div>
+      <div class="st" style="width:280px"><div class="lb">neutro, sin salida</div><div class="stage">
+        <div class="empty" style="padding:var(--s-lg) 0">
+          <div class="art" style="width:64px;height:64px;font-size:24px">☕</div>
+          <h4 style="font-size:17px;line-height:22px">Sin citas este día</h4>
+          <p style="font-size:14px;line-height:20px;margin-bottom:0">Un día sin citas no es un error.</p>
+        </div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TOKENS ============================== -->
+<section>
+  <div class="sec-head">
+    <h2>De dónde sale cada valor</h2>
+    <span class="count">Once colores y una escala fija de 4</span>
+  </div>
+  <p class="sec-intro">Cero colores, tamaños o fuentes quemados en las pantallas: todo lo que se ve
+  arriba sale de esta carta. Los dos temas usan los mismos nombres con distinto valor.</p>
+
+  <div class="deck">
+    <div class="polish">
+      <div class="cap" style="background:#A8456B"></div>
+      <div class="base"><span>#A8456B</span></div>
+      <span class="nm">color.brand</span>
+      <span class="us">Botón primario, seleccionados, precio</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#F7E8EE"></div>
+      <div class="base"><span>#F7E8EE</span></div>
+      <span class="nm">color.brandSoft</span>
+      <span class="us">Chips activos y avisos de marca</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#FBF7F8"></div>
+      <div class="base"><span>#FBF7F8</span></div>
+      <span class="nm">color.background</span>
+      <span class="us">Fondo de pantalla</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#FFFFFF"></div>
+      <div class="base"><span>#FFFFFF</span></div>
+      <span class="nm">color.surface</span>
+      <span class="us">Tarjetas, campos, modales</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#1F1A1D"></div>
+      <div class="base"><span>#1F1A1D</span></div>
+      <span class="nm">color.textPrimary</span>
+      <span class="us">Títulos y cuerpo</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#6B5F65"></div>
+      <div class="base"><span>#6B5F65</span></div>
+      <span class="nm">color.textSecondary</span>
+      <span class="us">Duración, dirección</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#E7DDE1"></div>
+      <div class="base"><span>#E7DDE1</span></div>
+      <span class="nm">color.border</span>
+      <span class="us">Bordes y separadores</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#2F6B4F"></div>
+      <div class="base"><span>#2F6B4F</span></div>
+      <span class="nm">color.success</span>
+      <span class="us">Cita confirmada</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#8A5C00"></div>
+      <div class="base"><span>#8A5C00</span></div>
+      <span class="nm">color.warning</span>
+      <span class="us">Cita pendiente</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#A32B2B"></div>
+      <div class="base"><span>#A32B2B</span></div>
+      <span class="nm">color.error</span>
+      <span class="us">Errores y cita rechazada</span>
+    </div>
+    <div class="polish">
+      <div class="cap" style="background:#9A9096"></div>
+      <div class="base"><span>#9A9096</span></div>
+      <span class="nm">color.disabled</span>
+      <span class="us">Texto y controles apagados</span>
+    </div>
+  </div>
+
+  <p class="ann" style="max-width:70ch">El rosa de marca se eligió oscuro a propósito. El rosa pastel
+  que uno esperaría en una app de manicure no alcanza 4.5:1 sobre blanco, así que sirve de fondo pero
+  no de texto ni de botón. El pastel se quedó como <b>brandSoft</b>, que solo va detrás de texto oscuro.</p>
+
+  <table class="ratios">
+    <thead><tr><th>Par que de verdad se usa</th><th>Ratio</th><th>Veredicto</th></tr></thead>
+    <tbody>
+      <tr><td>textPrimary sobre background</td><td>~15:1</td><td class="yes">AA y AAA</td></tr>
+      <tr><td>brand sobre surface</td><td>~5.6:1</td><td class="yes">AA en texto normal</td></tr>
+      <tr><td>blanco sobre brand</td><td>~5.6:1</td><td class="yes">AA en texto normal</td></tr>
+      <tr><td>textSecondary sobre background</td><td>~5.4:1</td><td class="yes">AA en texto normal</td></tr>
+      <tr><td>disabled sobre surface</td><td>~3.1:1</td><td class="lim">Solo texto grande e íconos</td></tr>
+    </tbody>
+  </table>
+
+  <div class="scale">
+    <div class="scale-row"><span class="tk">text.display &nbsp;28/34 · 700</span><span style="font:700 28px/34px var(--sans);letter-spacing:-.4px">Mis citas</span></div>
+    <div class="scale-row"><span class="tk">text.title &nbsp;20/26 · 600</span><span style="font:600 20px/26px var(--sans)">Manicure semipermanente</span></div>
+    <div class="scale-row"><span class="tk">text.body &nbsp;16/24 · 400</span><span style="font:400 16px/24px var(--sans)">Incluye limado, cutícula y esmaltado.</span></div>
+    <div class="scale-row"><span class="tk">text.label &nbsp;14/20 · 500</span><span style="font:500 14px/20px var(--sans)">Confirmar cita</span></div>
+    <div class="scale-row" style="border:0"><span class="tk">text.caption &nbsp;12/16 · 400</span><span style="font:400 12px/16px var(--sans)">60 min · Nails Neiva</span></div>
+  </div>
+
+  <div class="spaces">
+    <div class="sp"><div class="bar" style="width:4px;height:4px"></div><div class="tk">xs 4</div></div>
+    <div class="sp"><div class="bar" style="width:8px;height:8px"></div><div class="tk">sm 8</div></div>
+    <div class="sp"><div class="bar" style="width:12px;height:12px"></div><div class="tk">md 12</div></div>
+    <div class="sp"><div class="bar" style="width:16px;height:16px"></div><div class="tk">lg 16</div></div>
+    <div class="sp"><div class="bar" style="width:24px;height:24px"></div><div class="tk">xl 24</div></div>
+    <div class="sp"><div class="bar" style="width:32px;height:32px"></div><div class="tk">xxl 32</div></div>
+    <div class="sp" style="margin-left:26px"><div class="bar" style="width:44px;height:26px;border-radius:8px"></div><div class="tk">radius.sm 8</div></div>
+    <div class="sp"><div class="bar" style="width:44px;height:26px;border-radius:12px"></div><div class="tk">radius.md 12</div></div>
+    <div class="sp"><div class="bar" style="width:44px;height:26px;border-radius:999px"></div><div class="tk">radius.pill</div></div>
+  </div>
+  <p class="ann" style="margin-top:18px;max-width:70ch">Escala fija de 4, sin valores intermedios:
+  si algo necesita 14, se usa 12 o 16. Es la regla que hace que dos pantallas hechas en semanas
+  distintas se sigan viendo iguales.</p>
+</section>
+
+<footer>
+  Documento de apoyo de <b>01-architecture</b> · ManiCita · Programación Móvil [G1] 2026-B ·
+  Lilly Signey Puentes Rincon y Lizeth Caicedo.<br>
+  Los mockups se derivan de <code>screens/</code>, de <code>02-code-and-ui/design-system.md</code> y de
+  los cinco documentos de <code>02-code-and-ui/components/</code>. Los datos que se ven son de
+  ejemplo. Si un mockup y un documento no coinciden, <b>manda el documento</b>.
+</footer>
+
+</div>
+</body>
+</html>
