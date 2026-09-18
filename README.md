@@ -56,7 +56,7 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 3 | Almacenamiento local | SQLite (`@capacitor-community/sqlite`) con Drizzle ORM | [ADR-007](./01-architecture/decisions/records/ADR-007-local-storage-capacitor.md) |
 | 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
 | 5 | Idioma de la documentación | Español en todo lo que se adapta al proyecto; los nombres de archivo, las claves de i18n y los términos técnicos estándar (`loading`, `offline-first`, DTO) se mantienen en inglés | — |
-| 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en el repo `beauty-salon` siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md) |
+| 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en `beauty-salon/backend/` (monorepo temporal, ver ADR-010) siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md), [ADR-010](./01-architecture/decisions/records/ADR-010-monorepo-temporal.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
@@ -70,6 +70,11 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 > stack (Node.js + Express + PostgreSQL) en [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md).
 > El frontend Ionic + Capacitor ([ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md))
 > se mueve a un repo nuevo, todavía sin crear.
+
+> **Decisión 6 revisada de nuevo el 2026-09-18:** para no bloquear el avance del frontend mientras
+> ese repo nuevo no se crea, el equipo decidió trabajar la v1 como **monorepo**: `beauty-salon`
+> contiene carpetas `backend/` y `frontend/` separadas, con migración planeada a repos separados en
+> una próxima iteración. Ver [ADR-010](./01-architecture/decisions/records/ADR-010-monorepo-temporal.md).
 
 > Las secciones `04-quality` y `05-release` se conservan tal como vienen del framework original,
 > en inglés: quedan fuera del alcance de esta entrega.

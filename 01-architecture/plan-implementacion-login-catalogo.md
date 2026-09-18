@@ -1,8 +1,10 @@
 # Plan de trabajo — Iniciar sesión y Catálogo de servicios
 
-- **Repo de código:** repo de frontend (Ionic React + TypeScript sobre Capacitor, Android —
-  [ADR-005](./decisions/records/ADR-005-mobile-stack-ionic-capacitor.md)), **aún sin crear** —
-  `beauty-salon` ahora es el repo de la API, ver [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md)
+- **Repo de código:** `beauty-salon/frontend/` (Ionic React + TypeScript sobre Capacitor, Android —
+  [ADR-005](./decisions/records/ADR-005-mobile-stack-ionic-capacitor.md)). `beauty-salon` es un
+  monorepo temporal para la v1: `backend/` es el repo de la API (ver
+  [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md)) y `frontend/` es este proyecto
+  (ver [ADR-010](./decisions/records/ADR-010-monorepo-temporal.md))
 - **Features:** [Catálogo de servicios](./features/catalog.md), [Autenticación](./features/auth.md)
 - **Scopes de commit:** `core`, `catalog`, `auth` (ver [`git-conventions.md`](../00-governance/git-conventions.md))
 
