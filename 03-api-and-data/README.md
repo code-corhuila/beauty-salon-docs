@@ -9,13 +9,12 @@ En red y persistencia viven la mayoría de los errores y de los problemas de seg
 móvil: manejo de tokens, reintentos, comportamiento sin conexión y migraciones de esquema. Las reglas
 se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
-> **El backend de ManiCita todavía no está construido, pero ya tiene repo y stack decididos:**
-> Node.js + Express + PostgreSQL, en el repo `beauty-salon`
-> ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)). Mientras se
-> implementa, el contrato completo está diseñado en [`endpoints/`](./endpoints/) y se sirve con un
-> mock local durante el desarrollo del frontend. La
-> [Definition of Ready](../00-governance/definition-of-ready.md) admite explícitamente el contrato
-> *stubbed* para ese período.
+> **El backend de ManiCita ya está implementado** en Node.js + Express + PostgreSQL, en el repo
+> `beauty-salon` ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)),
+> siguiendo exactamente el contrato diseñado en [`endpoints/`](./endpoints/). Mientras el frontend no
+> esté conectado a una instancia real, se puede seguir sirviendo el contrato con un mock local: la
+> [Definition of Ready](../00-governance/definition-of-ready.md) admite el contrato *stubbed* para
+> ese propósito.
 
 ---
 
@@ -40,6 +39,7 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 |----------|-----------|---------|--------|
 | `POST /v1/auth/login` | [auth-login.md](./endpoints/auth-login.md) | auth | No |
 | `POST /v1/auth/registro` | [auth-registro.md](./endpoints/auth-registro.md) | auth | No |
+| `POST /v1/auth/refresh` | [auth-refresh.md](./endpoints/auth-refresh.md) | auth | No (requiere `refreshToken`) |
 | `GET /v1/servicios` | [catalogo-listar-servicios.md](./endpoints/catalogo-listar-servicios.md) | catalog | No |
 | `GET /v1/servicios/{id}` | [catalogo-detalle-servicio.md](./endpoints/catalogo-detalle-servicio.md) | catalog | No |
 | `GET /v1/servicios/{id}/disponibilidad` | [agendamiento-disponibilidad.md](./endpoints/agendamiento-disponibilidad.md) | booking | No |

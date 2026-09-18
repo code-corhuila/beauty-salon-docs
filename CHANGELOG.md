@@ -1,6 +1,13 @@
 # Changelog
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
+### Added
+- Backend implementado en `beauty-salon`: Node.js + Express + PostgreSQL, los 13 endpoints del
+  contrato (los 12 documentados más `auth-refresh`), probado de punta a punta contra PostgreSQL real
+- `03-api-and-data/endpoints/auth-refresh.md` — endpoint `POST /v1/auth/refresh`, faltante en el
+  contrato original: `authentication.md` ya describía el refresco de token del lado del cliente sin
+  que existiera el endpoint que lo hace posible
+
 ### Changed
 - **`beauty-salon` pasa a ser el repo de la API (Node.js + Express + PostgreSQL), no el de
   frontend.** El profesor indicó que ese repo debe usarse para la API; el frontend Ionic +

@@ -56,7 +56,7 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 3 | Almacenamiento local | SQLite (`@capacitor-community/sqlite`) con Drizzle ORM | [ADR-007](./01-architecture/decisions/records/ADR-007-local-storage-capacitor.md) |
 | 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
 | 5 | Idioma de la documentación | Español en todo lo que se adapta al proyecto; los nombres de archivo, las claves de i18n y los términos técnicos estándar (`loading`, `offline-first`, DTO) se mantienen en inglés | — |
-| 6 | Backend | Node.js + Express + PostgreSQL, implementado en el repo `beauty-salon`; el contrato ya diseñado en `03-api-and-data/endpoints/` se implementa tal cual | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md) |
+| 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en el repo `beauty-salon` siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
