@@ -2,9 +2,12 @@
 
 ## Estado del backend
 
-**ManiCita no tiene backend construido todavía.** El contrato completo está diseñado en
-[`endpoints/`](./endpoints/), un documento por endpoint, y eso es lo que la
-[Definition of Ready](../00-governance/definition-of-ready.md) admite como contrato *stubbed*.
+**ManiCita no tiene backend construido todavía**, pero ya tiene repo y stack decididos: Node.js +
+Express + PostgreSQL, en el repo `beauty-salon`
+([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)). Mientras se
+implementa, el contrato completo está diseñado en [`endpoints/`](./endpoints/), un documento por
+endpoint, y eso es lo que la [Definition of Ready](../00-governance/definition-of-ready.md) admite
+como contrato *stubbed*.
 
 Durante el desarrollo el contrato se sirve con un mock local, de modo que la app se construya contra
 la misma forma de datos que tendrá el servidor real.

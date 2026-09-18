@@ -2,6 +2,11 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Changed
+- **`beauty-salon` pasa a ser el repo de la API (Node.js + Express + PostgreSQL), no el de
+  frontend.** El profesor indicó que ese repo debe usarse para la API; el frontend Ionic +
+  Capacitor se mueve a un repo nuevo, aún sin crear. Nueva ADR-009. Actualizados: README raíz
+  (Decisión 6), `01-architecture/README.md`, `plan-implementacion-login-catalogo.md`,
+  `03-api-and-data/README.md` y `api-networking.md`
 - **Stack móvil revisado de React Native + Expo a Ionic React + Capacitor**, con la primera entrega
   de ManiCita limitada a **Android**. Motivo: el desempate original de ADR-002 (compilar iOS en la
   nube sin Mac con EAS Build) dejó de aplicar al definirse el alcance solo-Android. Nuevas ADR-005

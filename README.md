@@ -20,9 +20,10 @@ Es la **documentación de diseño** de ManiCita, escrita antes del código sigui
 SDD descrito en [`00-sdd-guide.md`](./00-sdd-guide.md): primero se decide y se escribe, después
 se implementa.
 
-Este es el único repo de documentación del proyecto: `beauty-salon` (el repo original) se limpió
-el 2026-09-17 para convertirse en el código del frontend. El [`DISCOVERY.md`](./DISCOVERY.md) de
-esta sección (entregable HU-02) se preservó y se trasladó aquí desde ese repo.
+Este es el único repo de documentación del proyecto. `beauty-salon` (el repo original) se limpió
+el 2026-09-17 y es el **repo de código de la API** ([ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)).
+El código del frontend vive en un repo aparte, aún sin crear. El [`DISCOVERY.md`](./DISCOVERY.md)
+de esta sección (entregable HU-02) se preservó y se trasladó aquí desde `beauty-salon`.
 
 **Estudiantes:** Lilly Signey Puentes Rincon y Lizeth Caicedo
 **Asignatura:** Programación Móvil [G1] — 2026-B · CORHUILA
@@ -55,7 +56,7 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 3 | Almacenamiento local | SQLite (`@capacitor-community/sqlite`) con Drizzle ORM | [ADR-007](./01-architecture/decisions/records/ADR-007-local-storage-capacitor.md) |
 | 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
 | 5 | Idioma de la documentación | Español en todo lo que se adapta al proyecto; los nombres de archivo, las claves de i18n y los términos técnicos estándar (`loading`, `offline-first`, DTO) se mantienen en inglés | — |
-| 6 | Backend | No existe todavía: el contrato de API se **diseña aquí** (stubbed), como lo permite la [Definition of Ready](./00-governance/definition-of-ready.md) | — |
+| 6 | Backend | Node.js + Express + PostgreSQL, implementado en el repo `beauty-salon`; el contrato ya diseñado en `03-api-and-data/endpoints/` se implementa tal cual | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
@@ -63,6 +64,12 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 > aplicar y el stack se revisó a Ionic + Capacitor en [ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md).
 > Las decisiones 1 y 4 no cambiaron de fondo, pero se reafirmaron en ADR-006 y ADR-008 porque, según la
 > convención propia de este repo, cambiar el stack obliga a revisar todo lo que dependía de él.
+
+> **Decisión 6 revisada el 2026-09-18:** el profesor indicó que `beauty-salon` (el repo limpiado el
+> 2026-09-17 para ser el frontend) debe usarse como **repo de la API**, no de frontend. Se decidió el
+> stack (Node.js + Express + PostgreSQL) en [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md).
+> El frontend Ionic + Capacitor ([ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md))
+> se mueve a un repo nuevo, todavía sin crear.
 
 > Las secciones `04-quality` y `05-release` se conservan tal como vienen del framework original,
 > en inglés: quedan fuera del alcance de esta entrega.

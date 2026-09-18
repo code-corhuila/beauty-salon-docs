@@ -9,10 +9,13 @@ En red y persistencia viven la mayoría de los errores y de los problemas de seg
 móvil: manejo de tokens, reintentos, comportamiento sin conexión y migraciones de esquema. Las reglas
 se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
-> **El backend de ManiCita no existe todavía.** El contrato completo está diseñado en
-> [`endpoints/`](./endpoints/) y se sirve con un mock local durante el desarrollo. La
+> **El backend de ManiCita todavía no está construido, pero ya tiene repo y stack decididos:**
+> Node.js + Express + PostgreSQL, en el repo `beauty-salon`
+> ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)). Mientras se
+> implementa, el contrato completo está diseñado en [`endpoints/`](./endpoints/) y se sirve con un
+> mock local durante el desarrollo del frontend. La
 > [Definition of Ready](../00-governance/definition-of-ready.md) admite explícitamente el contrato
-> *stubbed*.
+> *stubbed* para ese período.
 
 ---
 
