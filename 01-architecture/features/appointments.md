@@ -18,8 +18,8 @@ una sola vez.
 
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
-| [MyAppointmentsScreen](../screens/mis-citas.md) | `/mis-citas` | Listar las citas propias, separadas en próximas y pasadas |
-| [AppointmentDetailScreen](../screens/detalle-cita.md) | `/cita/:citaId` | Ver el resumen completo, el estado de la cita y cancelarla |
+| [MyAppointmentsScreen](../screens/mis-citas.md) | `/my-appointments` | Listar las citas propias, separadas en próximas y pasadas |
+| [AppointmentDetailScreen](../screens/detalle-cita.md) | `/appointment/:appointmentId` | Ver el resumen completo, el estado de la cita y cancelarla |
 
 ---
 
@@ -53,9 +53,9 @@ El estado no es un adorno: es el dato que después le dice al negocio cuánto pi
 
 - **Casos de uso:** `getMyAppointments`, `cancelAppointment`
 - **Repositorios:** `AppointmentRepository`
-- **Endpoints:** [`GET /v1/citas/mias`](../../03-api-and-data/endpoints/citas-listar-mis-citas.md),
-  [`PATCH /v1/citas/{id}/cancelar`](../../03-api-and-data/endpoints/citas-cancelar-cita.md)
-- **Persistencia local:** tabla [`citas`](../../03-api-and-data/entities/citas.md), solo las citas de
+- **Endpoints:** [`GET /v1/appointments/mine`](../../03-api-and-data/endpoints/appointments-list-mine.md),
+  [`PATCH /v1/appointments/{id}/cancel`](../../03-api-and-data/endpoints/appointments-cancel.md)
+- **Persistencia local:** tabla [`appointment`](../../03-api-and-data/entities/appointment.md), solo las citas de
   la clienta autenticada
 - **Estrategia offline:** **read-through cache** para leer, **online-only** para cancelar.
   La razón es de negocio: la clienta necesita ver a qué hora es su cita justo cuando va camino al

@@ -1,8 +1,8 @@
 # Entidad local — profesionales
 
 - **Almacén:** SQLite con `@capacitor-community/sqlite` y Drizzle ORM
-- **Tabla:** `profesionales`
-- **Versión de esquema en que se introduce:** 1
+- **Tabla:** `professional`
+- **Versión de esquema en que se introduce:** 2 (en la 1 se llamaba en español; ver [persistence.md](../persistence.md))
 
 Guarda quién atiende cada servicio, que es lo que la clienta mira antes de decidir: en este negocio
 la persona importa tanto como el precio.
@@ -15,7 +15,7 @@ la persona importa tanto como el precio.
 |---------|------|------|-------|
 | `id` | text | No | Llave primaria, la misma del servidor |
 | `name` | text | No | Nombre de la profesional |
-| `negocio_id` | text | No | Llave foránea a [`negocios`](./negocios.md) |
+| `business_id` | text | No | Llave foránea a [`business`](./business.md) |
 | `created_at` | integer | No | Epoch en milisegundos |
 | `updated_at` | integer | No | Epoch en milisegundos |
 | `cached_at` | integer | No | Cuándo se trajo del servidor |
@@ -30,7 +30,7 @@ la persona importa tanto como el precio.
 
 | Índice | Columnas | Para qué |
 |--------|----------|----------|
-| `idx_profesionales_negocio` | `negocio_id` | Listar las profesionales de un salón |
+| `idx_professional_business` | `business_id` | Listar las profesionales de un salón |
 
 ---
 
@@ -38,9 +38,9 @@ la persona importa tanto como el precio.
 
 | Entidad relacionada | Llave | Cardinalidad |
 |---------------------|-------|--------------|
-| [`negocios`](./negocios.md) | `negocio_id` | N:1 |
-| [`servicios`](./servicios.md) | `profesional_id` en la otra tabla | 1:N |
-| [`citas`](./citas.md) | `profesional_id` en la otra tabla | 1:N |
+| [`business`](./business.md) | `business_id` | N:1 |
+| [`service`](./service.md) | `professional_id` en la otra tabla | 1:N |
+| [`appointment`](./appointment.md) | `professional_id` en la otra tabla | 1:N |
 
 ---
 
@@ -54,5 +54,5 @@ la persona importa tanto como el precio.
 
 ## Notas de migración
 
-- Se crea en la versión 1 junto con `negocios` y `servicios`, en la misma transacción.
+- Se crea en la versión 2 junto con `business` y `service`, en la misma transacción.
 - Se vacía al cerrar sesión.

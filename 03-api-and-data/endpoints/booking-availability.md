@@ -1,7 +1,7 @@
 # Endpoint — Disponibilidad de un servicio
 
 - **Feature:** [Agendamiento](../../01-architecture/features/booking.md)
-- **Método y ruta:** `GET /v1/servicios/{servicioId}/disponibilidad`
+- **Método y ruta:** `GET /v1/services/{serviceId}/availability`
 - **Requiere sesión:** No. Se puede mirar la disponibilidad antes de registrarse; la sesión se exige
   al confirmar
 
@@ -11,8 +11,8 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `servicioId` | path | string | Sí | Servicio que se quiere agendar |
-| `fecha` | query | string | Sí | Formato `YYYY-MM-DD`, hasta 14 días hacia adelante |
+| `serviceId` | path | string | Sí | Servicio que se quiere agendar |
+| `date` | query | string | Sí | Formato `YYYY-MM-DD`, hasta 14 días hacia adelante |
 
 ---
 

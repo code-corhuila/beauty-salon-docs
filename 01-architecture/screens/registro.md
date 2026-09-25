@@ -1,6 +1,6 @@
 # Pantalla — SignUpScreen
 
-- **Ruta:** `/registro`
+- **Ruta:** `/register`
 - **Feature:** [Autenticación](../features/auth.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).

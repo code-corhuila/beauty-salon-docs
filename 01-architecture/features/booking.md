@@ -18,7 +18,7 @@ funciona una vez de punta a punta, el MVP cumplió.
 
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
-| [BookAppointmentScreen](../screens/agendar-cita.md) | `/agendar/:servicioId` | Elegir fecha, ver las horas libres, confirmar la cita |
+| [BookAppointmentScreen](../screens/agendar-cita.md) | `/book/:serviceId` | Elegir fecha, ver las horas libres, confirmar la cita |
 
 ---
 
@@ -42,8 +42,8 @@ funciona una vez de punta a punta, el MVP cumplió.
 
 - **Casos de uso:** `getAvailability`, `bookAppointment`
 - **Repositorios:** `BookingRepository`
-- **Endpoints:** [`GET /v1/servicios/{id}/disponibilidad`](../../03-api-and-data/endpoints/agendamiento-disponibilidad.md),
-  [`POST /v1/citas`](../../03-api-and-data/endpoints/agendamiento-crear-cita.md)
+- **Endpoints:** [`GET /v1/services/{id}/availability`](../../03-api-and-data/endpoints/booking-availability.md),
+  [`POST /v1/appointments`](../../03-api-and-data/endpoints/booking-create-appointment.md)
 - **Persistencia local:** ninguna. Los cupos **no se cachean**: un cupo guardado es un cupo mentiroso.
 - **Estrategia offline:** **online-only**, y es la decisión de negocio más importante de la sección 03:
   un cupo no se puede confirmar sin servidor, porque otra clienta puede estar tomándolo en ese mismo

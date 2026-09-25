@@ -75,6 +75,6 @@ más que los de cualquier otro.
   durationMinutes={service.durationMinutes}
   salonName={service.salonName}
   imageUrl={service.imageUrl}
-  onPress={() => navigation.navigate('ServiceDetail', { servicioId: service.id })}
+  onPress={() => navigation.navigate('ServiceDetail', { serviceId: service.id })}
 />
 ```

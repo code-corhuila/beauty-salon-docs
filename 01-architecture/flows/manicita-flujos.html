@@ -112,8 +112,8 @@
       <span><i class="sw a"></i> Redirección de la guarda</span>
     </div>
     <div class="note"><b>El caso que hay que probar sí o sí:</b> una clienta sin cuenta abre el deep
-      link <code>manicita.app/agendar/128</code> que le compartió una amiga. La guarda la manda a
-      <code>/login</code>, se registra, y <b>vuelve a <code>/agendar/128</code></b>, no al inicio. Si
+      link <code>manicita.app/book/128</code> que le compartió una amiga. La guarda la manda a
+      <code>/login</code>, se registra, y <b>vuelve a <code>/book/128</code></b>, no al inicio. Si
       vuelve al inicio, se pierde justo a la usuaria que llegó recomendada.</div>
   </section>
 
@@ -299,24 +299,24 @@ renderBpmn('bpmn', {
   nodes: [
     {id:'e0', type:'start', lane:0, col:0, label:['Quiere agendar']},
     {id:'t1', type:'task',  lane:0, col:1, label:['Explora el catálogo'],
-     route:'/servicios', api:'GET /v1/servicios'},
+     route:'/services', api:'GET /v1/services'},
     {id:'t2', type:'task',  lane:0, col:2, label:['Abre el detalle', 'del servicio'],
-     route:'/servicio/:servicioId', api:'GET /v1/servicios/{id}'},
+     route:'/service/:serviceId', api:'GET /v1/services/{id}'},
     {id:'g1', type:'gw',    lane:1, col:3, label:['¿Tiene sesión?']},
     {id:'t3', type:'task',  lane:0, col:4, label:['Inicia sesión', 'o se registra'],
      route:'/login', api:'POST /v1/auth/login'},
     {id:'t4', type:'task',  lane:0, col:5, label:['Elige la fecha'],
-     route:'/agendar/:servicioId'},
+     route:'/book/:serviceId'},
     {id:'t5', type:'task',  lane:2, col:6, label:['Calcula los cupos', 'libres del día'],
-     api:'GET /v1/servicios/{id}/disponibilidad'},
+     api:'GET /v1/services/{id}/availability'},
     {id:'g2', type:'gw',    lane:1, col:7, label:['¿Hay cupos', 'ese día?']},
     {id:'t6', type:'task',  lane:0, col:8, label:['Selecciona la hora', 'y confirma'],
-     route:'/agendar/:servicioId'},
+     route:'/book/:serviceId'},
     {id:'t7', type:'task',  lane:2, col:9, label:['Valida el cupo', 'y crea la cita'],
-     api:'POST /v1/citas'},
+     api:'POST /v1/appointments'},
     {id:'g3', type:'gw',    lane:1, col:10, label:['¿El cupo', 'sigue libre?']},
     {id:'e1', type:'end',   lane:0, col:11, label:['Cita registrada', 'como Pendiente'],
-     route:'/cita/:citaId'},
+     route:'/appointment/:appointmentId'},
     {id:'t8', type:'task',  lane:1, col:11, label:['Avisa que la hora', 'se acaba de ocupar'],
      api:'409 SlotTaken'}
   ],
@@ -381,20 +381,20 @@ renderBpmn('bpmn', {
 
   box(30, 300, 'RootNavigator', 'sesión + rol', 'root');
   group(280, 24, 920, 150, 'PUBLICSTACK — SIN SESIÓN');
-  box(300, 66, 'CatalogScreen', '/servicios', 'pub');
-  box(530, 66, 'ServiceDetailScreen', '/servicio/:servicioId', 'pub');
+  box(300, 66, 'CatalogScreen', '/services', 'pub');
+  box(530, 66, 'ServiceDetailScreen', '/service/:serviceId', 'pub');
   box(760, 66, 'LoginScreen', '/login', 'pub');
-  box(980, 66, 'SignUpScreen', '/registro', 'pub');
+  box(980, 66, 'SignUpScreen', '/register', 'pub');
   group(280, 204, 920, 230, 'CLIENTTABS — ROL CLIENTA');
-  box(300, 246, 'CatalogScreen', '/servicios', 'cli');
-  box(530, 246, 'ServiceDetailScreen', '/servicio/:servicioId', 'cli');
-  box(760, 246, 'BookAppointmentScreen', '/agendar/:servicioId', 'cli');
-  box(300, 350, 'MyAppointmentsScreen', '/mis-citas', 'cli');
-  box(530, 350, 'AppointmentDetailScreen', '/cita/:citaId', 'cli');
+  box(300, 246, 'CatalogScreen', '/services', 'cli');
+  box(530, 246, 'ServiceDetailScreen', '/service/:serviceId', 'cli');
+  box(760, 246, 'BookAppointmentScreen', '/book/:serviceId', 'cli');
+  box(300, 350, 'MyAppointmentsScreen', '/my-appointments', 'cli');
+  box(530, 350, 'AppointmentDetailScreen', '/appointment/:appointmentId', 'cli');
   group(280, 464, 920, 150, 'BUSINESSTABS — ROL NEGOCIO');
-  box(300, 506, 'BusinessServicesScreen', '/negocio/servicios', 'neg');
-  box(530, 506, 'ServiceFormScreen', '/negocio/servicio/nuevo', 'neg');
-  box(760, 506, 'BusinessAgendaScreen', '/negocio/agenda', 'neg');
+  box(300, 506, 'BusinessServicesScreen', '/business/services', 'neg');
+  box(530, 506, 'ServiceFormScreen', '/business/service/new', 'neg');
+  box(760, 506, 'BusinessAgendaScreen', '/business/agenda', 'neg');
 
   arrow([[230, 315], [255, 315], [255, 99], [280, 99]], {label:'público', at:[255, 200]});
   arrow([[230, 327], [280, 327]], {label:'clienta', at:[255, 320]});
@@ -412,9 +412,9 @@ renderBpmn('bpmn', {
     label:'pestañas del navegador de negocio', at:[630, 602]});
   /* guardas: la flecha apunta a donde la app REDIRIGE, no a donde se intentó entrar */
   arrow([[1200, 530], [1245, 530], [1245, 290], [1200, 290]], {dashed:true,
-    color:'#A32B2B', label:'clienta en ruta de negocio, la manda a /servicios', at:[960, 449]});
+    color:'#A32B2B', label:'clienta en ruta de negocio, la manda a /services', at:[960, 449]});
   arrow([[1200, 410], [1275, 410], [1275, 570], [1200, 570]], {dashed:true,
-    color:'#A32B2B', label:'negocio en ruta de clienta, lo manda a /negocio/agenda', at:[960, 640]});
+    color:'#A32B2B', label:'negocio en ruta de clienta, lo manda a /business/agenda', at:[960, 640]});
   arrow([[1200, 230], [1245, 230], [1245, 120], [1200, 120]], {dashed:true,
     color:'#A32B2B', label:'sesión expirada, vuelve al stack público', at:[1000, 189]});
 })();
@@ -431,25 +431,25 @@ renderBpmn('bpmn', {
   };
   const ROWS = [
     ['auth','LoginScreen','/login','signIn','POST','/v1/auth/login','ninguna · token en Keystore'],
-    ['auth','SignUpScreen','/registro','signUp','POST','/v1/auth/registro','ninguna · token en Keystore'],
-    ['cat','CatalogScreen','/servicios','getPublishedServices','GET','/v1/servicios',
-     'servicios · negocios · profesionales'],
-    ['cat','ServiceDetailScreen','/servicio/:servicioId','getServiceDetail','GET','/v1/servicios/{id}',
-     'servicios'],
-    ['book','BookAppointmentScreen','/agendar/:servicioId','getAvailability','GET',
-     '/v1/servicios/{id}/disponibilidad','ninguna · online-only'],
-    ['book','BookAppointmentScreen','/agendar/:servicioId','bookAppointment','POST','/v1/citas','citas'],
-    ['apt','MyAppointmentsScreen','/mis-citas','getMyAppointments','GET','/v1/citas/mias','citas'],
-    ['apt','AppointmentDetailScreen','/cita/:citaId','cancelAppointment','PATCH',
-     '/v1/citas/{id}/cancelar','citas'],
-    ['biz','ServiceFormScreen','/negocio/servicio/nuevo','createService + setSchedule','POST',
-     '/v1/negocio/servicios','ninguna · online-only'],
-    ['biz','BusinessServicesScreen','/negocio/servicios','pauseService','PATCH',
-     '/v1/negocio/servicios/{id}/estado','ninguna · online-only'],
-    ['biz','BusinessAgendaScreen','/negocio/agenda','getBusinessAgenda','GET','/v1/negocio/agenda',
+    ['auth','SignUpScreen','/register','signUp','POST','/v1/auth/register','ninguna · token en Keystore'],
+    ['cat','CatalogScreen','/services','getPublishedServices','GET','/v1/services',
+     'service · business · professional'],
+    ['cat','ServiceDetailScreen','/service/:serviceId','getServiceDetail','GET','/v1/services/{id}',
+     'service'],
+    ['book','BookAppointmentScreen','/book/:serviceId','getAvailability','GET',
+     '/v1/services/{id}/availability','ninguna · online-only'],
+    ['book','BookAppointmentScreen','/book/:serviceId','bookAppointment','POST','/v1/appointments','appointment'],
+    ['apt','MyAppointmentsScreen','/my-appointments','getMyAppointments','GET','/v1/appointments/mine','appointment'],
+    ['apt','AppointmentDetailScreen','/appointment/:appointmentId','cancelAppointment','PATCH',
+     '/v1/appointments/{id}/cancel','appointment'],
+    ['biz','ServiceFormScreen','/business/service/new','createService + setSchedule','POST',
+     '/v1/business/services','ninguna · online-only'],
+    ['biz','BusinessServicesScreen','/business/services','pauseService','PATCH',
+     '/v1/business/services/{id}/status','ninguna · online-only'],
+    ['biz','BusinessAgendaScreen','/business/agenda','getBusinessAgenda','GET','/v1/business/agenda',
      'ninguna · datos de clientas'],
-    ['biz','BusinessAgendaScreen','/negocio/agenda','respondAppointment','PATCH',
-     '/v1/negocio/citas/{id}/responder','ninguna · datos de clientas']
+    ['biz','BusinessAgendaScreen','/business/agenda','respondAppointment','PATCH',
+     '/v1/business/appointments/{id}/respond','ninguna · datos de clientas']
   ];
   const host = document.getElementById('chain');
   let current = null;

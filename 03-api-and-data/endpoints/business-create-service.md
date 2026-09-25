@@ -1,8 +1,8 @@
 # Endpoint — Publicar un servicio
 
 - **Feature:** [Gestión del negocio](../../01-architecture/features/business.md)
-- **Método y ruta:** `POST /v1/negocio/servicios`
-- **Requiere sesión:** Sí, con rol `negocio`
+- **Método y ruta:** `POST /v1/business/services`
+- **Requiere sesión:** Sí, con rol `business`
 
 Es el endpoint del Sprint 1 y el que llena el catálogo. Sin él, la app de la clienta abre vacía.
 
@@ -13,17 +13,17 @@ Es el endpoint del Sprint 1 y el que llena el catálogo. Sin él, la app de la c
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
 | `name` | body | string | Sí | Hasta 60 caracteres |
-| `type` | body | string | Sí | `tradicional`, `semipermanente`, `acrilicas`, `retiro`, `decoracion` |
+| `type` | body | string | Sí | `traditional`, `semi_permanent`, `acrylic`, `removal`, `nail_art` |
 | `description` | body | string | Sí | Qué incluye el servicio |
 | `priceCop` | body | number | Sí | Entero en pesos, mayor a 0 |
 | `durationMinutes` | body | number | Sí | Múltiplo de 15, entre 15 y 240 |
-| `professionalId` | body | string | Sí | Profesional que lo atiende |
+| `professionalId` | body | string | Sí | Profesional que lo atiende. Sale de [listar profesionales](./business-list-professionals.md) y debe ser del mismo negocio |
 | `schedule` | body | array | Sí | Horario de atención por día de la semana |
 
 ```json
 {
   "name": "Manicure semipermanente",
-  "type": "semipermanente",
+  "type": "semi_permanent",
   "description": "Incluye limado, cutícula, esmaltado semipermanente y decoración sencilla.",
   "priceCop": 45000,
   "durationMinutes": 60,
@@ -45,7 +45,7 @@ Es el endpoint del Sprint 1 y el que llena el catálogo. Sin él, la app de la c
 ## Response
 
 **Éxito (201):** el servicio creado con el mismo formato de
-[detalle de servicio](./catalogo-detalle-servicio.md), con `isPublished` en true.
+[detalle de servicio](./catalog-service-detail.md), con `isPublished` en true.
 
 **Mapeo DTO a dominio:** igual al del detalle. El servidor devuelve el `id` generado, que la app usa
 para navegar de vuelta a la lista con el servicio ya visible.

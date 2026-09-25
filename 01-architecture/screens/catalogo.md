@@ -1,6 +1,6 @@
 # Pantalla — CatalogScreen
 
-- **Ruta:** `/servicios`
+- **Ruta:** `/services`
 - **Feature:** [Catálogo de servicios](../features/catalog.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).
@@ -44,7 +44,7 @@ entrada de la app y **se explora sin cuenta**.
 | Acción de la usuaria | Resultado | Caso de uso |
 |----------------------|-----------|-------------|
 | Tocar un chip de tipo | Filtra la lista sin dejarla en blanco | `getPublishedServices` |
-| Tocar una tarjeta | Navega a `/servicio/:servicioId` | — |
+| Tocar una tarjeta | Navega a `/service/:serviceId` | — |
 | Deslizar hacia abajo | Refresca desde el servidor | `getPublishedServices` |
 
 ---

@@ -40,6 +40,15 @@
 Se emite un `refreshToken` nuevo en cada llamada (rotación): el interceptor debe reemplazar los dos
 tokens guardados, no solo el `accessToken`.
 
+Desde el 2026-09-25 la rotación **revoca el `refreshToken` anterior**: volver a usarlo responde 401.
+Antes de esa fecha el anterior seguía sirviendo hasta vencer, y la fila "ya rotado" de la tabla de
+errores no era cierta. La revocación se guarda en la tabla `revoked_refresh_token` del servidor,
+la misma que usa [cerrar sesión](./auth-logout.md).
+
+Consecuencia para la app: si dos peticiones refrescan a la vez con el mismo `refreshToken`, la
+segunda recibe 401. El interceptor debe **serializar** el refresco (una sola llamada en vuelo; las
+demás esperan su resultado).
+
 **Mapeo DTO a dominio:** igual al de [`auth-login`](./auth-login.md) — ninguno de los dos campos
 entra al dominio, van directo al plugin de secure storage.
 

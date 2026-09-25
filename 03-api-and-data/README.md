@@ -10,7 +10,8 @@ móvil: manejo de tokens, reintentos, comportamiento sin conexión y migraciones
 se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
 > **El backend de ManiCita ya está implementado** en Node.js + Express + PostgreSQL, en el repo
-> `beauty-salon` ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)),
+> `beauty-salon-api` ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md),
+> [ADR-011](../01-architecture/decisions/records/ADR-011-cuatro-repositorios.md)),
 > siguiendo exactamente el contrato diseñado en [`endpoints/`](./endpoints/). Mientras el frontend no
 > esté conectado a una instancia real, se puede seguir sirviendo el contrato con un mock local: la
 > [Definition of Ready](../00-governance/definition-of-ready.md) admite el contrato *stubbed* para
@@ -38,27 +39,32 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 | Endpoint | Documento | Feature | Sesión |
 |----------|-----------|---------|--------|
 | `POST /v1/auth/login` | [auth-login.md](./endpoints/auth-login.md) | auth | No |
-| `POST /v1/auth/registro` | [auth-registro.md](./endpoints/auth-registro.md) | auth | No |
+| `POST /v1/auth/register` | [auth-register.md](./endpoints/auth-register.md) | auth | No |
 | `POST /v1/auth/refresh` | [auth-refresh.md](./endpoints/auth-refresh.md) | auth | No (requiere `refreshToken`) |
-| `GET /v1/servicios` | [catalogo-listar-servicios.md](./endpoints/catalogo-listar-servicios.md) | catalog | No |
-| `GET /v1/servicios/{id}` | [catalogo-detalle-servicio.md](./endpoints/catalogo-detalle-servicio.md) | catalog | No |
-| `GET /v1/servicios/{id}/disponibilidad` | [agendamiento-disponibilidad.md](./endpoints/agendamiento-disponibilidad.md) | booking | No |
-| `POST /v1/citas` | [agendamiento-crear-cita.md](./endpoints/agendamiento-crear-cita.md) | booking | Sí, clienta |
-| `GET /v1/citas/mias` | [citas-listar-mis-citas.md](./endpoints/citas-listar-mis-citas.md) | appointments | Sí, clienta |
-| `PATCH /v1/citas/{id}/cancelar` | [citas-cancelar-cita.md](./endpoints/citas-cancelar-cita.md) | appointments | Sí, clienta |
-| `POST /v1/negocio/servicios` | [negocio-crear-servicio.md](./endpoints/negocio-crear-servicio.md) | business | Sí, negocio |
-| `PATCH /v1/negocio/servicios/{id}/estado` | [negocio-pausar-servicio.md](./endpoints/negocio-pausar-servicio.md) | business | Sí, negocio |
-| `GET /v1/negocio/agenda` | [negocio-agenda.md](./endpoints/negocio-agenda.md) | business | Sí, negocio |
-| `PATCH /v1/negocio/citas/{id}/responder` | [negocio-responder-cita.md](./endpoints/negocio-responder-cita.md) | business | Sí, negocio |
+| `POST /v1/auth/logout` | [auth-logout.md](./endpoints/auth-logout.md) | auth | No (requiere `refreshToken`) |
+| `GET /v1/services` | [catalog-list-services.md](./endpoints/catalog-list-services.md) | catalog | No |
+| `GET /v1/services/{id}` | [catalog-service-detail.md](./endpoints/catalog-service-detail.md) | catalog | No |
+| `GET /v1/services/{id}/availability` | [booking-availability.md](./endpoints/booking-availability.md) | booking | No |
+| `POST /v1/appointments` | [booking-create-appointment.md](./endpoints/booking-create-appointment.md) | booking | Sí, clienta |
+| `GET /v1/appointments/mine` | [appointments-list-mine.md](./endpoints/appointments-list-mine.md) | appointments | Sí, clienta |
+| `PATCH /v1/appointments/{id}/cancel` | [appointments-cancel.md](./endpoints/appointments-cancel.md) | appointments | Sí, clienta |
+| `GET /v1/business/professionals` | [business-list-professionals.md](./endpoints/business-list-professionals.md) | business | Sí, negocio |
+| `POST /v1/business/professionals` | [business-create-professional.md](./endpoints/business-create-professional.md) | business | Sí, negocio |
+| `GET /v1/business/services` | [business-list-services.md](./endpoints/business-list-services.md) | business | Sí, negocio |
+| `POST /v1/business/services` | [business-create-service.md](./endpoints/business-create-service.md) | business | Sí, negocio |
+| `PUT /v1/business/services/{id}` | [business-update-service.md](./endpoints/business-update-service.md) | business | Sí, negocio |
+| `PATCH /v1/business/services/{id}/status` | [business-update-service-status.md](./endpoints/business-update-service-status.md) | business | Sí, negocio |
+| `GET /v1/business/agenda` | [business-agenda.md](./endpoints/business-agenda.md) | business | Sí, negocio |
+| `PATCH /v1/business/appointments/{id}/respond` | [business-respond-appointment.md](./endpoints/business-respond-appointment.md) | business | Sí, negocio |
 
 ## Entidades locales documentadas
 
 | Tabla | Documento | Versión de esquema | Qué guarda |
 |-------|-----------|--------------------|------------|
-| `servicios` | [servicios.md](./entities/servicios.md) | 1 | Catálogo cacheado |
-| `negocios` | [negocios.md](./entities/negocios.md) | 1 | Nombre y dirección del salón |
-| `profesionales` | [profesionales.md](./entities/profesionales.md) | 1 | Quién atiende cada servicio |
-| `citas` | [citas.md](./entities/citas.md) | 2 | Solo las citas de la clienta autenticada |
+| `service` | [service.md](./entities/service.md) | 2 | Catálogo cacheado |
+| `business` | [business.md](./entities/business.md) | 2 | Nombre y dirección del salón |
+| `professional` | [professional.md](./entities/professional.md) | 2 | Quién atiende cada servicio |
+| `appointment` | [appointment.md](./entities/appointment.md) | 3 | Solo las citas de la clienta autenticada |
 
 > Son cuatro y no más a propósito. Cupos, horarios y agenda del negocio **no se guardan**, y el
 > porqué de cada exclusión está en [`persistence.md`](./persistence.md).

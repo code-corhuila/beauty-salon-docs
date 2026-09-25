@@ -18,7 +18,7 @@ Se decide una vez, se escribe, y se hace cumplir en la revisión.
 | [layers-and-state.md](./layers-and-state.md) | Capas Presentation/Domain/Data y patrón de estado |
 | [navigation.md](./navigation.md) | Modelo de rutas y reglas de navegación |
 | [decisions/](./decisions/) | Registros de decisiones de arquitectura (ADRs) |
-| [plan-implementacion-login-catalogo.md](./plan-implementacion-login-catalogo.md) | Plan de trabajo para construir `auth` y `catalog` en `beauty-salon/frontend/` (monorepo temporal — ver [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md) y [ADR-010](./decisions/records/ADR-010-monorepo-temporal.md)) |
+| [plan-implementacion-login-catalogo.md](./plan-implementacion-login-catalogo.md) | Plan de trabajo para construir `auth` y `catalog` en `beauty-salon-app` (ver [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md) y [ADR-011](./decisions/records/ADR-011-cuatro-repositorios.md)) |
 | [flows/](./flows/) | Diagramas de apoyo: BPMN anotado, mapa de navegación y cadena de trazabilidad |
 | [mockups/](./mockups/) | Las diez pantallas dibujadas, sus estados clave, los componentes y los tokens |
 | [features/](./features/) | Un documento por feature |
@@ -43,15 +43,15 @@ Se decide una vez, se escribe, y se hace cumplir en la revisión.
 | Pantalla | Documento | Ruta | Feature |
 |----------|-----------|------|---------|
 | LoginScreen | [login.md](./screens/login.md) | `/login` | auth |
-| SignUpScreen | [registro.md](./screens/registro.md) | `/registro` | auth |
-| CatalogScreen | [catalogo.md](./screens/catalogo.md) | `/servicios` | catalog |
-| ServiceDetailScreen | [detalle-servicio.md](./screens/detalle-servicio.md) | `/servicio/:servicioId` | catalog |
-| BookAppointmentScreen | [agendar-cita.md](./screens/agendar-cita.md) | `/agendar/:servicioId` | booking |
-| MyAppointmentsScreen | [mis-citas.md](./screens/mis-citas.md) | `/mis-citas` | appointments |
-| AppointmentDetailScreen | [detalle-cita.md](./screens/detalle-cita.md) | `/cita/:citaId` | appointments |
-| BusinessServicesScreen | [negocio-servicios.md](./screens/negocio-servicios.md) | `/negocio/servicios` | business |
-| ServiceFormScreen | [negocio-servicio-form.md](./screens/negocio-servicio-form.md) | `/negocio/servicio/nuevo` | business |
-| BusinessAgendaScreen | [negocio-agenda.md](./screens/negocio-agenda.md) | `/negocio/agenda` | business |
+| SignUpScreen | [registro.md](./screens/registro.md) | `/register` | auth |
+| CatalogScreen | [catalogo.md](./screens/catalogo.md) | `/services` | catalog |
+| ServiceDetailScreen | [detalle-servicio.md](./screens/detalle-servicio.md) | `/service/:serviceId` | catalog |
+| BookAppointmentScreen | [agendar-cita.md](./screens/agendar-cita.md) | `/book/:serviceId` | booking |
+| MyAppointmentsScreen | [mis-citas.md](./screens/mis-citas.md) | `/my-appointments` | appointments |
+| AppointmentDetailScreen | [detalle-cita.md](./screens/detalle-cita.md) | `/appointment/:appointmentId` | appointments |
+| BusinessServicesScreen | [negocio-servicios.md](./screens/negocio-servicios.md) | `/business/services` | business |
+| ServiceFormScreen | [negocio-servicio-form.md](./screens/negocio-servicio-form.md) | `/business/service/new` | business |
+| BusinessAgendaScreen | [business-agenda.md](./screens/negocio-agenda.md) | `/business/agenda` | business |
 
 ## Diagramas de apoyo
 

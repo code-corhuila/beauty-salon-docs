@@ -1,8 +1,8 @@
 # Endpoint — Crear la cita
 
 - **Feature:** [Agendamiento](../../01-architecture/features/booking.md)
-- **Método y ruta:** `POST /v1/citas`
-- **Requiere sesión:** Sí, con rol `clienta`
+- **Método y ruta:** `POST /v1/appointments`
+- **Requiere sesión:** Sí, con rol `client`
 
 Es el endpoint donde el MVP se cumple o no se cumple.
 
@@ -13,7 +13,7 @@ Es el endpoint donde el MVP se cumple o no se cumple.
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
 | `serviceId` | body | string | Sí | Servicio que se agenda |
-| `slotId` | body | string | Sí | Cupo devuelto por [disponibilidad](./agendamiento-disponibilidad.md) |
+| `slotId` | body | string | Sí | Cupo devuelto por [disponibilidad](./booking-availability.md) |
 | `clientRequestId` | body | string | Sí | UUID generado en el cliente para que el servidor pueda descartar envíos duplicados |
 
 ```json
@@ -37,7 +37,7 @@ Es el endpoint donde el MVP se cumple o no se cumple.
 ```json
 {
   "id": "apt_501",
-  "status": "pendiente",
+  "status": "pending",
   "startsAt": "2026-09-12T09:00:00-05:00",
   "service": { "id": "svc_128", "name": "Manicure semipermanente", "priceCop": 45000, "durationMinutes": 60 },
   "professional": { "id": "prf_12", "name": "Marcela Ruiz" },
@@ -50,9 +50,9 @@ Es el endpoint donde el MVP se cumple o no se cumple.
 
 | Campo del DTO | Campo de dominio | Transformación |
 |---------------|------------------|----------------|
-| `status` | `AppointmentStatus` | string a enum: `pendiente`, `confirmada`, `rechazada`, `cancelada`, `completada`, `noAsistio`. Un valor desconocido es error |
+| `status` | `AppointmentStatus` | string a enum: `pending`, `confirmed`, `rejected`, `cancelled`, `completed`, `no_show`. Un valor desconocido es error |
 | `startsAt`, `createdAt` | `Date` | ISO 8601 con zona |
-| `service`, `professional`, `business` | Se aplanan en `Appointment` | Ver [`citas`](../entities/citas.md) |
+| `service`, `professional`, `business` | Se aplanan en `Appointment` | Ver [`appointment`](../entities/appointment.md) |
 
 ---
 
@@ -72,6 +72,6 @@ Es el endpoint donde el MVP se cumple o no se cumple.
 ## Caché y offline
 
 - **Estrategia:** online-only, sin excepción.
-- **Entidad cacheada:** la cita creada se guarda en [`citas`](../entities/citas.md) para que aparezca
+- **Entidad cacheada:** la cita creada se guarda en [`appointment`](../entities/appointment.md) para que aparezca
   de inmediato en Mis citas.
 - **Invalidación:** crear una cita invalida el caché de Mis citas.

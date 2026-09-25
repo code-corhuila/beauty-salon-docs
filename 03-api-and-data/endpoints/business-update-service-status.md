@@ -1,8 +1,8 @@
 # Endpoint — Pausar o publicar un servicio
 
 - **Feature:** [Gestión del negocio](../../01-architecture/features/business.md)
-- **Método y ruta:** `PATCH /v1/negocio/servicios/{servicioId}/estado`
-- **Requiere sesión:** Sí, con rol `negocio`
+- **Método y ruta:** `PATCH /v1/business/services/{serviceId}/status`
+- **Requiere sesión:** Sí, con rol `business`
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `servicioId` | path | string | Sí | Debe pertenecer al negocio autenticado |
+| `serviceId` | path | string | Sí | Debe pertenecer al negocio autenticado |
 | `isPublished` | body | boolean | Sí | `false` pausa, `true` vuelve a publicar |
 
 ```json
@@ -27,7 +27,7 @@
 
 | Efecto | Comportamiento |
 |--------|----------------|
-| Catálogo de la clienta | El servicio desaparece de `GET /v1/servicios` |
+| Catálogo de la clienta | El servicio desaparece de `GET /v1/services` |
 | Deep link al detalle | Devuelve 410, y la app muestra que ya no está disponible |
 | Citas ya agendadas | **Se respetan.** Siguen en la agenda del negocio y en Mis citas de la clienta |
 | Disponibilidad | Deja de ofrecer cupos nuevos |

@@ -1,8 +1,8 @@
 # Entidad local — negocios
 
 - **Almacén:** SQLite con `@capacitor-community/sqlite` y Drizzle ORM
-- **Tabla:** `negocios`
-- **Versión de esquema en que se introduce:** 1
+- **Tabla:** `business`
+- **Versión de esquema en que se introduce:** 2 (en la 1 se llamaba en español; ver [persistence.md](../persistence.md))
 
 Guarda lo mínimo para mostrar de quién es cada servicio en el catálogo: el nombre del salón y su
 dirección.
@@ -29,7 +29,7 @@ dirección.
 
 | Índice | Columnas | Para qué |
 |--------|----------|----------|
-| — | — | Ninguno además de la llave primaria: la tabla siempre se consulta por `id` desde `servicios` |
+| — | — | Ninguno además de la llave primaria: la tabla siempre se consulta por `id` desde `service` |
 
 > No se crea un índice por si acaso. Un índice que ninguna consulta usa solo hace más lentas las
 > escrituras.
@@ -40,14 +40,14 @@ dirección.
 
 | Entidad relacionada | Llave | Cardinalidad |
 |---------------------|-------|--------------|
-| [`servicios`](./servicios.md) | `negocio_id` en la otra tabla | 1:N |
-| [`profesionales`](./profesionales.md) | `negocio_id` en la otra tabla | 1:N |
+| [`service`](./service.md) | `business_id` en la otra tabla | 1:N |
+| [`professional`](./professional.md) | `business_id` en la otra tabla | 1:N |
 
 ---
 
 ## Sincronización
 
-- **¿Se sincroniza?** No. Caché de solo lectura, igual que `servicios`.
+- **¿Se sincroniza?** No. Caché de solo lectura, igual que `service`.
 - **Política de conflicto:** no aplica; la respuesta del servidor reemplaza la fila.
 - **Vencimiento:** 30 minutos, el mismo del catálogo, porque llegan en la misma respuesta.
 
@@ -55,5 +55,5 @@ dirección.
 
 ## Notas de migración
 
-- Se crea en la versión 1 junto con `servicios` y `profesionales`.
+- Se crea en la versión 2 junto con `service` y `professional`.
 - Se vacía al cerrar sesión.

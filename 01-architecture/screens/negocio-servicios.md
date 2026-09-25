@@ -1,6 +1,6 @@
 # Pantalla — BusinessServicesScreen
 
-- **Ruta:** `/negocio/servicios`
+- **Ruta:** `/business/services`
 - **Feature:** [Gestión del negocio](../features/business.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).
@@ -41,7 +41,7 @@ no esté prestando. Es la pantalla de inicio del lado del negocio.
 
 | Acción de la usuaria | Resultado | Caso de uso |
 |----------------------|-----------|-------------|
-| Tocar Crear servicio | Navega a `/negocio/servicio/nuevo` | — |
+| Tocar Crear servicio | Navega a `/business/service/new` | — |
 | Tocar un servicio | Navega al formulario en modo edición | — |
 | Mover el interruptor | Publica o pausa el servicio; cambio optimista que se revierte si falla | `pauseService` |
 

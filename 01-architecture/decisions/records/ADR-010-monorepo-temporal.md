@@ -2,7 +2,7 @@
 
 - **ID:** ADR-010
 - **Fecha:** 2026-09-18
-- **Estado:** Accepted
+- **Estado:** Superseded by [ADR-011](./ADR-011-cuatro-repositorios.md) (2026-09-25)
 - **Autoría:** Lilly Signey Puentes Rincon y Lizeth Caicedo
 
 ---
@@ -14,7 +14,7 @@ indicación explícita del profesor, y registró que el curso exige **repos sepa
 (docs, backend, frontend), con el repo de frontend (Ionic React + Capacitor,
 [ADR-005](./ADR-005-mobile-stack-ionic-capacitor.md)) todavía **sin crear**.
 
-Para poder arrancar la Fase 0 de [`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md)
+Para poder arrancar la Fase 0 de [`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md)
 sin esperar a que se cree y nombre ese repo nuevo, el equipo decidió que esta **primera versión**
 (v1/MVP) trabaje bajo un esquema de **monorepo**: backend y frontend comparten el mismo repositorio
 (`beauty-salon`), pero en carpetas distintas, para conservar la separación de responsabilidades a
@@ -69,7 +69,7 @@ puede extraer con `git subtree split` conservando su historial).
 ## Consecuencias
 
 **Positivas:**
-- El equipo puede arrancar la Fase 0 del frontend ([`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md))
+- El equipo puede arrancar la Fase 0 del frontend ([`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md))
   de inmediato, sin depender de que se cree un repo nuevo.
 - El backend conserva su historial de git; solo se reubican sus archivos dentro de `backend/`.
 
@@ -83,7 +83,7 @@ puede extraer con `git subtree split` conservando su historial).
 **Impacto en el sistema:**
 - Documentos actualizados junto con esta ADR: [`README.md`](../../README.md) (Decisión 6),
   [`01-architecture/README.md`](../README.md),
-  [`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md) (el repo de
+  [`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md) (el repo de
   código del frontend ya no está "sin crear": es `beauty-salon/frontend/`).
 - Repo `beauty-salon`: reorganizar `src/`, `Dockerfile`, `docker-compose.yml`, `package.json` y
   demás archivos de la API dentro de `backend/`; crear `frontend/` con el scaffold Ionic + Capacitor
@@ -98,5 +98,5 @@ puede extraer con `git subtree split` conservando su historial).
   frontend también vive ahí, por ahora).
 - Relacionada con: [ADR-005](./ADR-005-mobile-stack-ionic-capacitor.md) (stack del frontend, que
   ahora arranca dentro de `beauty-salon/frontend/` en vez de un repo aparte).
-- [`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md) — Fase 0 se
+- [`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md) — Fase 0 se
   ejecuta dentro de `beauty-salon/frontend/`.

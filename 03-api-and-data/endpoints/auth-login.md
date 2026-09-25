@@ -33,7 +33,7 @@
   "user": {
     "id": "usr_128",
     "name": "Laura Gómez",
-    "role": "clienta"
+    "role": "client"
   }
 }
 ```
@@ -43,7 +43,7 @@
 | Campo del DTO | Campo de dominio | Transformación |
 |---------------|------------------|----------------|
 | `accessToken`, `refreshToken` | — | No entran al dominio: van directo al plugin de secure storage de Capacitor |
-| `user.role` | `Session.role` | string a enum `clienta` o `negocio`; un valor desconocido es error, no se asume clienta |
+| `user.role` | `Session.role` | string a enum `client` o `business`; un valor desconocido es error, no se asume clienta |
 | `user.id`, `user.name` | `Session.userId`, `Session.name` | Directo |
 
 ---

@@ -16,8 +16,8 @@ está**:
 
 | Rol | Qué puede hacer | Rutas propias |
 |-----|-----------------|---------------|
-| `clienta` | Explorar, agendar, ver y cancelar sus citas | `/agendar/:id`, `/mis-citas`, `/cita/:id` |
-| `negocio` | Publicar y pausar servicios, definir horarios, responder citas | `/negocio/*` |
+| `client` | Explorar, agendar, ver y cancelar sus citas | `/book/:id`, `/my-appointments`, `/appointment/:id` |
+| `business` | Publicar y pausar servicios, definir horarios, responder citas | `/business/*` |
 
 - El rol viene dentro del token y se lee al restaurar la sesión.
 - **El rol se verifica en el servidor en cada petición.** La guarda de navegación del cliente es

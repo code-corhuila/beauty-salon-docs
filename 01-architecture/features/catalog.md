@@ -18,8 +18,8 @@ reemplaza la pregunta de WhatsApp "¿cuánto vale y qué días tienes?".
 
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
-| [CatalogScreen](../screens/catalogo.md) | `/servicios` | Listar los servicios publicados y filtrarlos por tipo |
-| [ServiceDetailScreen](../screens/detalle-servicio.md) | `/servicio/:servicioId` | Ver descripción, precio, duración, profesional y dirección, y entrar a agendar |
+| [CatalogScreen](../screens/catalogo.md) | `/services` | Listar los servicios publicados y filtrarlos por tipo |
+| [ServiceDetailScreen](../screens/detalle-servicio.md) | `/service/:serviceId` | Ver descripción, precio, duración, profesional y dirección, y entrar a agendar |
 
 ---
 
@@ -39,11 +39,11 @@ reemplaza la pregunta de WhatsApp "¿cuánto vale y qué días tienes?".
 
 - **Casos de uso:** `getPublishedServices`, `getServiceDetail`
 - **Repositorios:** `CatalogRepository`
-- **Endpoints:** [`GET /v1/servicios`](../../03-api-and-data/endpoints/catalogo-listar-servicios.md),
-  [`GET /v1/servicios/{id}`](../../03-api-and-data/endpoints/catalogo-detalle-servicio.md)
-- **Persistencia local:** tablas [`servicios`](../../03-api-and-data/entities/servicios.md),
-  [`profesionales`](../../03-api-and-data/entities/profesionales.md) y
-  [`negocios`](../../03-api-and-data/entities/negocios.md)
+- **Endpoints:** [`GET /v1/services`](../../03-api-and-data/endpoints/catalog-list-services.md),
+  [`GET /v1/services/{id}`](../../03-api-and-data/endpoints/catalog-service-detail.md)
+- **Persistencia local:** tablas [`service`](../../03-api-and-data/entities/service.md),
+  [`professional`](../../03-api-and-data/entities/professional.md) y
+  [`business`](../../03-api-and-data/entities/business.md)
 - **Estrategia offline:** **read-through cache**. Se muestra lo cacheado de inmediato y se refresca
   en segundo plano. Justificación de negocio: un precio de manicure que cambió ayer sigue siendo útil
   hoy; una clienta con la app en blanco en el bus, no.

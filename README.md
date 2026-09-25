@@ -55,8 +55,8 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 2 | Stack móvil | Ionic React + TypeScript sobre Capacitor, **solo Android** en la primera entrega | [ADR-005](./01-architecture/decisions/records/ADR-005-mobile-stack-ionic-capacitor.md) |
 | 3 | Almacenamiento local | SQLite (`@capacitor-community/sqlite`) con Drizzle ORM | [ADR-007](./01-architecture/decisions/records/ADR-007-local-storage-capacitor.md) |
 | 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
-| 5 | Idioma de la documentación | Español en todo lo que se adapta al proyecto; los nombres de archivo, las claves de i18n y los términos técnicos estándar (`loading`, `offline-first`, DTO) se mantienen en inglés | — |
-| 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en `beauty-salon/backend/` (monorepo temporal, ver ADR-010) siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md), [ADR-010](./01-architecture/decisions/records/ADR-010-monorepo-temporal.md) |
+| 5 | Idioma | Documentación en español. **Todo identificador en inglés**: tablas y columnas (singular, `snake_case`), rutas de la API y de la app, valores de enumeración (`pending`, `client`, `semi_permanent`), campos del JSON (`camelCase`) y nombres de archivo de endpoints y entidades. Los textos que lee la persona (i18n, mensajes de error) van en español | [ADR-012](./01-architecture/decisions/records/ADR-012-nombres-en-ingles.md) |
+| 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en `beauty-salon-api` siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/`. Cuatro repos: `beauty-salon-docs`, `beauty-salon-infra`, `beauty-salon-api` y `beauty-salon-app` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md), [ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
@@ -75,6 +75,11 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 > ese repo nuevo no se crea, el equipo decidió trabajar la v1 como **monorepo**: `beauty-salon`
 > contiene carpetas `backend/` y `frontend/` separadas, con migración planeada a repos separados en
 > una próxima iteración. Ver [ADR-010](./01-architecture/decisions/records/ADR-010-monorepo-temporal.md).
+
+> **Decisión 6 revisada el 2026-09-25:** con el Manual de contrato de datos y API del curso, el
+> monorepo se separó en cuatro repositorios hermanos: `beauty-salon-docs`, `beauty-salon-infra`
+> (compose, sin esquema), `beauty-salon-api` (antes `beauty-salon`; la API y el esquema) y
+> `beauty-salon-app` (el antiguo `frontend/`). Ver [ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md).
 
 > Las secciones `04-quality` y `05-release` se conservan tal como vienen del framework original,
 > en inglés: quedan fuera del alcance de esta entrega.

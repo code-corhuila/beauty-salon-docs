@@ -1,6 +1,6 @@
 # Pantalla — ServiceFormScreen
 
-- **Ruta:** `/negocio/servicio/nuevo` (con `servicioId` opcional para editar)
+- **Ruta:** `/business/service/new` (con `serviceId` opcional para editar)
 - **Feature:** [Gestión del negocio](../features/business.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).

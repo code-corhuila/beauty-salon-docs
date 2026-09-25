@@ -38,8 +38,8 @@ se cumplen así:
 - **Dado** que confirmo una hora que otra clienta acaba de tomar, **cuando** el servidor rechaza el
   cupo, **entonces** la app me avisa y me vuelve a mostrar la disponibilidad actualizada.
 - Pantalla: [`agendar-cita.md`](../01-architecture/screens/agendar-cita.md) ·
-  Endpoints: [`disponibilidad`](../03-api-and-data/endpoints/agendamiento-disponibilidad.md),
-  [`crear cita`](../03-api-and-data/endpoints/agendamiento-crear-cita.md)
+  Endpoints: [`disponibilidad`](../03-api-and-data/endpoints/booking-availability.md),
+  [`crear cita`](../03-api-and-data/endpoints/booking-create-appointment.md)
 - Estados: loading (consultando cupos), vacío (no hay cupos ese día), error (cupo tomado), offline
   (no se puede agendar sin conexión, la feature es online-only).
 - Depende de: HU-001 y HU-003. Estimación: 8 puntos.

@@ -1,6 +1,6 @@
 # Pantalla — MyAppointmentsScreen
 
-- **Ruta:** `/mis-citas`
+- **Ruta:** `/my-appointments`
 - **Feature:** [Mis citas](../features/appointments.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).
@@ -42,7 +42,7 @@ salón para confirmar la hora, muchas veces sin buena señal.
 | Acción de la usuaria | Resultado | Caso de uso |
 |----------------------|-----------|-------------|
 | Cambiar de pestaña | Alterna próximas y pasadas sin volver a pedir al servidor | — |
-| Tocar una cita | Navega a `/cita/:citaId` | — |
+| Tocar una cita | Navega a `/appointment/:appointmentId` | — |
 | Deslizar hacia abajo | Refresca desde el servidor | `getMyAppointments` |
 
 ---

@@ -1,7 +1,7 @@
 # Endpoint — Listar servicios publicados
 
 - **Feature:** [Catálogo de servicios](../../01-architecture/features/catalog.md)
-- **Método y ruta:** `GET /v1/servicios`
+- **Método y ruta:** `GET /v1/services`
 - **Requiere sesión:** No. El catálogo se explora sin cuenta a propósito
 
 ---
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `tipo` | query | string | No | `tradicional`, `semipermanente`, `acrilicas`, `retiro`, `decoracion` |
+| `type` | query | string | No | `traditional`, `semi_permanent`, `acrylic`, `removal`, `nail_art` |
 | `page` | query | number | No | Por defecto 1 |
 | `pageSize` | query | number | No | Por defecto 20, máximo 50 |
 
@@ -28,7 +28,7 @@ Solo devuelve servicios en estado publicado. Los pausados no aparecen nunca en e
     {
       "id": "svc_128",
       "name": "Manicure semipermanente",
-      "type": "semipermanente",
+      "type": "semi_permanent",
       "priceCop": 45000,
       "durationMinutes": 60,
       "imageUrl": "https://cdn.manicita.app/svc_128.jpg",
@@ -48,7 +48,7 @@ Solo devuelve servicios en estado publicado. Los pausados no aparecen nunca en e
 | `priceCop` | `Service.priceCop` | Entero en pesos. La UI lo formatea con `Intl.NumberFormat`, el dominio no guarda texto |
 | `durationMinutes` | `Service.durationMinutes` | Directo. Si no es múltiplo de 15, se descarta el servicio y se registra el dato inválido |
 | `type` | `ServiceType` | string a enum; un tipo desconocido se mapea a `otro` y el servicio igual se muestra |
-| `professional`, `business` | Se aplanan en `Service` y se guardan además en sus tablas | Ver [`servicios`](../entities/servicios.md) |
+| `professional`, `business` | Se aplanan en `Service` y se guardan además en sus tablas | Ver [`service`](../entities/service.md) |
 
 ---
 
@@ -67,7 +67,7 @@ es el estado `empty` de la pantalla, no un error.
 ## Caché y offline
 
 - **Estrategia:** read-through cache.
-- **Entidades cacheadas:** [`servicios`](../entities/servicios.md),
-  [`profesionales`](../entities/profesionales.md), [`negocios`](../entities/negocios.md).
+- **Entidades cacheadas:** [`service`](../entities/service.md),
+  [`professional`](../entities/professional.md), [`business`](../entities/business.md).
 - **TTL:** 30 minutos. Vencido, se muestra lo cacheado y se refresca en segundo plano.
 - **Invalidación:** al hacer pull-to-refresh y al recuperar la conexión.

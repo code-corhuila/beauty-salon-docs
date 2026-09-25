@@ -30,6 +30,10 @@ Una ADR documenta una decisión de arquitectura importante. Un archivo = una dec
 | [ADR-006](./records/ADR-006-state-management-pattern.md) | Patrón de manejo de estado (reafirmación) | Accepted | 2026-09-17 |
 | [ADR-007](./records/ADR-007-local-storage-capacitor.md) | Almacenamiento local (revisión: SQLite vía Capacitor) | Accepted | 2026-09-17 |
 | [ADR-008](./records/ADR-008-dependency-injection.md) | Inyección de dependencias (reafirmación) | Accepted | 2026-09-17 |
+| [ADR-009](./records/ADR-009-backend-repo-and-stack.md) | Repo y stack del backend (API) | Accepted | 2026-09-18 |
+| [ADR-010](./records/ADR-010-monorepo-temporal.md) | Monorepo temporal: backend y frontend en `beauty-salon` | Superseded by ADR-011 | 2026-09-18 |
+| [ADR-011](./records/ADR-011-cuatro-repositorios.md) | Cuatro repositorios: docs, infra, api y app | Accepted | 2026-09-25 |
+| [ADR-012](./records/ADR-012-nombres-en-ingles.md) | Todos los identificadores en inglés, y migraciones versionadas en la API | Accepted | 2026-09-25 |
 
 > La ADR-001 que traía el framework era un ejemplo genérico y el propio archivo pedía reemplazarla.
 > Se reescribió con la decisión real del proyecto, conservando el número y el tema.

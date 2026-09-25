@@ -1,8 +1,8 @@
 # Entidad local — citas
 
 - **Almacén:** SQLite con `@capacitor-community/sqlite` y Drizzle ORM
-- **Tabla:** `citas`
-- **Versión de esquema en que se introduce:** 2
+- **Tabla:** `appointment`
+- **Versión de esquema en que se introduce:** 3
 
 Guarda **solo las citas de la clienta autenticada**. Existe para que pueda ver a qué hora y en qué
 dirección es su cita cuando va camino al salón, que suele ser cuando peor señal tiene.
@@ -17,20 +17,20 @@ se guarda en el dispositivo.
 | Columna | Tipo | Nulo | Notas |
 |---------|------|------|-------|
 | `id` | text | No | Llave primaria, la misma del servidor |
-| `status` | text | No | `pendiente`, `confirmada`, `rechazada`, `cancelada`, `completada`, `no_asistio` |
+| `status` | text | No | `pending`, `confirmed`, `rejected`, `cancelled`, `completed`, `no_show` |
 | `starts_at` | integer | No | Epoch en milisegundos, en hora de Colombia |
-| `servicio_id` | text | No | Llave foránea a [`servicios`](./servicios.md) |
-| `profesional_id` | text | No | Llave foránea a [`profesionales`](./profesionales.md) |
-| `negocio_id` | text | No | Llave foránea a [`negocios`](./negocios.md) |
+| `service_id` | text | No | Llave foránea a [`service`](./service.md) |
+| `professional_id` | text | No | Llave foránea a [`professional`](./professional.md) |
+| `business_id` | text | No | Llave foránea a [`business`](./business.md) |
 | `service_name` | text | No | Copia del nombre al momento de agendar |
 | `price_cop` | integer | No | Copia del precio al momento de agendar |
 | `duration_minutes` | integer | No | Copia de la duración al momento de agendar |
-| `rejection_reason` | text | Sí | Solo cuando `status` es `rechazada` |
+| `rejection_reason` | text | Sí | Solo cuando `status` es `rejected` |
 | `created_at` | integer | No | Epoch en milisegundos |
 | `updated_at` | integer | No | Epoch en milisegundos |
 | `cached_at` | integer | No | Cuándo se trajo del servidor |
 
-> Las tres columnas copiadas —nombre, precio y duración— **duplican** datos de `servicios` a
+> Las tres columnas copiadas —nombre, precio y duración— **duplican** datos de `service` a
 > propósito. Una cita es el registro de lo que se acordó ese día: si la manicurista sube el precio el
 > mes entrante, la cita pasada no puede cambiar de valor. Y si el servicio se despublica, la cita
 > tiene que seguir siendo legible.
@@ -41,8 +41,8 @@ se guarda en el dispositivo.
 
 | Índice | Columnas | Para qué |
 |--------|----------|----------|
-| `idx_citas_starts_at` | `starts_at` | Ordenar la lista y separar próximas de pasadas, que es la consulta de la pantalla principal |
-| `idx_citas_status` | `status` | Filtrar por estado en el detalle y en las pruebas |
+| `idx_appointment_starts_at` | `starts_at` | Ordenar la lista y separar próximas de pasadas, que es la consulta de la pantalla principal |
+| `idx_appointment_status` | `status` | Filtrar por estado en el detalle y en las pruebas |
 
 ---
 
@@ -50,9 +50,9 @@ se guarda en el dispositivo.
 
 | Entidad relacionada | Llave | Cardinalidad |
 |---------------------|-------|--------------|
-| [`servicios`](./servicios.md) | `servicio_id` | N:1 |
-| [`profesionales`](./profesionales.md) | `profesional_id` | N:1 |
-| [`negocios`](./negocios.md) | `negocio_id` | N:1 |
+| [`service`](./service.md) | `service_id` | N:1 |
+| [`professional`](./professional.md) | `professional_id` | N:1 |
+| [`business`](./business.md) | `business_id` | N:1 |
 
 ---
 
@@ -68,7 +68,7 @@ se guarda en el dispositivo.
 
 ## Notas de migración
 
-- Llega en la **versión 2** del esquema, en el Sprint 2, cuando ya hay celulares de prueba con datos
-  de la versión 1. La migración agrega la tabla y sus dos índices sin tocar las tablas existentes.
+- Llega en la **versión 3** del esquema, en el Sprint 2, cuando ya hay celulares de prueba con datos
+  de la versión 2. La migración agrega la tabla y sus dos índices sin tocar las tablas existentes.
 - Se prueba contra una base con catálogo cargado, no vacía.
 - Se vacía al cerrar sesión.

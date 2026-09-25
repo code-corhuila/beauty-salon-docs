@@ -10,9 +10,9 @@
 ## Contexto
 
 Hasta ahora ManiCita no tenía backend real: el contrato de API vivía únicamente como diseño
-*stubbed* en [`03-api-and-data/endpoints/`](../../03-api-and-data/endpoints/), servido con un mock
+*stubbed* en [`03-api-and-data/endpoints/`](../../../03-api-and-data/endpoints/), servido con un mock
 local durante el desarrollo, tal como lo admite la
-[Definition of Ready](../../00-governance/definition-of-ready.md). La Decisión 6 del
+[Definition of Ready](../../../00-governance/definition-of-ready.md). La Decisión 6 del
 [README principal](../../README.md) registraba explícitamente que el backend "no existe todavía".
 
 El profesor de la asignatura indicó que el repositorio `beauty-salon` (el repo original del
@@ -79,17 +79,17 @@ para el almacenamiento local en [ADR-007](./ADR-007-local-storage-capacitor.md).
 - El trabajo de limpieza y el README escritos en `beauty-salon` el 2026-09-17 para convertirlo en
   frontend quedan descartados; hay que reescribir el README de ese repo para su nuevo rol de API.
 - Se necesita crear y nombrar un repo nuevo para el frontend antes de poder arrancar la Fase 0 de
-  [`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md).
+  [`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md).
 - El estado "backend no existe" de la Decisión 6 del README y de
-  [`03-api-and-data/README.md`](../../03-api-and-data/README.md) /
-  [`api-networking.md`](../../03-api-and-data/api-networking.md) queda desactualizado: ahora hay
+  [`03-api-and-data/README.md`](../../../03-api-and-data/README.md) /
+  [`api-networking.md`](../../../03-api-and-data/api-networking.md) queda desactualizado: ahora hay
   repo y stack decididos, aunque el código todavía no está escrito.
 
 **Impacto en el sistema:**
 - Documentos a actualizar: [`README.md`](../../README.md) (Decisión 6), `01-architecture/README.md`,
-  [`plan-implementacion-login-catalogo.md`](../plan-implementacion-login-catalogo.md) (el repo de
-  código que referencia ya no es `beauty-salon`), [`03-api-and-data/README.md`](../../03-api-and-data/README.md)
-  y [`api-networking.md`](../../03-api-and-data/api-networking.md) (estado del backend).
+  [`plan-implementacion-login-catalogo.md`](../../plan-implementacion-login-catalogo.md) (el repo de
+  código que referencia ya no es `beauty-salon`), [`03-api-and-data/README.md`](../../../03-api-and-data/README.md)
+  y [`api-networking.md`](../../../03-api-and-data/api-networking.md) (estado del backend).
 - Repo `beauty-salon`: reescribir su `README.md` para reflejar su nuevo rol de API.
 
 ---

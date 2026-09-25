@@ -1,7 +1,7 @@
 # Endpoint — Detalle de un servicio
 
 - **Feature:** [Catálogo de servicios](../../01-architecture/features/catalog.md)
-- **Método y ruta:** `GET /v1/servicios/{servicioId}`
+- **Método y ruta:** `GET /v1/services/{serviceId}`
 - **Requiere sesión:** No. Es la ruta que recibe el deep link compartido por WhatsApp
 
 ---
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `servicioId` | path | string | Sí | Identificador del servicio |
+| `serviceId` | path | string | Sí | Identificador del servicio |
 
 ---
 
@@ -22,7 +22,7 @@
 {
   "id": "svc_128",
   "name": "Manicure semipermanente",
-  "type": "semipermanente",
+  "type": "semi_permanent",
   "description": "Incluye limado, cutícula, esmaltado semipermanente y decoración sencilla.",
   "priceCop": 45000,
   "durationMinutes": 60,
@@ -57,7 +57,7 @@
 ## Caché y offline
 
 - **Estrategia:** read-through cache.
-- **Entidad cacheada:** [`servicios`](../entities/servicios.md).
+- **Entidad cacheada:** [`service`](../entities/service.md).
 - **TTL:** 30 minutos.
 - **Nota:** con datos cacheados el detalle se muestra, pero **el botón de agendar se deshabilita**,
   porque agendar es online-only.

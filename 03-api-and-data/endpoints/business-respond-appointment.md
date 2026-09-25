@@ -1,8 +1,8 @@
 # Endpoint — Confirmar o rechazar una cita
 
 - **Feature:** [Gestión del negocio](../../01-architecture/features/business.md)
-- **Método y ruta:** `PATCH /v1/negocio/citas/{citaId}/responder`
-- **Requiere sesión:** Sí, con rol `negocio`
+- **Método y ruta:** `PATCH /v1/business/appointments/{appointmentId}/respond`
+- **Requiere sesión:** Sí, con rol `business`
 
 Es la respuesta que cierra el ciclo: la clienta agendó y queda esperando que el negocio conteste.
 
@@ -12,12 +12,12 @@ Es la respuesta que cierra el ciclo: la clienta agendó y queda esperando que el
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `citaId` | path | string | Sí | Debe pertenecer al negocio autenticado |
-| `status` | body | string | Sí | `confirmada` o `rechazada` |
-| `reason` | body | string | Solo si `status` es `rechazada` | Motivo que verá la clienta |
+| `appointmentId` | path | string | Sí | Debe pertenecer al negocio autenticado |
+| `status` | body | string | Sí | `confirmed` o `rejected` |
+| `reason` | body | string | Solo si `status` es `rejected` | Motivo que verá la clienta |
 
 ```json
-{ "status": "rechazada", "reason": "Se me cruzó una cita más larga a esa hora" }
+{ "status": "rejected", "reason": "Se me cruzó una cita más larga a esa hora" }
 ```
 
 > El motivo es obligatorio al rechazar. Una cita que se cae sin explicación es exactamente el
@@ -29,12 +29,12 @@ Es la respuesta que cierra el ciclo: la clienta agendó y queda esperando que el
 ## Response
 
 **Éxito (200):** la cita con su nuevo estado, en el mismo formato de
-[la agenda del negocio](./negocio-agenda.md).
+[la agenda del negocio](./business-agenda.md).
 
 | Efecto | Comportamiento |
 |--------|----------------|
-| `confirmada` | La clienta recibe la notificación y la cita queda en firme en Mis citas |
-| `rechazada` | El cupo se libera y vuelve a aparecer en la disponibilidad; la clienta ve el motivo |
+| `confirmed` | La clienta recibe la notificación y la cita queda en firme en Mis citas |
+| `rejected` | El cupo se libera y vuelve a aparecer en la disponibilidad; la clienta ve el motivo |
 
 ---
 

@@ -1,6 +1,6 @@
 # Pantalla — BusinessAgendaScreen
 
-- **Ruta:** `/negocio/agenda`
+- **Ruta:** `/business/agenda`
 - **Feature:** [Gestión del negocio](../features/business.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).

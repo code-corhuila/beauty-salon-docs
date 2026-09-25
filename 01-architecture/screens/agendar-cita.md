@@ -1,6 +1,6 @@
 # Pantalla — BookAppointmentScreen
 
-- **Ruta:** `/agendar/:servicioId`
+- **Ruta:** `/book/:serviceId`
 - **Feature:** [Agendamiento](../features/booking.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).
@@ -45,7 +45,7 @@ Es la pantalla donde el producto cumple su promesa: agendar sin escribir un solo
 |----------------------|-----------|-------------|
 | Elegir una fecha | Carga los cupos de ese día | `getAvailability` |
 | Tocar una hora | La marca como seleccionada y habilita el botón | — |
-| Tocar Confirmar | Crea la cita en estado Pendiente y navega a `/cita/:citaId` | `bookAppointment` |
+| Tocar Confirmar | Crea la cita en estado Pendiente y navega a `/appointment/:appointmentId` | `bookAppointment` |
 
 ---
 

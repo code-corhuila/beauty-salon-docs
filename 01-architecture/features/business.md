@@ -22,9 +22,9 @@ a una manicurista de Neiva.
 
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
-| [BusinessServicesScreen](../screens/negocio-servicios.md) | `/negocio/servicios` | Listar los servicios propios, publicarlos o pausarlos |
-| [ServiceFormScreen](../screens/negocio-servicio-form.md) | `/negocio/servicio/nuevo` | Crear o editar un servicio con su profesional y su horario |
-| [BusinessAgendaScreen](../screens/negocio-agenda.md) | `/negocio/agenda` | Ver las citas recibidas por día y confirmarlas o rechazarlas |
+| [BusinessServicesScreen](../screens/negocio-servicios.md) | `/business/services` | Listar los servicios propios, publicarlos o pausarlos |
+| [ServiceFormScreen](../screens/negocio-servicio-form.md) | `/business/service/new` | Crear o editar un servicio con su profesional y su horario |
+| [BusinessAgendaScreen](../screens/negocio-agenda.md) | `/business/agenda` | Ver las citas recibidas por día y confirmarlas o rechazarlas |
 
 ---
 
@@ -44,10 +44,14 @@ a una manicurista de Neiva.
 - **Casos de uso:** `createService`, `pauseService`, `setSchedule`, `getBusinessAgenda`,
   `respondAppointment`
 - **Repositorios:** `BusinessRepository`, `AppointmentRepository`
-- **Endpoints:** [`POST /v1/negocio/servicios`](../../03-api-and-data/endpoints/negocio-crear-servicio.md),
-  [`PATCH /v1/negocio/servicios/{id}/estado`](../../03-api-and-data/endpoints/negocio-pausar-servicio.md),
-  [`GET /v1/negocio/agenda`](../../03-api-and-data/endpoints/negocio-agenda.md),
-  [`PATCH /v1/negocio/citas/{id}/responder`](../../03-api-and-data/endpoints/negocio-responder-cita.md)
+- **Endpoints:** [`GET /v1/business/professionals`](../../03-api-and-data/endpoints/business-list-professionals.md),
+  [`POST /v1/business/professionals`](../../03-api-and-data/endpoints/business-create-professional.md),
+  [`GET /v1/business/services`](../../03-api-and-data/endpoints/business-list-services.md),
+  [`POST /v1/business/services`](../../03-api-and-data/endpoints/business-create-service.md),
+  [`PUT /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-update-service.md),
+  [`PATCH /v1/business/services/{id}/status`](../../03-api-and-data/endpoints/business-update-service-status.md),
+  [`GET /v1/business/agenda`](../../03-api-and-data/endpoints/business-agenda.md),
+  [`PATCH /v1/business/appointments/{id}/respond`](../../03-api-and-data/endpoints/business-respond-appointment.md)
 - **Persistencia local:** ninguna. La agenda del negocio **no se cachea**, porque contiene nombre y
   celular de las clientas: es el dato más sensible de la app y no tiene por qué quedar en reposo en
   el dispositivo. Ver [`security-rules.md`](../../00-governance/security-rules.md).

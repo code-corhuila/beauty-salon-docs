@@ -22,7 +22,7 @@ viendo precios.
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
 | [LoginScreen](../screens/login.md) | `/login` | Entrar con correo y contraseña |
-| [SignUpScreen](../screens/registro.md) | `/registro` | Crear cuenta eligiendo el rol |
+| [SignUpScreen](../screens/registro.md) | `/register` | Crear cuenta eligiendo el rol |
 
 ---
 
@@ -48,7 +48,9 @@ viendo precios.
 - **Casos de uso:** `signIn`, `signUp`, `signOut`, `restoreSession`
 - **Repositorios:** `AuthRepository`, `SessionStorage`
 - **Endpoints:** [`POST /v1/auth/login`](../../03-api-and-data/endpoints/auth-login.md),
-  [`POST /v1/auth/registro`](../../03-api-and-data/endpoints/auth-registro.md)
+  [`POST /v1/auth/register`](../../03-api-and-data/endpoints/auth-register.md),
+  [`POST /v1/auth/refresh`](../../03-api-and-data/endpoints/auth-refresh.md),
+  [`POST /v1/auth/logout`](../../03-api-and-data/endpoints/auth-logout.md)
 - **Persistencia local:** los tokens van **solo** al plugin de secure storage de Capacitor, nunca a SQLite.
   El perfil de la sesión activa (nombre, rol) se guarda en memoria y se vuelve a pedir al restaurar.
 - **Estrategia offline:** online-only. Sin conexión no se puede iniciar sesión, pero **una sesión ya
@@ -83,5 +85,5 @@ viendo precios.
   ausente y expirado; que `signOut` borre token, base local y caché de imágenes.
 - **De componente:** `LoginScreen` en sus cuatro estados; que el error de credenciales aparezca junto
   al campo y no reemplace la pantalla.
-- **Integración:** el flujo completo de deep link — abrir `/agendar/128` sin sesión, registrarse y
-  volver a `/agendar/128`.
+- **Integración:** el flujo completo de deep link — abrir `/book/128` sin sesión, registrarse y
+  volver a `/book/128`.

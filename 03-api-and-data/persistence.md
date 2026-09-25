@@ -17,10 +17,10 @@ La regla es guardar solo lo que la app necesita sin conexión, no espejar el bac
 
 | Se guarda | Por qué |
 |-----------|---------|
-| [`servicios`](./entities/servicios.md) | El catálogo debe abrir con contenido aunque la señal esté mala |
-| [`negocios`](./entities/negocios.md) | Nombre y dirección se muestran junto a cada servicio |
-| [`profesionales`](./entities/profesionales.md) | Quién atiende el servicio, se muestra en el detalle |
-| [`citas`](./entities/citas.md) | Solo las de la clienta autenticada: es lo que se consulta camino al salón |
+| [`service`](./entities/service.md) | El catálogo debe abrir con contenido aunque la señal esté mala |
+| [`business`](./entities/business.md) | Nombre y dirección se muestran junto a cada servicio |
+| [`professional`](./entities/professional.md) | Quién atiende el servicio, se muestra en el detalle |
+| [`appointment`](./entities/appointment.md) | Solo las de la clienta autenticada: es lo que se consulta camino al salón |
 
 | NO se guarda | Por qué |
 |--------------|---------|
@@ -32,9 +32,9 @@ La regla es guardar solo lo que la app necesita sin conexión, no espejar el bac
 
 ## Nombres
 
-- Tablas en `snake_case` y plural: `servicios`, `citas`.
+- Tablas en `snake_case` y plural: `service`, `appointment`.
 - Llave primaria: `id`.
-- Llaves foráneas: `<entidad_singular>_id` — `servicio_id`, `negocio_id`.
+- Llaves foráneas: `<entidad_singular>_id` — `service_id`, `business_id`.
 - Marcas de tiempo en registros mutables: `created_at`, `updated_at`.
 - Booleanos con prefijo `is_` o `has_`: `is_published`.
 - Las columnas van en inglés, igual que el resto del código; los nombres de tabla en español porque
@@ -60,8 +60,13 @@ La regla es guardar solo lo que la app necesita sin conexión, no espejar el bac
 
 | Versión | Cambio | Sprint |
 |---------|--------|--------|
-| 1 | Esquema inicial: `negocios`, `profesionales`, `servicios` | 1 |
-| 2 | Se agrega `citas` con su índice por fecha | 2 |
+| 1 | Esquema inicial, en español: `negocios`, `profesionales`, `servicios` | 1 |
+| 2 | Nombres en inglés y singular ([ADR-012](../01-architecture/decisions/records/ADR-012-nombres-en-ingles.md)): se descartan las tres tablas de la v1 y se crean `business`, `professional`, `service` | 2 |
+| 3 | Se agrega `appointment` con su índice por fecha | 2 |
 
-> La versión 2 llega en el Sprint 2 con datos reales de la versión 1 en los celulares de prueba. Ese
-> es justamente el caso que hay que probar antes de publicarla.
+> **Por qué la v2 descarta en vez de copiar:** las tres tablas son solo caché del catálogo, y sus
+> valores de `type` estaban en español (`tradicional`…), que la API ya no devuelve. Copiarlas
+> dejaría filas que ningún filtro encuentra; la próxima carga con red las vuelve a llenar.
+
+> La versión 3 llega con datos reales de la versión 2 en los celulares de prueba. Ese es justamente
+> el caso que hay que probar antes de publicarla.

@@ -1,8 +1,8 @@
 # Endpoint — Agenda del negocio
 
 - **Feature:** [Gestión del negocio](../../01-architecture/features/business.md)
-- **Método y ruta:** `GET /v1/negocio/agenda`
-- **Requiere sesión:** Sí, con rol `negocio`
+- **Método y ruta:** `GET /v1/business/agenda`
+- **Requiere sesión:** Sí, con rol `business`
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `fecha` | query | string | Sí | `YYYY-MM-DD`, el día que se está consultando |
+| `date` | query | string | Sí | `YYYY-MM-DD`, el día que se está consultando |
 
 El negocio se identifica por el token, nunca por un parámetro de la URL.
 
@@ -26,7 +26,7 @@ El negocio se identifica por el token, nunca por un parámetro de la URL.
   "items": [
     {
       "id": "apt_501",
-      "status": "pendiente",
+      "status": "pending",
       "startsAt": "2026-09-12T09:00:00-05:00",
       "service": { "id": "svc_128", "name": "Manicure semipermanente", "durationMinutes": 60 },
       "professional": { "id": "prf_12", "name": "Marcela Ruiz" },
@@ -59,7 +59,7 @@ Un día sin citas es un 200 con `items` vacío: estado `empty`, no error.
 ## Endpoint relacionado
 
 Desde esta misma pantalla el negocio confirma o rechaza cada cita pendiente:
-[`PATCH /v1/negocio/citas/{id}/responder`](./negocio-responder-cita.md).
+[`PATCH /v1/business/appointments/{id}/respond`](./business-respond-appointment.md).
 
 ---
 

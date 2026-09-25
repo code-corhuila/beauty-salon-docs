@@ -1,8 +1,8 @@
 # Endpoint — Listar mis citas
 
 - **Feature:** [Mis citas](../../01-architecture/features/appointments.md)
-- **Método y ruta:** `GET /v1/citas/mias`
-- **Requiere sesión:** Sí, con rol `clienta`
+- **Método y ruta:** `GET /v1/appointments/mine`
+- **Requiere sesión:** Sí, con rol `client`
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `alcance` | query | string | No | `proximas` o `pasadas`. Sin el parámetro devuelve ambas |
+| `scope` | query | string | No | `upcoming` o `past`. Sin el parámetro devuelve ambas |
 | `page` | query | number | No | Por defecto 1 |
 
 La clienta se identifica por el token, no por un parámetro. Un `clientId` en la URL permitiría pedir
@@ -27,7 +27,7 @@ las citas de otra persona cambiando un número.
   "items": [
     {
       "id": "apt_501",
-      "status": "confirmada",
+      "status": "confirmed",
       "startsAt": "2026-09-12T09:00:00-05:00",
       "service": { "id": "svc_128", "name": "Manicure semipermanente", "priceCop": 45000, "durationMinutes": 60 },
       "professional": { "id": "prf_12", "name": "Marcela Ruiz" },
@@ -40,8 +40,8 @@ las citas de otra persona cambiando un número.
 }
 ```
 
-**Mapeo DTO a dominio:** el mismo de [crear cita](./agendamiento-crear-cita.md), más
-`rejectionReason`, que solo tiene valor cuando el estado es `rechazada`.
+**Mapeo DTO a dominio:** el mismo de [crear cita](./booking-create-appointment.md), más
+`rejectionReason`, que solo tiene valor cuando el estado es `rejected`.
 
 La separación entre próximas y pasadas la hace el caso de uso comparando `startsAt` con la hora
 actual, no el servidor: así las dos pestañas se llenan con una sola petición.
@@ -62,6 +62,6 @@ Sin citas es un 200 con `items` vacío: es el estado `empty`, no un error.
 ## Caché y offline
 
 - **Estrategia:** read-through cache.
-- **Entidad cacheada:** [`citas`](../entities/citas.md), solo las de la clienta autenticada.
+- **Entidad cacheada:** [`appointment`](../entities/appointment.md), solo las de la clienta autenticada.
 - **TTL:** 5 minutos, más corto que el del catálogo porque el estado de la cita lo cambia el negocio.
 - **Invalidación:** al agendar, al cancelar, con pull-to-refresh y al recuperar la conexión.

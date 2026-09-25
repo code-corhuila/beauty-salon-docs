@@ -36,7 +36,7 @@ la misma forma de datos que tendrá el servidor real.
 
 - **Reintentos solo en peticiones idempotentes** (GET), con retroceso exponencial: 300 ms, 900 ms y
   se acabó. Máximo 2 reintentos.
-- **Nunca se reintenta automáticamente un POST o un PATCH.** Reintentar `POST /v1/citas` puede crear
+- **Nunca se reintenta automáticamente un POST o un PATCH.** Reintentar `POST /v1/appointments` puede crear
   dos citas. El error se muestra y la clienta decide.
 - Cada petición lleva un `X-Request-Id` generado por un interceptor, para poder rastrearla.
 
@@ -55,7 +55,7 @@ la misma forma de datos que tendrá el servidor real.
 | 2xx | Éxito | Mapea a entidad de dominio |
 | 401 | Sin autenticar | Refresca el token y reintenta una vez; si falla, cierra sesión |
 | 403 | Sin permiso | Error de dominio `Unauthorized`; la guarda de navegación redirige |
-| 409 | Conflicto | En `POST /v1/citas` significa **cupo tomado**: se mapea a `SlotTaken` y la pantalla recarga la disponibilidad |
+| 409 | Conflicto | En `POST /v1/appointments` significa **cupo tomado**: se mapea a `SlotTaken` y la pantalla recarga la disponibilidad |
 | 422 | Validación | Se mapea a `ValidationFailed` con los errores por campo, que el formulario muestra |
 | 4xx restante | Error del cliente | Error de dominio con mensaje accionable |
 | 5xx o timeout | Transitorio | Retroceso y reintento si es idempotente; después, error visible con reintentar |

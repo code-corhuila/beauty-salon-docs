@@ -1,10 +1,10 @@
 # Plan de trabajo — Iniciar sesión y Catálogo de servicios
 
-- **Repo de código:** `beauty-salon/frontend/` (Ionic React + TypeScript sobre Capacitor, Android —
-  [ADR-005](./decisions/records/ADR-005-mobile-stack-ionic-capacitor.md)). `beauty-salon` es un
-  monorepo temporal para la v1: `backend/` es el repo de la API (ver
-  [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md)) y `frontend/` es este proyecto
-  (ver [ADR-010](./decisions/records/ADR-010-monorepo-temporal.md))
+- **Repo de código:** `beauty-salon-app` (Ionic React + TypeScript sobre Capacitor, Android —
+  [ADR-005](./decisions/records/ADR-005-mobile-stack-ionic-capacitor.md)). La API vive en
+  `beauty-salon-api` (ver [ADR-009](./decisions/records/ADR-009-backend-repo-and-stack.md)) y se
+  levanta desde `beauty-salon-infra` (ver [ADR-011](./decisions/records/ADR-011-cuatro-repositorios.md)).
+  Hasta el 2026-09-25 este código vivió en `beauty-salon/frontend/` ([ADR-010](./decisions/records/ADR-010-monorepo-temporal.md))
 - **Features:** [Catálogo de servicios](./features/catalog.md), [Autenticación](./features/auth.md)
 - **Scopes de commit:** `core`, `catalog`, `auth` (ver [`git-conventions.md`](../00-governance/git-conventions.md))
 
@@ -45,14 +45,14 @@ por separado, para no duplicar decisiones de configuración.
 | 3 | Configurar alias `@core/*`, `@features/*`, `@shared/*` en `tsconfig.json` y `vite.config.ts` | [`project-structure.md`](./project-structure.md) |
 | 4 | Configurar ESLint (`eslint-plugin-react`, `eslint-plugin-react-hooks`, `@typescript-eslint`, `eslint-plugin-import`) con `import/no-restricted-paths`, y Prettier | [`coding-standards.md`](../02-code-and-ui/coding-standards.md) |
 | 5 | Cliente `axios` único en `core/network/` con timeouts, interceptor de `X-Request-Id` y manejo de estados de respuesta | [`api-networking.md`](../03-api-and-data/api-networking.md) |
-| 6 | Base de datos local: `@capacitor-community/sqlite` + Drizzle ORM (driver `sqlite-proxy`), esquema versión 1 (`negocios`, `profesionales`, `servicios`) | [ADR-007](./decisions/records/ADR-007-local-storage-capacitor.md), [`persistence.md`](../03-api-and-data/persistence.md) |
+| 6 | Base de datos local: `@capacitor-community/sqlite` + Drizzle ORM (driver `sqlite-proxy`), esquema versión 1 (`business`, `professional`, `service`) | [ADR-007](./decisions/records/ADR-007-local-storage-capacitor.md), [`persistence.md`](../03-api-and-data/persistence.md) |
 | 7 | Plugin de secure storage de Capacitor envuelto en `core/storage/` para los tokens | [`authentication.md`](../03-api-and-data/authentication.md) |
 | 8 | Composition root vacío en `core/di/` + `AppProviders` (Context), listo para que cada feature registre sus repositorios | [ADR-008](./decisions/records/ADR-008-dependency-injection.md) |
 | 9 | Tabla de rutas centralizada con `IonReactRouter`/`IonRouterOutlet`, `RootNavigator` con `PublicStack` (sin sesión aún, ambas pantallas de `catalog` y las dos de `auth` van aquí) | [`navigation.md`](./navigation.md) |
 | 10 | Mock local del contrato `/v1` (p. ej. `json-server` o MSW) sirviendo `auth-login`, `auth-registro`, `catalogo-listar-servicios`, `catalogo-detalle-servicio` | [`03-api-and-data/endpoints/`](../03-api-and-data/endpoints/) |
 
 **Criterio de salida de la Fase 0:** la app arranca, navega entre una pantalla en blanco de
-`/login` y otra de `/servicios` sin sesión, y una petición de prueba contra el mock responde.
+`/login` y otra de `/services` sin sesión, y una petición de prueba contra el mock responde.
 Todavía no hay UI real de ninguna de las dos features.
 
 ---
@@ -67,7 +67,7 @@ complejidad extra de sesión.
    adelante — no se duplica, ver [`project-structure.md`](./project-structure.md)), interfaz
    `CatalogRepository`.
 2. **Domain:** casos de uso `getPublishedServices` (con filtro por tipo) y `getServiceDetail`.
-3. **Data:** esquema Drizzle de `servicios`, `negocios`, `profesionales` (versión 1,
+3. **Data:** esquema Drizzle de `service`, `business`, `professional` (versión 1,
    [`persistence.md`](../03-api-and-data/persistence.md)); `CatalogRepositoryImpl` con estrategia
    **read-through cache**: muestra lo cacheado de inmediato y refresca en segundo plano.
 4. **Presentation:** `useCatalogStore` con `CatalogState` (`loading | loaded | empty | error`, más
@@ -79,7 +79,7 @@ complejidad extra de sesión.
    ([`screens/catalogo.md`](./screens/catalogo.md), [`screens/detalle-servicio.md`](./screens/detalle-servicio.md)).
    El estado `empty` (catálogo del primer día) y `empty` por filtro son casos **distintos**, cada
    uno con su propia prueba.
-6. **Routing:** rutas públicas `/servicios` y `/servicio/:servicioId`; esta última debe abrir
+6. **Routing:** rutas públicas `/services` y `/service/:serviceId`; esta última debe abrir
    correctamente como deep link, sin pasar por el catálogo primero.
 7. **Accesibilidad:** cada tarjeta se anuncia completa (nombre, precio, duración) en una sola
    etiqueta; chips anunciados como seleccionados o no; 48×48 dp en chips y tarjetas.
@@ -108,7 +108,7 @@ Construir en este orden — cada paso depende del anterior:
    escritos a mano, sin `jest.mock` ([ADR-008](./decisions/records/ADR-008-dependency-injection.md)).
 3. **Data:** `AuthRepositoryImpl` contra
    [`POST /v1/auth/login`](../03-api-and-data/endpoints/auth-login.md) y
-   [`POST /v1/auth/registro`](../03-api-and-data/endpoints/auth-registro.md); `SessionStorageImpl`
+   [`POST /v1/auth/register`](../03-api-and-data/endpoints/auth-register.md); `SessionStorageImpl`
    sobre el plugin de secure storage — **nunca** SQLite para los tokens
    ([`authentication.md`](../03-api-and-data/authentication.md)).
 4. **Presentation:** `useAuthStore` (Zustand) con `SessionState` (arranca en `unknown`, no en
@@ -118,7 +118,7 @@ Construir en este orden — cada paso depende del anterior:
    ([`screens/login.md`](./screens/login.md), [`screens/registro.md`](./screens/registro.md)):
    `loading`, `loaded`, `error` (credenciales bajo el campo, red como banner), `offline`. El
    selector de rol de `SignUpScreen` se anuncia como grupo de opciones.
-6. **Routing:** rutas públicas `/login` y `/registro`; la guarda de sesión del `RootNavigator`
+6. **Routing:** rutas públicas `/login` y `/register`; la guarda de sesión del `RootNavigator`
    redirige a `/login` guardando la ruta pretendida y vuelve a ella al autenticarse
    ([`navigation.md`](./navigation.md) — caso del deep link compartido por WhatsApp).
 7. **Accesibilidad:** `aria-label` en los dos campos, botón de mostrar/ocultar contraseña que

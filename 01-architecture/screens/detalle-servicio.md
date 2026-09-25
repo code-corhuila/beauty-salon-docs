@@ -1,6 +1,6 @@
 # Pantalla — ServiceDetailScreen
 
-- **Ruta:** `/servicio/:servicioId`
+- **Ruta:** `/service/:serviceId`
 - **Feature:** [Catálogo de servicios](../features/catalog.md)
 - **Referencia de diseño:** [`mockups/manicita-mockups.html`](../mockups/manicita-mockups.html),
   dibujado con los tokens de [`design-system.md`](../../02-code-and-ui/design-system.md).
@@ -45,7 +45,7 @@ que funcionar sin sesión y sin venir del catálogo.
 | Acción de la usuaria | Resultado | Caso de uso |
 |----------------------|-----------|-------------|
 | Abrir la pantalla | Carga el detalle por su id | `getServiceDetail` |
-| Tocar Agendar | Navega a `/agendar/:servicioId`; sin sesión, la guarda pide login y devuelve aquí | — |
+| Tocar Agendar | Navega a `/book/:serviceId`; sin sesión, la guarda pide login y devuelve aquí | — |
 | Tocar la dirección | Copia la dirección al portapapeles | — |
 
 ---

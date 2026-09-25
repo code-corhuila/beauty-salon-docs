@@ -22,7 +22,7 @@ publicar), nunca al abrir la app.
 |--------|------------|-------|
 | Encabezado | Logo y título | Explica por qué se pide la sesión: "Inicia sesión para agendar" |
 | Cuerpo | [CampoFormulario](../../02-code-and-ui/components/campo-formulario.md) x2 | Correo y contraseña, con mostrar/ocultar contraseña |
-| Pie | [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) | Entrar. Debajo, enlace a `/registro` |
+| Pie | [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) | Entrar. Debajo, enlace a `/register` |
 
 ---
 
@@ -44,7 +44,7 @@ publicar), nunca al abrir la app.
 |----------------------|-----------|-------------|
 | Escribir correo y contraseña | Se habilita el botón | — (validación local) |
 | Tocar Entrar | Autentica y vuelve a la ruta pretendida, o al inicio de su rol | `signIn` |
-| Tocar Crear cuenta | Navega a `/registro` conservando la ruta pretendida | — |
+| Tocar Crear cuenta | Navega a `/register` conservando la ruta pretendida | — |
 
 ---
 

@@ -1,8 +1,8 @@
 # Endpoint — Cancelar una cita
 
 - **Feature:** [Mis citas](../../01-architecture/features/appointments.md)
-- **Método y ruta:** `PATCH /v1/citas/{citaId}/cancelar`
-- **Requiere sesión:** Sí, con rol `clienta`
+- **Método y ruta:** `PATCH /v1/appointments/{appointmentId}/cancel`
+- **Requiere sesión:** Sí, con rol `client`
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Parámetro | En | Tipo | Requerido | Notas |
 |-----------|----|------|-----------|-------|
-| `citaId` | path | string | Sí | Debe pertenecer a la clienta autenticada |
+| `appointmentId` | path | string | Sí | Debe pertenecer a la clienta autenticada |
 | `reason` | body | string | No | Motivo opcional; se le muestra al negocio |
 
 ```json
@@ -21,8 +21,8 @@
 
 ## Response
 
-**Éxito (200):** la cita completa con `status` en `cancelada`, con el mismo formato de
-[listar mis citas](./citas-listar-mis-citas.md).
+**Éxito (200):** la cita completa con `status` en `cancelled`, con el mismo formato de
+[listar mis citas](./appointments-list-mine.md).
 
 El cupo queda libre de inmediato y vuelve a aparecer en la disponibilidad del servicio.
 
