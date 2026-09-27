@@ -59,8 +59,11 @@ Cuerpo de un 422:
 
 ```json
 {
-  "error": "ValidationFailed",
-  "errors": { "phone": "Debe tener 10 dígitos" }
+  "title": "Validación fallida",
+  "status": 422,
+  "detail": "Revisa los campos marcados.",
+  "code": "VALIDATION_FAILED",
+  "errors": { "phone": ["Debe tener 10 dígitos"] }
 }
 ```
 

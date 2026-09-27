@@ -35,9 +35,9 @@ hasta que venza (60 minutos como máximo). La app lo borra del dispositivo de to
 
 ## Errores
 
-| Código | Cuándo | Cuerpo | Qué hace la app |
+| Código | Cuándo | `code` | Qué hace la app |
 |--------|--------|--------|-----------------|
-| 401 | `refreshToken` falta, está mal firmado o ya venció | `{ "error": "Unauthorized" }` | Nada distinto: borra los tokens locales y va al login igual |
+| 401 | `refreshToken` falta, está mal firmado o ya venció | `INVALID_REFRESH_TOKEN` | Nada distinto: borra los tokens locales y va al login igual |
 | 5xx o timeout | Transitorio | — | Igual: borra los tokens locales y va al login. **Cerrar sesión nunca falla para la usuaria** |
 
 Un `refreshToken` que ya estaba revocado responde **204**, no 401: el resultado que se pedía ya se

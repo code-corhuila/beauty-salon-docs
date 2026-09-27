@@ -23,6 +23,7 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
 | Archivo | Para qué sirve |
 |---------|----------------|
+| [api-contract.md](./api-contract.md) | **Contrato de API:** convenciones, forma única del error (`problem+json`), códigos de estado, las 18 fichas E-01..E-18, idempotencia, concurrencia, versionado, sondas y huecos. Manda sobre la API y sobre el cliente HTTP de la app |
 | [data-model.md](./data-model.md) | Modelo de datos del servidor: entidades, invariantes con su marca (motor / solo dominio / pendiente), tablas, restricciones, índices y deuda. Verificado contra la base |
 | [api-networking.md](./api-networking.md) | Cliente HTTP, timeouts, reintentos, mapeo de errores |
 | [authentication.md](./authentication.md) | Tokens, refresco, roles, cierre de sesión |

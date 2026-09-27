@@ -43,12 +43,12 @@
 
 **Orden de comprobación:** sesión → rol → `name` → límite de 20.
 
-| Código | Cuándo | Cuerpo | Qué hace la app |
+| Código | Cuándo | `code` | Qué hace la app |
 |--------|--------|--------|-----------------|
-| 401 | Sin token o vencido | `{ "error": "Unauthorized" }` | Refresco transparente y un reintento |
-| 403 | La sesión es de una clienta | `{ "error": "Forbidden" }` | La guarda no debería dejar llegar aquí |
-| 422 | `name` vacío o largo | `{ "error": "ValidationFailed", "errors": { "name": "Es requerido, hasta 60 caracteres" } }` | Marca el campo |
-| 422 | El negocio ya tiene 20 | `{ "error": "ValidationFailed", "errors": { "name": "Un negocio puede tener hasta 20 profesionales" } }` | Mensaje bajo el campo |
+| 401 | Sin token o vencido | `AUTH_REQUIRED` / `SESSION_EXPIRED` | Refresco transparente y un reintento |
+| 403 | La sesión es de una clienta | `FORBIDDEN_ROLE` | La guarda no debería dejar llegar aquí |
+| 422 | `name` vacío o largo | `VALIDATION_FAILED`, `errors.name`: "Es requerido, hasta 60 caracteres" | Marca el campo |
+| 422 | El negocio ya tiene 20 | `VALIDATION_FAILED`, `errors.name`: "Un negocio puede tener hasta 20 profesionales" | Mensaje bajo el campo |
 | 5xx o timeout | Transitorio | — | **Sin reintento automático** (no es idempotente); error con botón de reintentar |
 
 ---

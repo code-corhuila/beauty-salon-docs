@@ -47,14 +47,14 @@ servicio.
 negocio → la profesional es del negocio → solape de horario con **otro** servicio de la misma
 profesional (el propio servicio no cuenta).
 
-| Código | Cuándo | Cuerpo | Qué hace la app |
+| Código | Cuándo | `code` | Qué hace la app |
 |--------|--------|--------|-----------------|
-| 401 | Sin token o vencido | `{ "error": "Unauthorized" }` | Refresco transparente y un reintento |
-| 403 | Sesión de clienta, o servicio de otro negocio | `{ "error": "Forbidden" }` | `Unauthorized` |
-| 404 | El servicio no existe | `{ "error": "NotFound" }` | Vuelve a la lista y la recarga |
-| 409 | El horario se solapa con otro servicio de la misma profesional | `{ "error": "Conflict" }` | Mensaje bajo el horario |
-| 422 | Validación de campos | `{ "error": "ValidationFailed", "errors": { … } }`, mismos mensajes que crear servicio | Marca los campos y conserva lo escrito |
-| 422 | La profesional no es del negocio | `{ "error": "ValidationFailed", "errors": { "professionalId": "No pertenece a este negocio" } }` | Recarga la lista de profesionales |
+| 401 | Sin token o vencido | `AUTH_REQUIRED` / `SESSION_EXPIRED` | Refresco transparente y un reintento |
+| 403 | Sesión de clienta, o servicio de otro negocio | `FORBIDDEN_ROLE` / `FORBIDDEN_RESOURCE` | `Unauthorized` |
+| 404 | El servicio no existe | `SERVICE_NOT_FOUND` | Vuelve a la lista y la recarga |
+| 409 | El horario se solapa con otro servicio de la misma profesional | `SCHEDULE_OVERLAP` | Mensaje bajo el horario |
+| 422 | Validación de campos | `VALIDATION_FAILED`, mismos mensajes por campo que crear servicio | Marca los campos y conserva lo escrito |
+| 422 | La profesional no es del negocio | `VALIDATION_FAILED`, `errors.professionalId`: "No pertenece a este negocio" | Recarga la lista de profesionales |
 | 5xx o timeout | Transitorio | — | Se puede reintentar (es idempotente), una vez |
 
 ---

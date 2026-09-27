@@ -46,10 +46,10 @@ límite.
 
 ## Errores
 
-| Código | Cuándo | Cuerpo | Qué hace la app |
+| Código | Cuándo | `code` | Qué hace la app |
 |--------|--------|--------|-----------------|
-| 401 | Sin token o vencido | `{ "error": "Unauthorized" }` | Refresco transparente y un reintento |
-| 403 | La sesión es de una clienta | `{ "error": "Forbidden" }` | La guarda de rutas no debería dejar llegar aquí |
+| 401 | Sin token o vencido | `AUTH_REQUIRED` / `SESSION_EXPIRED` | Refresco transparente y un reintento |
+| 403 | La sesión es de una clienta | `FORBIDDEN_ROLE` | La guarda de rutas no debería dejar llegar aquí |
 | 5xx o timeout | Transitorio | — | Hasta 2 reintentos por ser GET; después, error con reintentar |
 
 ---

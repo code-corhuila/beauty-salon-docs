@@ -50,14 +50,27 @@ la misma forma de datos que tendrá el servidor real.
 
 ## Manejo de estados de respuesta
 
+Todo error de la API llega como `application/problem+json` con `title`, `status`, `detail`, `code` y,
+en validación, `errors` ([`api-contract.md`](./api-contract.md) §2). El interceptor lo convierte en
+un error tipado que conserva `code` y `detail`:
+
+- **La app decide con `code`**, nunca comparando el texto de `detail`: el mismo 409 puede ser
+  `SLOT_TAKEN`, `EMAIL_TAKEN` o `SCHEDULE_OVERLAP`, y cada uno lleva a una pantalla distinta.
+- **La persona lee `detail`**, que ya viene en español y dice qué hacer. No se reemplaza por un
+  "ocurrió un error" genérico.
+
 | Rango | Significado | Qué hace la app |
 |-------|-------------|-----------------|
 | 2xx | Éxito | Mapea a entidad de dominio |
-| 401 | Sin autenticar | Refresca el token y reintenta una vez; si falla, cierra sesión |
-| 403 | Sin permiso | Error de dominio `Unauthorized`; la guarda de navegación redirige |
-| 409 | Conflicto | En `POST /v1/appointments` significa **cupo tomado**: se mapea a `SlotTaken` y la pantalla recarga la disponibilidad |
-| 422 | Validación | Se mapea a `ValidationFailed` con los errores por campo, que el formulario muestra |
-| 4xx restante | Error del cliente | Error de dominio con mensaje accionable |
+| 400 | `MALFORMED_JSON` | Defecto de la app, no de la persona: se registra y se muestra `detail` |
+| 401 | `AUTH_REQUIRED`, `SESSION_EXPIRED` | Refresca el token y reintenta una vez; si falla, cierra sesión |
+| 401 | `INVALID_CREDENTIALS` | Mensaje bajo el formulario de login; no se refresca nada |
+| 401 | `INVALID_REFRESH_TOKEN` | Cierra sesión limpiamente |
+| 403 | `FORBIDDEN_ROLE`, `FORBIDDEN_RESOURCE` | Error de dominio `Unauthorized`; la guarda de navegación redirige |
+| 409 | `SLOT_TAKEN` | Error de dominio `SlotTaken`: la pantalla recarga la disponibilidad |
+| 409 | Otros `code` | Se muestra `detail` en el contexto de la acción |
+| 410 | `SERVICE_PAUSED` | Estado "ya no disponible" |
+| 422 | `VALIDATION_FAILED` | `ValidationFailed` con `errors` por campo, que el formulario muestra junto a cada campo |
 | 5xx o timeout | Transitorio | Retroceso y reintento si es idempotente; después, error visible con reintentar |
 
 > El 409 es el código más importante del proyecto. Es la respuesta que evita que dos clientas queden
