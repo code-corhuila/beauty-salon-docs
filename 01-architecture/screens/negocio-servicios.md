@@ -47,6 +47,19 @@ no esté prestando. Es la pantalla de inicio del lado del negocio.
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| Carga de la lista | [`GET /v1/business/services`](../../03-api-and-data/endpoints/business-list-services.md) | `Service` (§2.4) (publicados y pausados), con `Schedule` (§2.5) | Ninguna |
+| `pauseService` | [`PATCH /v1/business/services/{id}/status`](../../03-api-and-data/endpoints/business-update-service-status.md) | `Service` (§2.4) | Ninguna |
+
+---
+
 ## Accesibilidad
 
 - [ ] El interruptor anuncia qué controla y su estado: "Manicure semipermanente, publicado".

@@ -2,26 +2,26 @@
 
 ## Estado del backend
 
-**ManiCita ya tiene backend implementado**: Node.js + Express + PostgreSQL, en el repo `beauty-salon`
-([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)), siguiendo el
-contrato diseñado en [`endpoints/`](./endpoints/), un documento por endpoint. Mientras el frontend no
-apunte a una instancia real, se puede seguir sirviendo ese mismo contrato con un mock local, que es
-lo que la [Definition of Ready](../00-governance/definition-of-ready.md) admite como contrato
-*stubbed*.
+**ManiCita ya tiene backend implementado**: Node.js + Express + PostgreSQL, en el repo
+`beauty-salon-api` ([ADR-009](../01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md),
+[ADR-011](../01-architecture/decisions/records/ADR-011-cuatro-repositorios.md)), siguiendo el
+contrato de [`api-contract.md`](./api-contract.md). Durante el desarrollo la app apunta a esa API
+real, levantada con `beauty-salon-infra`; ya no se usa un mock.
 
-Durante el desarrollo el contrato se sirve con un mock local, de modo que la app se construya contra
-la misma forma de datos que tendrá el servidor real.
-
-- Base URL de desarrollo: `http://localhost:3000/v1`
-- Base URL de producción: `https://api.manicita.app/v1`
+- Base URL de desarrollo: `http://localhost:3000/v1` en el navegador, `http://10.0.2.2:3000/v1` en el
+  emulador de Android.
+- Base URL de producción: **no existe todavía**. La API no tiene despliegue (hueco H-01 de
+  [`api-contract.md`](./api-contract.md)); cuando lo tenga, será una URL `https://`.
 - La base URL se inyecta como variable de entorno de build de Vite (`.env` por ambiente, leída con
   `import.meta.env`), nunca se escribe en el código.
 
 ## Cliente
 
 - **Un solo** cliente `axios` configurado en `src/core/network/`: base URL, timeouts e interceptores
-  definidos una vez. Ninguna feature crea su propio cliente.
-- Timeouts concretos de este proyecto:
+  definidos una vez. Ninguna feature crea su propio cliente
+  ([ADR-015](../01-architecture/decisions/records/ADR-015-cliente-http-axios.md)).
+- Timeouts concretos de este proyecto (axios solo tiene un timeout total, así que el código usa la
+  columna de respuesta; ver `requestProfiles.ts`):
 
 | Tipo de petición | Timeout de conexión | Timeout de respuesta |
 |------------------|---------------------|----------------------|

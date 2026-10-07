@@ -82,6 +82,8 @@ documenta con [`_template-component.md`](./_template-component.md).
 | CampoFormulario | [campo-formulario.md](./components/campo-formulario.md) | Login, registro, formulario de servicio |
 | TarjetaServicio | [tarjeta-servicio.md](./components/tarjeta-servicio.md) | Catálogo, servicios del negocio |
 | SelectorHorario | [selector-horario.md](./components/selector-horario.md) | Agendar cita |
-| EstadoVacio | [estado-vacio.md](./components/estado-vacio.md) | Catálogo, mis citas, servicios del negocio |
+| EstadoVacio | [estado-vacio.md](./components/estado-vacio.md) | Catálogo, mis citas, servicios del negocio, agenda |
+| BotonSecundario | [boton-secundario.md](./components/boton-secundario.md) | Detalle de la cita, agenda del negocio |
+| DistintivoEstadoCita | [distintivo-estado-cita.md](./components/distintivo-estado-cita.md) | Mis citas, detalle de la cita, agenda del negocio |
 
 Un componente se encarga de estilo y disposición. **No tiene lógica de negocio ni pide datos.**

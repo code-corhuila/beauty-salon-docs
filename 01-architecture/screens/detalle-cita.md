@@ -19,9 +19,9 @@ después de agendar, así que también funciona como comprobante.
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Encabezado | Estado de la cita | Distintivo con texto e ícono: Pendiente, Confirmada, Rechazada, Cancelada, Completada, No asistió |
+| Encabezado | [DistintivoEstadoCita](../../02-code-and-ui/components/distintivo-estado-cita.md) en tamaño `md` | Texto e ícono: Pendiente, Confirmada, Rechazada, Cancelada, Completada, No asistió |
 | Cuerpo | Bloques de resumen | Servicio, precio, duración, profesional, fecha y hora, salón y dirección. Si fue rechazada, el motivo |
-| Pie | Botón secundario destructivo | Cancelar cita. Solo si está Pendiente o Confirmada y aún no pasó |
+| Pie | [BotonSecundario](../../02-code-and-ui/components/boton-secundario.md) con `isDestructive` | Cancelar cita. Solo si está Pendiente o Confirmada y aún no pasó |
 
 ---
 
@@ -44,6 +44,22 @@ después de agendar, así que también funciona como comprobante.
 | Tocar Cancelar | Abre un diálogo de confirmación antes de enviar nada | — |
 | Confirmar la cancelación | La cita pasa a Cancelada y el cupo se libera | `cancelAppointment` |
 | Tocar la dirección | Copia la dirección al portapapeles | — |
+
+---
+
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| Lectura del detalle | Ninguno propio: la cita ya viene en la respuesta de [`GET /v1/appointments/mine`](../../03-api-and-data/endpoints/appointments-list-mine.md) | `Appointment` (§2.6) | [`appointment`](../../03-api-and-data/entities/appointment.md) |
+| `cancelAppointment` | [`PATCH /v1/appointments/{id}/cancel`](../../03-api-and-data/endpoints/appointments-cancel.md) | `Appointment` (§2.6) | Se actualiza la fila de [`appointment`](../../03-api-and-data/entities/appointment.md) con la respuesta del servidor; nunca antes |
+
+> El contrato no tiene un `GET` de una sola cita: la pantalla abre una cita que "Mis citas" ya
+> trajo. Si se llega por un enlace directo sin esa lista cargada, la pantalla la pide primero.
 
 ---
 

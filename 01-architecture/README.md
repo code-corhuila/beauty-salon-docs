@@ -82,7 +82,8 @@ dependencias externas, igual que el documento de flujos. Contiene:
 2. **Cuatro estados que hay que dibujar**: el catálogo vacío del primer día, el onboarding del
    negocio sin servicios, el cupo tomado al confirmar y la lista de citas sin conexión.
 3. **Una lámina en tema oscuro**, para comprobar que los dos temas salen de los mismos tokens.
-4. **Los cinco componentes compartidos** con sus estados visuales.
+4. **Los cinco primeros componentes compartidos** con sus estados visuales. `BotonSecundario` y
+   `DistintivoEstadoCita`, documentados el 2026-10-07, todavía no están dibujados en la lámina.
 5. **Los tokens**: los once colores con su hex y sus contrastes, la escala tipográfica y la de
    espaciado.
 

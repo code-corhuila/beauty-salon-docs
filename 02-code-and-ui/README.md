@@ -32,6 +32,8 @@ reglas se hacen cumplir en la revisión y en el linter.
 | TarjetaServicio | [tarjeta-servicio.md](./components/tarjeta-servicio.md) | Catálogo, servicios del negocio |
 | SelectorHorario | [selector-horario.md](./components/selector-horario.md) | Agendar cita |
 | EstadoVacio | [estado-vacio.md](./components/estado-vacio.md) | Catálogo, mis citas, servicios del negocio, agenda |
+| BotonSecundario | [boton-secundario.md](./components/boton-secundario.md) | Detalle de la cita (cancelar), agenda del negocio (confirmar y rechazar) |
+| DistintivoEstadoCita | [distintivo-estado-cita.md](./components/distintivo-estado-cita.md) | Mis citas, detalle de la cita, agenda del negocio |
 
 > Un componente entra a `shared/` cuando lo usan **dos o más features**. Lo que use una sola feature
 > se queda en su carpeta `presentation/`, aunque se vea reutilizable.

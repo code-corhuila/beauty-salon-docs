@@ -65,6 +65,20 @@ logra llenarlo sola, no hay catálogo**.
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| Selector de profesional | [`GET /v1/business/professionals`](../../03-api-and-data/endpoints/business-list-professionals.md) y [`POST /v1/business/professionals`](../../03-api-and-data/endpoints/business-create-professional.md) | `Professional` (§2.3) | Ninguna |
+| `createService`, `setSchedule` | [`POST /v1/business/services`](../../03-api-and-data/endpoints/business-create-service.md) | `Service` (§2.4) y `Schedule` (§2.5) | Ninguna |
+| Edición | [`PUT /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-update-service.md) | `Service` (§2.4) y `Schedule` (§2.5) | Ninguna |
+
+---
+
 ## Accesibilidad
 
 - [ ] Cada campo tiene etiqueta visible, no solo texto de ayuda dentro del campo.

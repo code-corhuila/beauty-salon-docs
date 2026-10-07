@@ -59,6 +59,7 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en `beauty-salon-api` siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/`. Cuatro repos: `beauty-salon-docs`, `beauty-salon-infra`, `beauty-salon-api` y `beauty-salon-app` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md), [ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md) |
 | 7 | Pruebas | Vitest + React Testing Library y Cypress en la app; `node:test` y el smoke test contra PostgreSQL real en la API | [ADR-013](./01-architecture/decisions/records/ADR-013-herramientas-de-prueba.md) |
 | 8 | Distribución | APK firmado adjunto a un GitHub Release, construido por GitHub Actions; sin Google Play durante el semestre | [ADR-014](./01-architecture/decisions/records/ADR-014-distribucion-github-releases.md) |
+| 9 | Cliente HTTP | Una sola instancia de axios en `core/network/`, con reintento solo de lecturas y errores `problem+json` traducidos a errores de dominio | [ADR-015](./01-architecture/decisions/records/ADR-015-cliente-http-axios.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al

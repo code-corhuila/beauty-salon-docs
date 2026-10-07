@@ -33,10 +33,10 @@ choca con una convención local, gana la gobernanza, salvo que una ADR nueva
 
 | Sprint | Documento | Fecha |
 |--------|-----------|-------|
-| — | Ninguna todavía: los sprints aún no se han ejecutado | — |
+| 1 (Corte 1) | [retros/sprint-01.md](./retros/sprint-01.md) | 2026-10-07 |
 
-> Cuando se cierre el Sprint 1 se copia `_template-sprint-retro.md` a `retros/sprint-01.md`
-> y se agrega la fila aquí. La plantilla original no se toca.
+> Al cerrar cada sprint se copia `_template-sprint-retro.md` a `retros/sprint-NN.md` y se agrega la
+> fila aquí. La plantilla original no se toca.
 
 ---
 

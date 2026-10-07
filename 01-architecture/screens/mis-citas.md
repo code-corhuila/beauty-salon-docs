@@ -20,7 +20,7 @@ salón para confirmar la hora, muchas veces sin buena señal.
 | Región | Componente | Notas |
 |--------|------------|-------|
 | Encabezado | Título y dos pestañas | Próximas y Pasadas |
-| Cuerpo | Lista de tarjetas de cita | Fecha, hora, servicio, salón y estado de la cita |
+| Cuerpo | Lista de tarjetas de cita | Fecha, hora, servicio y salón; el estado con [DistintivoEstadoCita](../../02-code-and-ui/components/distintivo-estado-cita.md). La tarjeta solo la usa esta feature, así que vive en `features/appointments/presentation/` |
 | Banner | Aviso de sin conexión | Con la fecha de la última actualización |
 
 ---
@@ -44,6 +44,18 @@ salón para confirmar la hora, muchas veces sin buena señal.
 | Cambiar de pestaña | Alterna próximas y pasadas sin volver a pedir al servidor | — |
 | Tocar una cita | Navega a `/appointment/:appointmentId` | — |
 | Deslizar hacia abajo | Refresca desde el servidor | `getMyAppointments` |
+
+---
+
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| `getMyAppointments` | [`GET /v1/appointments/mine`](../../03-api-and-data/endpoints/appointments-list-mine.md) | `Appointment` (§2.6), con `Service` (§2.4) y `Business` (§2.2) | [`appointment`](../../03-api-and-data/entities/appointment.md), solo las citas propias (read-through) |
 
 ---
 

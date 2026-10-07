@@ -48,6 +48,19 @@ publicar), nunca al abrir la app.
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| `signIn` | [`POST /v1/auth/login`](../../03-api-and-data/endpoints/auth-login.md) | `UserAccount` (§2.1) | Ninguna en SQLite: los tokens van al almacenamiento seguro |
+| `restoreSession` (al abrir la app) | [`POST /v1/auth/refresh`](../../03-api-and-data/endpoints/auth-refresh.md) | `UserAccount` (§2.1), `RevokedRefreshToken` (§2.7) | Tokens en el almacenamiento seguro |
+
+---
+
 ## Accesibilidad
 
 - [ ] Los dos campos tienen etiqueta visible y `aria-label`.

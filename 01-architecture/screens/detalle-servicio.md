@@ -50,6 +50,18 @@ que funcionar sin sesión y sin venir del catálogo.
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| `getServiceDetail` | [`GET /v1/services/{id}`](../../03-api-and-data/endpoints/catalog-service-detail.md) | `Service` (§2.4), `Business` (§2.2), `Professional` (§2.3) | [`service`](../../03-api-and-data/entities/service.md), [`business`](../../03-api-and-data/entities/business.md), [`professional`](../../03-api-and-data/entities/professional.md) (read-through) |
+
+---
+
 ## Accesibilidad
 
 - [ ] El precio y la duración se anuncian juntos con su unidad: "45 mil pesos, 60 minutos".

@@ -2,6 +2,13 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- Cierre del informe del corte 1 (2026-10-07): retro del Sprint 1 en `00-governance/retros/sprint-01.md`;
+  ADR-015 (cliente HTTP con axios, decisión ya tomada pero sin registrar); sección "Datos que la
+  alimentan" en las 10 pantallas (caso de uso → endpoint → entidad del servidor → caché local);
+  componentes `BotonSecundario` y `DistintivoEstadoCita`, que el detalle de la cita, la agenda y Mis
+  citas usaban sin ficha
+- `api-networking.md`: el repo es `beauty-salon-api`, ya no hay mock, y la URL de producción no
+  existe todavía (H-01); se declara que axios solo tiene timeout total
 - **04-quality adaptada (2026-10-07):** `testing-strategy.md` con las herramientas reales de cada
   repo, la pirámide, la cobertura y la tabla de reglas de negocio críticas; `performance-budgets.md`
   con línea base medida (JavaScript inicial 362 KB gzip); `mobile-security.md` como checklist con el

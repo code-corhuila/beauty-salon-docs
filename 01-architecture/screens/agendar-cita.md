@@ -49,6 +49,19 @@ Es la pantalla donde el producto cumple su promesa: agendar sin escribir un solo
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| `getAvailability` | [`GET /v1/services/{id}/availability`](../../03-api-and-data/endpoints/booking-availability.md) | `Service` (§2.4), `Schedule` (§2.5) y `Appointment` (§2.6): los cupos se calculan, no son una tabla | Ninguna: los cupos no se cachean |
+| `bookAppointment` | [`POST /v1/appointments`](../../03-api-and-data/endpoints/booking-create-appointment.md) | `Appointment` (§2.6) | Ninguna: la cita entra a la caché cuando "Mis citas" se refresca |
+
+---
+
 ## Accesibilidad
 
 - [ ] Cada hora se anuncia con su estado: "10:30 de la mañana, disponible" o "ocupada".

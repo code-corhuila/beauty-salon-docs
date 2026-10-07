@@ -47,6 +47,18 @@ define el resto de la app, así que es la primera decisión del formulario, no l
 
 ---
 
+## Datos que la alimentan
+
+Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
+están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché local, en
+[`entities/`](../../03-api-and-data/entities/).
+
+| Caso de uso | Endpoint | Entidad del servidor | Caché local |
+|-------------|----------|----------------------|-------------|
+| `signUp` | [`POST /v1/auth/register`](../../03-api-and-data/endpoints/auth-register.md) | `UserAccount` (§2.1); si el rol es negocio, también `Business` (§2.2) y su primera `Professional` (§2.3) | Ninguna en SQLite: los tokens van al almacenamiento seguro |
+
+---
+
 ## Accesibilidad
 
 - [ ] El selector de rol se anuncia como grupo de opciones, con la seleccionada marcada.

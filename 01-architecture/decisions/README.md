@@ -36,6 +36,7 @@ Una ADR documenta una decisión de arquitectura importante. Un archivo = una dec
 | [ADR-012](./records/ADR-012-nombres-en-ingles.md) | Todos los identificadores en inglés, y migraciones versionadas en la API | Accepted | 2026-09-25 |
 | [ADR-013](./records/ADR-013-herramientas-de-prueba.md) | Herramientas de prueba: Vitest y Cypress en la app, `node:test` y smoke test en la API | Accepted | 2026-10-07 |
 | [ADR-014](./records/ADR-014-distribucion-github-releases.md) | Distribución por GitHub Releases, con CI en GitHub Actions | Accepted | 2026-10-07 |
+| [ADR-015](./records/ADR-015-cliente-http-axios.md) | Cliente HTTP: una sola instancia de axios con interceptores | Accepted | 2026-10-07 |
 
 > La ADR-001 que traía el framework era un ejemplo genérico y el propio archivo pedía reemplazarla.
 > Se reescribió con la decisión real del proyecto, conservando el número y el tema.
@@ -57,12 +58,14 @@ ADR-005  stack (Ionic React + Capacitor, solo Android)
    ├──▶ ADR-006  patrón de estado (Zustand)
    ├──▶ ADR-007  almacenamiento local (SQLite vía Capacitor + Drizzle)
    ├──▶ ADR-008  inyección de dependencias (composition root manual)
-   │       └──▶ ADR-013  herramientas de prueba (Vitest, Cypress; objetos falsos inyectados)
+   │       ├──▶ ADR-013  herramientas de prueba (Vitest, Cypress; objetos falsos inyectados)
+   │       └──▶ ADR-015  cliente HTTP (una instancia de axios con interceptores)
    └──▶ ADR-014  distribución del APK por GitHub Releases, CI en GitHub Actions
 ```
 
-> ADR-013 y ADR-014 (2026-10-07) cierran las dos decisiones que el framework deja abiertas para las
-> secciones `04-quality` y `05-release`. Ninguna reemplaza a una anterior.
+> ADR-013, ADR-014 y ADR-015 (2026-10-07) registran decisiones que el framework deja abiertas:
+> pruebas, distribución y cliente HTTP. La de axios ya se había tomado en la práctica pero no estaba
+> escrita. Ninguna reemplaza a una anterior.
 
 Si algún día se cambiara el stack otra vez, las otras tres vigentes (006, 007, 008) se marcarían
 `Superseded`: ninguna sobrevive a ese cambio, sin importar si su conclusión termina siendo la misma.
