@@ -13,6 +13,8 @@ src/
 │   │                           wrapper del plugin de secure storage de Capacitor
 │   ├── theme/                  Design tokens, tipografía, tema claro y oscuro
 │   ├── routing/                Navegador raíz, tipos de rutas y guardas de sesión
+│   ├── session/                SessionState global (perfil y rol, nunca tokens): lo abre auth y lo
+│   │                           leen las guardas y las demás features
 │   └── domain/                 Entidades compartidas por varias features (Service, Appointment)
 ├── features/
 │   ├── auth/                   Registro, inicio de sesión, sesión y rol

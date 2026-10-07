@@ -1,7 +1,10 @@
 # Feature — Autenticación y sesión
 
 - **Responsables:** Lilly Signey Puentes Rincon y Lizeth Caicedo
-- **Estado:** Planned
+- **Estado:** In progress — registro (HU-08) e inicio de sesión (HU-09) construidos en
+  `beauty-salon-app` el 2026-10-07; faltan restaurar la sesión al abrir (HU-10), enviar y renovar el
+  token (HU-11), cerrar sesión (HU-12) y las rutas por rol (HU-13). Mientras no exista la pantalla
+  del negocio (HU-14), las dos cuentas aterrizan en el catálogo al entrar
 - **Historias relacionadas:** HU-007 registro e inicio de sesión (habilitadora del Sprint 1)
 
 ---
