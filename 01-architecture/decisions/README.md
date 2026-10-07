@@ -34,6 +34,8 @@ Una ADR documenta una decisión de arquitectura importante. Un archivo = una dec
 | [ADR-010](./records/ADR-010-monorepo-temporal.md) | Monorepo temporal: backend y frontend en `beauty-salon` | Superseded by ADR-011 | 2026-09-18 |
 | [ADR-011](./records/ADR-011-cuatro-repositorios.md) | Cuatro repositorios: docs, infra, api y app | Accepted | 2026-09-25 |
 | [ADR-012](./records/ADR-012-nombres-en-ingles.md) | Todos los identificadores en inglés, y migraciones versionadas en la API | Accepted | 2026-09-25 |
+| [ADR-013](./records/ADR-013-herramientas-de-prueba.md) | Herramientas de prueba: Vitest y Cypress en la app, `node:test` y smoke test en la API | Accepted | 2026-10-07 |
+| [ADR-014](./records/ADR-014-distribucion-github-releases.md) | Distribución por GitHub Releases, con CI en GitHub Actions | Accepted | 2026-10-07 |
 
 > La ADR-001 que traía el framework era un ejemplo genérico y el propio archivo pedía reemplazarla.
 > Se reescribió con la decisión real del proyecto, conservando el número y el tema.
@@ -54,8 +56,13 @@ vigente es esta:
 ADR-005  stack (Ionic React + Capacitor, solo Android)
    ├──▶ ADR-006  patrón de estado (Zustand)
    ├──▶ ADR-007  almacenamiento local (SQLite vía Capacitor + Drizzle)
-   └──▶ ADR-008  inyección de dependencias (composition root manual)
+   ├──▶ ADR-008  inyección de dependencias (composition root manual)
+   │       └──▶ ADR-013  herramientas de prueba (Vitest, Cypress; objetos falsos inyectados)
+   └──▶ ADR-014  distribución del APK por GitHub Releases, CI en GitHub Actions
 ```
+
+> ADR-013 y ADR-014 (2026-10-07) cierran las dos decisiones que el framework deja abiertas para las
+> secciones `04-quality` y `05-release`. Ninguna reemplaza a una anterior.
 
 Si algún día se cambiara el stack otra vez, las otras tres vigentes (006, 007, 008) se marcarían
 `Superseded`: ninguna sobrevive a ese cambio, sin importar si su conclusión termina siendo la misma.

@@ -57,6 +57,8 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 4 | Inyección de dependencias | Composition root manual + React Context | [ADR-008](./01-architecture/decisions/records/ADR-008-dependency-injection.md) |
 | 5 | Idioma | Documentación en español. **Todo identificador en inglés**: tablas y columnas (singular, `snake_case`), rutas de la API y de la app, valores de enumeración (`pending`, `client`, `semi_permanent`), campos del JSON (`camelCase`) y nombres de archivo de endpoints y entidades. Los textos que lee la persona (i18n, mensajes de error) van en español | [ADR-012](./01-architecture/decisions/records/ADR-012-nombres-en-ingles.md) |
 | 6 | Backend | Node.js + Express + PostgreSQL, **implementado** en `beauty-salon-api` siguiendo tal cual el contrato ya diseñado en `03-api-and-data/endpoints/`. Cuatro repos: `beauty-salon-docs`, `beauty-salon-infra`, `beauty-salon-api` y `beauty-salon-app` | [ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md), [ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md) |
+| 7 | Pruebas | Vitest + React Testing Library y Cypress en la app; `node:test` y el smoke test contra PostgreSQL real en la API | [ADR-013](./01-architecture/decisions/records/ADR-013-herramientas-de-prueba.md) |
+| 8 | Distribución | APK firmado adjunto a un GitHub Release, construido por GitHub Actions; sin Google Play durante el semestre | [ADR-014](./01-architecture/decisions/records/ADR-014-distribucion-github-releases.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al
@@ -81,8 +83,8 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 > (compose, sin esquema), `beauty-salon-api` (antes `beauty-salon`; la API y el esquema) y
 > `beauty-salon-app` (el antiguo `frontend/`). Ver [ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md).
 
-> Las secciones `04-quality` y `05-release` se conservan tal como vienen del framework original,
-> en inglés: quedan fuera del alcance de esta entrega.
+> **2026-10-07:** las secciones `04-quality` y `05-release` quedan adaptadas a ManiCita, con 10 casos
+> de prueba, la checklist del primer release y dos ADR nuevas (013 pruebas, 014 distribución).
 
 ---
 
@@ -103,7 +105,7 @@ graph TD
         A3["03-api-and-data\nred · auth · persistencia · offline"]
     end
 
-    subgraph ENTREGA["🟠 ENTREGA (fuera de alcance)"]
+    subgraph ENTREGA["🟠 ENTREGA"]
         A4["04-quality"]
         A5["05-release"]
     end
@@ -119,8 +121,8 @@ graph TD
 | [01](./01-architecture/) | Architecture | Estructura, capas, estado, navegación, ADRs, features y pantallas |
 | [02](./02-code-and-ui/) | Code & UI | Estándares de código, design system, accesibilidad, i18n, componentes |
 | [03](./03-api-and-data/) | API & Data | Red, autenticación, persistencia, offline, endpoints y entidades |
-| [04](./04-quality/) | Quality | *Sin adaptar — fuera del alcance de esta entrega* |
-| [05](./05-release/) | Release | *Sin adaptar — fuera del alcance de esta entrega* |
+| [04](./04-quality/) | Quality | Estrategia de pruebas, presupuestos de rendimiento, checklist de seguridad, casos de prueba |
+| [05](./05-release/) | Release | CI/CD, firma y distribución, observabilidad, checklist por release |
 
 ---
 

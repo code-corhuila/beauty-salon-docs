@@ -22,7 +22,7 @@ Una historia está **terminada solo cuando todo esto es cierto**:
 
 | Check | Verificación concreta |
 |-------|-----------------------|
-| Pruebas | `npm test` en verde (Jest). Casos de uso con prueba unitaria; pantallas con prueba de React Testing Library que cubre al menos los estados loaded, vacío y error |
+| Pruebas | `npm run test.unit` en verde (Vitest, [ADR-013](../01-architecture/decisions/records/ADR-013-herramientas-de-prueba.md)). Casos de uso con prueba unitaria; pantallas con prueba de React Testing Library que cubre al menos los estados loaded, vacío y error. Si la historia toca una regla de negocio crítica, su [caso de prueba](../04-quality/test-cases/) se ejecuta y se marca. En la API, `pwsh scripts/smoke-test.ps1` en verde |
 | Plataforma | Emulador Android (API 34) vía Android Studio. Al menos una vez por sprint, en el celular físico de la manicurista aliada |
 | Sin advertencias | `npm run lint` (ESLint con `--max-warnings=0`) y `npx tsc --noEmit` sin errores, con el set de reglas declarado en [`02-code-and-ui/coding-standards.md`](../02-code-and-ui/coding-standards.md) |
 | Estados | La pantalla implementa las cinco filas de su tabla de estados en `01-architecture/screens/` |

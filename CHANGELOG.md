@@ -2,6 +2,21 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- **04-quality adaptada (2026-10-07):** `testing-strategy.md` con las herramientas reales de cada
+  repo, la pirámide, la cobertura y la tabla de reglas de negocio críticas; `performance-budgets.md`
+  con línea base medida (JavaScript inicial 362 KB gzip); `mobile-security.md` como checklist con el
+  estado de cada punto; 10 casos de prueba `test-cases/TC-001..TC-010`, uno por regla crítica
+- **05-release adaptada (2026-10-07):** `ci-cd.md` (GitHub Actions por repo), `signing-and-stores.md`
+  (llave, identidad, versionado, distribución escalonada, volver atrás), `observability.md`
+  (eventos del embudo sin datos personales) y la checklist `releases/v0.1.0.md`
+- ADR-013 (herramientas de prueba) y ADR-014 (distribución por GitHub Releases)
+
+### Changed
+- `definition-of-done.md` y `layers-and-state.md`: las pruebas se corren con Vitest
+  (`npm run test.unit`), no con Jest; la app nunca tuvo `npm test` (ADR-013)
+- README raíz: 04 y 05 dejan de figurar como fuera de alcance; decisiones 7 y 8
+
+### Added
 - Backend implementado en `beauty-salon`: Node.js + Express + PostgreSQL, los 13 endpoints del
   contrato (los 12 documentados más `auth-refresh`), probado de punta a punta contra PostgreSQL real
 - `03-api-and-data/endpoints/auth-refresh.md` — endpoint `POST /v1/auth/refresh`, faltante en el

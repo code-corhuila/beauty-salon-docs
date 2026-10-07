@@ -23,7 +23,8 @@ Presentation  ──▶  Domain  ◀──  Data
 **Cómo se ve la regla en ManiCita:** el cálculo de cupos (`horario / duración del servicio`) es una
 regla de negocio, así que vive en `domain/`, en el caso de uso `getAvailability`, y no en el
 componente del selector de horas ni en el repositorio. Eso permite probar la regla más importante
-del producto con Jest puro, sin renderizar la UI ni tocar la red.
+del producto con una prueba unitaria de Vitest
+([ADR-013](./decisions/records/ADR-013-herramientas-de-prueba.md)), sin renderizar la UI ni tocar la red.
 
 > **El servidor es la autoridad del cupo**, porque es el único que ve todas las citas al mismo
 > tiempo. El caso de uso implementa la misma regla por dos motivos: descartar las horas del día de
