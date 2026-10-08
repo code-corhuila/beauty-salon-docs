@@ -1,9 +1,9 @@
 # Feature — Autenticación y sesión
 
 - **Responsables:** Lilly Signey Puentes Rincon y Lizeth Caicedo
-- **Estado:** In progress — registro (HU-08) e inicio de sesión (HU-09) construidos en
-  `beauty-salon-app` el 2026-10-07; faltan restaurar la sesión al abrir (HU-10), enviar y renovar el
-  token (HU-11), cerrar sesión (HU-12) y las rutas por rol (HU-13). Mientras no exista la pantalla
+- **Estado:** In progress — registro (HU-08), inicio de sesión (HU-09) y sesión persistente
+  (HU-10) construidos en `beauty-salon-app` el 2026-10-07; faltan enviar y renovar el token en cada
+  petición (HU-11), cerrar sesión (HU-12) y las rutas por rol (HU-13). Mientras no exista la pantalla
   del negocio (HU-14), las dos cuentas aterrizan en el catálogo al entrar
 - **Historias relacionadas:** HU-007 registro e inicio de sesión (habilitadora del Sprint 1)
 
@@ -58,6 +58,12 @@ viendo precios.
   El perfil de la sesión activa (nombre, rol) se guarda en memoria y se vuelve a pedir al restaurar.
 - **Estrategia offline:** online-only. Sin conexión no se puede iniciar sesión, pero **una sesión ya
   abierta sigue siendo válida sin red**: el token guardado se lee del dispositivo.
+- **Al abrir la app (`restoreSession`, HU-10):** sin tokens → anónima. `accessToken` vigente (con un
+  minuto de margen) → autenticada sin ir a la red. Vencido → se renueva antes de declarar la sesión;
+  si no hay conexión (sin red o timeout) se conserva la sesión con el perfil guardado; cualquier
+  otra respuesta (401, o un 5xx como pide [`auth-refresh.md`](../../03-api-and-data/endpoints/auth-refresh.md))
+  borra los tokens y arranca anónima. El nombre y el rol salen del `accessToken`, sin verificar la
+  firma (api-contract §1.2: solo sirven para decidir qué mostrar)
 
 ---
 
