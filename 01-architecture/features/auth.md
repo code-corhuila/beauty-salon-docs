@@ -1,9 +1,11 @@
 # Feature — Autenticación y sesión
 
 - **Responsables:** Lilly Signey Puentes Rincon y Lizeth Caicedo
-- **Estado:** In progress — registro (HU-08), inicio de sesión (HU-09) y sesión persistente
-  (HU-10) construidos en `beauty-salon-app` el 2026-10-07; faltan enviar y renovar el token en cada
-  petición (HU-11), cerrar sesión (HU-12) y las rutas por rol (HU-13). Mientras no exista la pantalla
+- **Estado:** In progress — registro (HU-08), inicio de sesión (HU-09), sesión persistente
+  (HU-10) y envío y renovación del token (HU-11) construidos en `beauty-salon-app` el 2026-10-07;
+  faltan cerrar sesión (HU-12) y las rutas por rol (HU-13). Cuando un refresco es rechazado, hoy se
+  borran los tokens y la sesión pasa a anónima (`core/session/endSession.ts`); el resto del cierre
+  de sesión de [`authentication.md`](../../03-api-and-data/authentication.md) llega con HU-12. Mientras no exista la pantalla
   del negocio (HU-14), las dos cuentas aterrizan en el catálogo al entrar
 - **Historias relacionadas:** HU-007 registro e inicio de sesión (habilitadora del Sprint 1)
 
