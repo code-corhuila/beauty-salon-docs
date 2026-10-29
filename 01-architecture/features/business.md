@@ -23,7 +23,8 @@ a una manicurista de Neiva.
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
 | [BusinessServicesScreen](../screens/negocio-servicios.md) | `/business/services` | Listar los servicios propios, publicarlos o pausarlos |
-| [ServiceFormScreen](../screens/negocio-servicio-form.md) | `/business/service/new` | Crear o editar un servicio con su profesional y su horario |
+| [ServiceFormScreen](../screens/negocio-servicio-form.md) | `/business/service/new` | Crear, editar o eliminar un servicio con su profesional y su horario |
+| [BusinessProfessionalsScreen](../screens/negocio-profesionales.md) | `/business/professionals` | Listar, crear, renombrar y eliminar las profesionales del salón |
 | [BusinessAgendaScreen](../screens/negocio-agenda.md) | `/business/agenda` | Ver las citas recibidas por día y confirmarlas o rechazarlas |
 
 ---
@@ -41,15 +42,19 @@ a una manicurista de Neiva.
 
 ## Datos
 
-- **Casos de uso:** `createService`, `pauseService`, `setSchedule`, `getBusinessAgenda`,
-  `respondAppointment`
+- **Casos de uso:** `createService`, `pauseService`, `deleteService`, `setSchedule`,
+  `listProfessionals`, `createProfessional`, `renameProfessional`, `deleteProfessional`,
+  `getBusinessAgenda`, `respondAppointment`
 - **Repositorios:** `BusinessRepository`, `AppointmentRepository`
 - **Endpoints:** [`GET /v1/business/professionals`](../../03-api-and-data/endpoints/business-list-professionals.md),
   [`POST /v1/business/professionals`](../../03-api-and-data/endpoints/business-create-professional.md),
+  [`PUT /v1/business/professionals/{id}`](../../03-api-and-data/endpoints/business-update-professional.md),
+  [`DELETE /v1/business/professionals/{id}`](../../03-api-and-data/endpoints/business-delete-professional.md),
   [`GET /v1/business/services`](../../03-api-and-data/endpoints/business-list-services.md),
   [`POST /v1/business/services`](../../03-api-and-data/endpoints/business-create-service.md),
   [`PUT /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-update-service.md),
   [`PATCH /v1/business/services/{id}/status`](../../03-api-and-data/endpoints/business-update-service-status.md),
+  [`DELETE /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-delete-service.md),
   [`GET /v1/business/agenda`](../../03-api-and-data/endpoints/business-agenda.md),
   [`PATCH /v1/business/appointments/{id}/respond`](../../03-api-and-data/endpoints/business-respond-appointment.md)
 - **Persistencia local:** ninguna. La agenda del negocio **no se cachea**, porque contiene nombre y
@@ -64,7 +69,8 @@ a una manicurista de Neiva.
 - El horario se define **por profesional y por día de la semana**, no por servicio. Un servicio
   hereda el horario de la profesional que lo atiende.
 - **Pausar no es borrar.** Un servicio pausado sale del catálogo, pero las citas ya agendadas se
-  respetan y siguen apareciendo en la agenda.
+  respetan y siguen apareciendo en la agenda. Eliminar de verdad solo se permite a un servicio sin
+  ninguna cita, y a una profesional sin servicios ni citas que no sea la última del salón.
 - No se puede publicar un servicio sin precio, sin duración, sin profesional asignada o sin horario:
   faltando cualquiera de los cuatro, los cupos no se pueden calcular y el servicio sería inagendable.
 - La duración es el campo del que salen los cupos, así que se pide en minutos y se valida como

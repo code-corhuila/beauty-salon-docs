@@ -43,6 +43,7 @@
 | `/appointment/:appointmentId` | `AppointmentDetail` | `AppointmentDetailScreen` | `appointmentId: string` | Sí | `client` |
 | `/business/services` | `BusinessServices` | `BusinessServicesScreen` | — | Sí | `business` |
 | `/business/service/new` | `ServiceForm` | `ServiceFormScreen` | `serviceId?: string` (si viene, edita) | Sí | `business` |
+| `/business/professionals` | `BusinessProfessionals` | `BusinessProfessionalsScreen` | — | Sí | `business` |
 | `/business/agenda` | `BusinessAgenda` | `BusinessAgendaScreen` | — | Sí | `business` |
 
 Esta tabla está dibujada en [`flows/manicita-flujos.html`](./flows/manicita-flujos.html), diagrama 2.
@@ -62,6 +63,7 @@ RootNavigator                      decide según la sesión
 │   └── MyAppointments · AppointmentDetail
 └── BusinessTabs                   sesión con rol negocio
     ├── BusinessServices · ServiceForm
+    ├── BusinessProfessionals
     └── BusinessAgenda
 ```
 

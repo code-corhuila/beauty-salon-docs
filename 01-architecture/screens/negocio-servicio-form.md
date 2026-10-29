@@ -49,6 +49,7 @@ logra llenarlo sola, no hay catálogo**.
 |----------------------|-----------|-------------|
 | Llenar y tocar Publicar | Valida, crea el servicio y calcula los cupos a partir del horario | `createService`, `setSchedule` |
 | Editar un servicio existente | Actualiza sin afectar las citas ya agendadas | `createService` en modo edición |
+| Tocar Eliminar servicio (solo en modo edición) | Diálogo de confirmación; si el servicio tiene citas, la API responde 409 y la pantalla ofrece pausarlo en su lugar | `deleteService` |
 | Salir con cambios sin guardar | Diálogo de confirmación antes de descartar | — |
 
 ---
@@ -76,6 +77,7 @@ están en [`data-model.md`](../../03-api-and-data/data-model.md); la caché loca
 | Selector de profesional | [`GET /v1/business/professionals`](../../03-api-and-data/endpoints/business-list-professionals.md) y [`POST /v1/business/professionals`](../../03-api-and-data/endpoints/business-create-professional.md) | `Professional` (§2.3) | Ninguna |
 | `createService`, `setSchedule` | [`POST /v1/business/services`](../../03-api-and-data/endpoints/business-create-service.md) | `Service` (§2.4) y `Schedule` (§2.5) | Ninguna |
 | Edición | [`PUT /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-update-service.md) | `Service` (§2.4) y `Schedule` (§2.5) | Ninguna |
+| `deleteService` | [`DELETE /v1/business/services/{id}`](../../03-api-and-data/endpoints/business-delete-service.md) | `Service` (§2.4) y `Schedule` (§2.5) en cascada | Ninguna |
 
 ---
 

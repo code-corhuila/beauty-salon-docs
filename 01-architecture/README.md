@@ -51,6 +51,7 @@ Se decide una vez, se escribe, y se hace cumplir en la revisión.
 | AppointmentDetailScreen | [detalle-cita.md](./screens/detalle-cita.md) | `/appointment/:appointmentId` | appointments |
 | BusinessServicesScreen | [negocio-servicios.md](./screens/negocio-servicios.md) | `/business/services` | business |
 | ServiceFormScreen | [negocio-servicio-form.md](./screens/negocio-servicio-form.md) | `/business/service/new` | business |
+| BusinessProfessionalsScreen | [negocio-profesionales.md](./screens/negocio-profesionales.md) | `/business/professionals` | business |
 | BusinessAgendaScreen | [business-agenda.md](./screens/negocio-agenda.md) | `/business/agenda` | business |
 
 ## Diagramas de apoyo
