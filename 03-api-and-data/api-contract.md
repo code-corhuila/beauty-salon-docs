@@ -699,8 +699,9 @@ nuevo.
 ### E-19 · PUT /v1/business/professionals/{professionalId}
 
 > **E-19, E-20 y E-21 se agregaron el 2026-10-28** para completar los CRUD de profesional y servicio
-> que exige el c3-project (HU-15 y HU-16). Están **diseñados y pendientes de implementar**: no tienen
-> sonda en §10 hasta que existan en `beauty-salon-api`.
+> que exige el c3-project (HU-15 y HU-16), según [ADR-017](../01-architecture/decisions/records/ADR-017-borrado-fisico-restringido.md).
+> Están **diseñados y pendientes de implementar**: no tienen sonda en §10 hasta que existan en
+> `beauty-salon-api`.
 
 | Autorización | Rol `business`, dueño de la profesional |
 |---|---|

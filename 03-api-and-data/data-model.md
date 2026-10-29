@@ -360,7 +360,8 @@ las de `schedule` al editar un servicio. Con el c3-project se diseñaron dos bor
   `schedule` se va en cascada. Si tiene citas, 409 y se pausa (§6).
 
 Las restricciones de esta tabla no cambian: la API comprueba antes de borrar para responder 409 en
-vez de dejar que la clave foránea produzca un 500. No hay borrado de cuenta, negocio ni cita.
+vez de dejar que la clave foránea produzca un 500. No hay borrado de cuenta, negocio ni cita. La
+decisión y sus alternativas están en [ADR-017](../01-architecture/decisions/records/ADR-017-borrado-fisico-restringido.md).
 
 ---
 

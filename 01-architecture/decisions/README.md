@@ -37,6 +37,8 @@ Una ADR documenta una decisión de arquitectura importante. Un archivo = una dec
 | [ADR-013](./records/ADR-013-herramientas-de-prueba.md) | Herramientas de prueba: Vitest y Cypress en la app, `node:test` y smoke test en la API | Accepted | 2026-10-07 |
 | [ADR-014](./records/ADR-014-distribucion-github-releases.md) | Distribución por GitHub Releases, con CI en GitHub Actions | Accepted | 2026-10-07 |
 | [ADR-015](./records/ADR-015-cliente-http-axios.md) | Cliente HTTP: una sola instancia de axios con interceptores | Accepted | 2026-10-07 |
+| [ADR-016](./records/ADR-016-ramas-feat-fix-con-pr.md) | Flujo de ramas del c3-project: `feat/` y `fix/` con PR y merge commit hacia `main` | Accepted | 2026-10-28 |
+| [ADR-017](./records/ADR-017-borrado-fisico-restringido.md) | Borrado físico restringido de profesionales y servicios sin historia | Accepted | 2026-10-28 |
 
 > La ADR-001 que traía el framework era un ejemplo genérico y el propio archivo pedía reemplazarla.
 > Se reescribió con la decisión real del proyecto, conservando el número y el tema.
@@ -61,11 +63,22 @@ ADR-005  stack (Ionic React + Capacitor, solo Android)
    │       ├──▶ ADR-013  herramientas de prueba (Vitest, Cypress; objetos falsos inyectados)
    │       └──▶ ADR-015  cliente HTTP (una instancia de axios con interceptores)
    └──▶ ADR-014  distribución del APK por GitHub Releases, CI en GitHub Actions
+
+ADR-011  cuatro repositorios
+   └──▶ ADR-016  ramas feat/fix con PR y merge commit en los tres repos de código
+
+ADR-009  API sobre PostgreSQL
+   └──▶ ADR-017  borrado físico solo sin historia (E-19 a E-21)
 ```
 
 > ADR-013, ADR-014 y ADR-015 (2026-10-07) registran decisiones que el framework deja abiertas:
 > pruebas, distribución y cliente HTTP. La de axios ya se había tomado en la práctica pero no estaba
 > escrita. Ninguna reemplaza a una anterior.
+>
+> ADR-016 y ADR-017 (2026-10-28) salen de la guía del proyecto de aula del corte 3 (c3-project): el
+> flujo de ramas que se evalúa y el CRUD completo de dos entidades relacionadas. Ninguna reemplaza a
+> una ADR anterior; ADR-016 reemplaza la práctica de commitear directo a `main` autorizada el
+> 2026-09-18, que nunca tuvo ADR.
 
 Si algún día se cambiara el stack otra vez, las otras tres vigentes (006, 007, 008) se marcarían
 `Superseded`: ninguna sobrevive a ese cambio, sin importar si su conclusión termina siendo la misma.

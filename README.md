@@ -84,6 +84,8 @@ Se tomaron antes de escribir las secciones 01, 02 y 03, y cada una tiene su ADR 
 | 7 | Pruebas | Vitest + React Testing Library y Cypress en la app; `node:test` y el smoke test contra PostgreSQL real en la API | [ADR-013](./01-architecture/decisions/records/ADR-013-herramientas-de-prueba.md) |
 | 8 | Distribución | APK firmado adjunto a un GitHub Release, construido por GitHub Actions; sin Google Play durante el semestre | [ADR-014](./01-architecture/decisions/records/ADR-014-distribucion-github-releases.md) |
 | 9 | Cliente HTTP | Una sola instancia de axios en `core/network/`, con reintento solo de lecturas y errores `problem+json` traducidos a errores de dominio | [ADR-015](./01-architecture/decisions/records/ADR-015-cliente-http-axios.md) |
+| 10 | Ramas | En app, api e infra todo entra a `main` por PR desde `feat/` o `fix/`, con merge commit para conservar la autoría; `v1.0.0` en `main`. El docs sigue en una sola rama | [ADR-016](./01-architecture/decisions/records/ADR-016-ramas-feat-fix-con-pr.md) |
+| 11 | Borrado | Profesional y servicio se eliminan de verdad solo si no tienen historia; con citas, 409 y el servicio se pausa | [ADR-017](./01-architecture/decisions/records/ADR-017-borrado-fisico-restringido.md) |
 
 > **Decisión 2 revisada el 2026-09-17:** el stack original ([ADR-002](./01-architecture/decisions/records/ADR-002-mobile-stack.md),
 > React Native + Expo) fue desempatado por la posibilidad de compilar iOS en la nube sin Mac. Al

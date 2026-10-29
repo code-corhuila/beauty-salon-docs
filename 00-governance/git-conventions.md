@@ -8,7 +8,8 @@
 > **Actualizado el 2026-10-28 para el proyecto de aula del corte 3 (c3-project).** La guía del curso
 > califica la etiqueta `v1.0.0` en `main` de cada repositorio de código y recomienda trabajar cada
 > tarea en una rama `feat/` o `fix/` unida por Pull Request. Desde esta fecha **nadie commitea
-> directo a `main`** en app, api ni infra: todo entra por PR.
+> directo a `main`** en app, api ni infra: todo entra por PR. La decisión y sus alternativas están en
+> [ADR-016](../01-architecture/decisions/records/ADR-016-ramas-feat-fix-con-pr.md).
 
 ## Ramas
 

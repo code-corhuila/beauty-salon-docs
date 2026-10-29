@@ -2,6 +2,10 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- **Proyecto de aula del corte 3 (2026-10-28):** ficha del proyecto al inicio del README (fase 0);
+  E-19 editar profesional, E-20 eliminar profesional y E-21 eliminar servicio (diseñados, pendientes
+  de implementar); pantalla `negocio-profesionales.md`; ADR-016 (ramas `feat/`/`fix/` con PR y merge
+  commit) y ADR-017 (borrado físico solo sin historia)
 - Cierre del informe del corte 1 (2026-10-07): retro del Sprint 1 en `00-governance/retros/sprint-01.md`;
   ADR-015 (cliente HTTP con axios, decisión ya tomada pero sin registrar); sección "Datos que la
   alimentan" en las 10 pantallas (caso de uso → endpoint → entidad del servidor → caché local);
