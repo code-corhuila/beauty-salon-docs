@@ -23,7 +23,7 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
 | Archivo | Para qué sirve |
 |---------|----------------|
-| [api-contract.md](./api-contract.md) | **Contrato de API:** convenciones, forma única del error (`problem+json`), códigos de estado, las 18 fichas E-01..E-18, idempotencia, concurrencia, versionado, sondas y huecos. Manda sobre la API y sobre el cliente HTTP de la app |
+| [api-contract.md](./api-contract.md) | **Contrato de API:** convenciones, forma única del error (`problem+json`), códigos de estado, las 21 fichas E-01..E-21 (E-19..E-21 diseñadas el 2026-10-28, pendientes de implementar), idempotencia, concurrencia, versionado, sondas y huecos. Manda sobre la API y sobre el cliente HTTP de la app |
 | [data-model.md](./data-model.md) | Modelo de datos del servidor: entidades, invariantes con su marca (motor / solo dominio / pendiente), tablas, restricciones, índices y deuda. Verificado contra la base |
 | [api-networking.md](./api-networking.md) | Cliente HTTP, timeouts, reintentos, mapeo de errores |
 | [authentication.md](./authentication.md) | Tokens, refresco, roles, cierre de sesión |
@@ -52,10 +52,13 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 | `PATCH /v1/appointments/{id}/cancel` | [appointments-cancel.md](./endpoints/appointments-cancel.md) | appointments | Sí, clienta |
 | `GET /v1/business/professionals` | [business-list-professionals.md](./endpoints/business-list-professionals.md) | business | Sí, negocio |
 | `POST /v1/business/professionals` | [business-create-professional.md](./endpoints/business-create-professional.md) | business | Sí, negocio |
+| `PUT /v1/business/professionals/{id}` | [business-update-professional.md](./endpoints/business-update-professional.md) | business | Sí, negocio |
+| `DELETE /v1/business/professionals/{id}` | [business-delete-professional.md](./endpoints/business-delete-professional.md) | business | Sí, negocio |
 | `GET /v1/business/services` | [business-list-services.md](./endpoints/business-list-services.md) | business | Sí, negocio |
 | `POST /v1/business/services` | [business-create-service.md](./endpoints/business-create-service.md) | business | Sí, negocio |
 | `PUT /v1/business/services/{id}` | [business-update-service.md](./endpoints/business-update-service.md) | business | Sí, negocio |
 | `PATCH /v1/business/services/{id}/status` | [business-update-service-status.md](./endpoints/business-update-service-status.md) | business | Sí, negocio |
+| `DELETE /v1/business/services/{id}` | [business-delete-service.md](./endpoints/business-delete-service.md) | business | Sí, negocio |
 | `GET /v1/business/agenda` | [business-agenda.md](./endpoints/business-agenda.md) | business | Sí, negocio |
 | `PATCH /v1/business/appointments/{id}/respond` | [business-respond-appointment.md](./endpoints/business-respond-appointment.md) | business | Sí, negocio |
 

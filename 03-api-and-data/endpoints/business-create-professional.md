@@ -57,8 +57,9 @@
 
 - La profesional **no tiene** foto, teléfono ni especialidad, y no es un olvido: el catálogo solo
   muestra su nombre.
-- No hay editar ni borrar profesional en esta versión. Borrarla dejaría servicios y citas históricas
-  sin a quién referir.
+- Desde el 2026-10-28 se puede [editar](./business-update-professional.md) y
+  [eliminar](./business-delete-professional.md). Eliminar solo funciona si no tiene servicios ni citas,
+  y nunca deja al negocio sin profesionales.
 
 ---
 

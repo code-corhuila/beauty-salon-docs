@@ -167,7 +167,7 @@ Lo que se publica en el catálogo, con su horario.
 | La profesional pertenece **al mismo negocio** que el servicio | **solo dominio**: son dos claves foráneas independientes; el motor aceptaría una profesional de otro negocio. **pendiente** (D-03) |
 | Tiene al menos una franja de horario | **solo dominio** |
 | Sus franjas no se solapan con las de **otro** servicio de la misma profesional | **solo dominio**, y con carrera: dos altas simultáneas pueden solaparse. No se puede expresar con una restricción simple porque cruza dos tablas |
-| Pausar no borra: `is_published = false` | **solo dominio** (no hay endpoint de borrado; ver §6) |
+| Pausar no borra: `is_published = false` | **solo dominio**. El borrado físico (E-21) solo aplica a servicios sin citas; ver §5 y §6 |
 
 **Relaciones:** N : 1 con `Business` y `Professional`; 1 : N con `Schedule` y `Appointment`.
 
@@ -350,10 +350,17 @@ El motor reporta `NO ACTION` en todas salvo una (salida en §11.4). `NO ACTION` 
 | `appointment.business_id → business` | Restringir | Ídem |
 | `revoked_refresh_token.user_id → user_account` | Restringir | Mientras exista la fila, el token sigue revocado |
 
-**¿Este dato se borra de verdad?** Hoy **ninguna fila se borra desde la API**, con una excepción:
-editar un servicio borra y vuelve a crear sus filas de `schedule`. No hay endpoints de borrado de
-cuenta, negocio, profesional, servicio ni cita. Lo que la interfaz llama "quitar" un servicio es
-pausarlo (§6).
+**¿Este dato se borra de verdad?** Hasta el 2026-10-28 **ninguna fila se borraba desde la API**, salvo
+las de `schedule` al editar un servicio. Con el c3-project se diseñaron dos borrados físicos
+(pendientes de implementar):
+
+- `DELETE /v1/business/professionals/{id}` (E-20): solo si la profesional **no tiene servicios ni
+  citas** y no es la última del negocio. Si no, 409.
+- `DELETE /v1/business/services/{id}` (E-21): solo si el servicio **no tiene ninguna cita**; su
+  `schedule` se va en cascada. Si tiene citas, 409 y se pausa (§6).
+
+Las restricciones de esta tabla no cambian: la API comprueba antes de borrar para responder 409 en
+vez de dejar que la clave foránea produzca un 500. No hay borrado de cuenta, negocio ni cita.
 
 ---
 

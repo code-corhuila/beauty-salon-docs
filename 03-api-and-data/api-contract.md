@@ -164,15 +164,19 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 | `INVALID_CREDENTIALS` | 401 | Credenciales inválidas | "Correo o contraseña incorrectos." |
 | `INVALID_REFRESH_TOKEN` | 401 | Sesión inválida | "Tu sesión ya no es válida. Inicia sesión de nuevo." |
 | `FORBIDDEN_ROLE` | 403 | Rol no permitido | "Esta acción no está disponible para tu tipo de cuenta." |
-| `FORBIDDEN_RESOURCE` | 403 | Recurso ajeno | Depende del recurso: "Este servicio pertenece a otro negocio.", "Esta cita pertenece a otro negocio.", "Esta cita pertenece a otra clienta." o "La sesión no pertenece a un negocio registrado." |
+| `FORBIDDEN_RESOURCE` | 403 | Recurso ajeno | Depende del recurso: "Este servicio pertenece a otro negocio.", "Esta profesional pertenece a otro negocio.", "Esta cita pertenece a otro negocio.", "Esta cita pertenece a otra clienta." o "La sesión no pertenece a un negocio registrado." |
 | `ROUTE_NOT_FOUND` | 404 | Ruta inexistente | "La ruta solicitada no existe." |
 | `SERVICE_NOT_FOUND` | 404 | Servicio inexistente | "El servicio no existe." |
 | `APPOINTMENT_NOT_FOUND` | 404 | Cita inexistente | "La cita no existe." |
+| `PROFESSIONAL_NOT_FOUND` | 404 | Profesional inexistente | "La profesional no existe." — E-19 y E-20, pendiente de implementar |
 | `EMAIL_TAKEN` | 409 | Correo registrado | "Ese correo ya tiene una cuenta. Inicia sesión." |
 | `SLOT_TAKEN` | 409 | Cupo tomado | "Alguien acaba de tomar esa hora. Elige otra." |
 | `SCHEDULE_OVERLAP` | 409 | Horario solapado | "El horario se cruza con otro servicio de la misma profesional (día N)." — N es el día ISO |
 | `APPOINTMENT_NOT_CANCELLABLE` | 409 | Cita no cancelable | "Esta cita ya no se puede cancelar: ya fue cancelada o rechazada, o ya pasó." |
 | `APPOINTMENT_ALREADY_RESPONDED` | 409 | Cita ya respondida | "Esta cita ya fue respondida o cancelada, o ya pasó." |
+| `LAST_PROFESSIONAL` | 409 | Última profesional | "El negocio debe tener al menos una profesional." — E-20, pendiente de implementar |
+| `PROFESSIONAL_IN_USE` | 409 | Profesional en uso | "Esta profesional tiene servicios o citas registradas y no se puede eliminar. Asigna sus servicios a otra profesional o páusalos." — E-20, pendiente de implementar |
+| `SERVICE_HAS_APPOINTMENTS` | 409 | Servicio con citas | "Este servicio tiene citas registradas y no se puede eliminar. Puedes pausarlo para que deje de aparecer en el catálogo." — E-21, pendiente de implementar |
 | `SERVICE_PAUSED` | 410 | Servicio pausado | "Este servicio ya no está disponible." |
 | `PAYLOAD_TOO_LARGE` | 413 | Petición demasiado grande | "La petición supera el tamaño máximo de 100 KB." |
 | `VALIDATION_FAILED` | 422 | Validación fallida | "Revisa los campos marcados." + `errors` |
@@ -183,7 +187,7 @@ Los mensajes de cada campo en `errors` están en la ficha de cada endpoint (§5)
 ### 2.3 Los errores sin cuerpo
 
 **No hay.** Todo error, incluido el 401, trae el cuerpo de §2.1. El único código **exitoso** sin
-cuerpo es el **204** de [E-04](#e-04--post-v1authlogout).
+cuerpo es el **204** de [E-04](#e-04--post-v1authlogout) y de los borrados [E-20](#e-20--delete-v1businessprofessionalsprofessionalid) y [E-21](#e-21--delete-v1businessservicesserviceid).
 
 ---
 
@@ -193,12 +197,12 @@ cuerpo es el **204** de [E-04](#e-04--post-v1authlogout).
 |--------|---------------|-----------|
 | 200 | Operación con cuerpo: lecturas, actualizaciones, cancelar, responder | — |
 | 201 | Se creó un recurso: registro, cita, servicio, profesional. Devuelve el recurso con su `id`. **También** al repetir una creación de cita con la misma `clientRequestId` (§6) | Nunca para actualizaciones |
-| 204 | Cerrar sesión | Si hay algo que devolver |
+| 204 | Cerrar sesión y eliminar (E-20, E-21) | Si hay algo que devolver |
 | 400 | El cuerpo no es JSON válido (`MALFORMED_JSON`) | Para reglas de negocio ni para campos inválidos: eso es 422 |
 | 401 | No hay credencial, venció, o no vale (`AUTH_REQUIRED`, `SESSION_EXPIRED`, `INVALID_CREDENTIALS`, `INVALID_REFRESH_TOKEN`) | Si la credencial vale pero el rol no alcanza |
 | 403 | La credencial vale pero no alcanza: rol equivocado o recurso de otra persona | Si el recurso no existe (ver D-05) |
 | 404 | El recurso o la ruta no existen | Para validación |
-| 409 | Conflicto con el estado actual o con otra operación: cupo tomado, correo repetido, horario solapado, cita ya respondida o no cancelable | Para validación de campos |
+| 409 | Conflicto con el estado actual o con otra operación: cupo tomado, correo repetido, horario solapado, cita ya respondida o no cancelable, borrar algo que tiene historia o la última profesional | Para validación de campos |
 | 410 | El servicio existe pero está pausado (`SERVICE_PAUSED`) | Si no existe: eso es 404 |
 | 413 | Cuerpo de más de 100 KB | — |
 | 422 | La petición se entendió pero viola una regla: campos inválidos, cupo inexistente, profesional de otro negocio, límite de 20 profesionales | Para JSON mal formado |
@@ -548,7 +552,7 @@ puede cancelar hasta el instante en que empieza. Cancelar libera el cupo al inst
 | 422 | `name` vacío o largo | `VALIDATION_FAILED` | `name`: "Es requerido, hasta 60 caracteres" |
 | 422 | Ya hay 20 | `VALIDATION_FAILED` | `name`: "Un negocio puede tener hasta 20 profesionales" |
 
-**Notas:** la profesional **no tiene** foto, teléfono ni especialidad. No hay editar ni borrar.
+**Notas:** la profesional **no tiene** foto, teléfono ni especialidad. Se edita con [E-19](#e-19--put-v1businessprofessionalsprofessionalid) y se borra con [E-20](#e-20--delete-v1businessprofessionalsprofessionalid).
 
 ### E-13 · GET /v1/business/services
 
@@ -692,6 +696,73 @@ nuevo.
 
 **Notas:** pausar no toca las citas ya agendadas. Efectos en [data-model.md §6](./data-model.md#6-baja-lógica).
 
+### E-19 · PUT /v1/business/professionals/{professionalId}
+
+> **E-19, E-20 y E-21 se agregaron el 2026-10-28** para completar los CRUD de profesional y servicio
+> que exige el c3-project (HU-15 y HU-16). Están **diseñados y pendientes de implementar**: no tienen
+> sonda en §10 hasta que existan en `beauty-salon-api`.
+
+| Autorización | Rol `business`, dueño de la profesional |
+|---|---|
+| Idempotente | Sí |
+| Integración en la app | [business-update-professional.md](./endpoints/business-update-professional.md) |
+
+**Petición:** `name` (string, sí, no vacío tras recortar espacios, hasta 60 caracteres).
+
+**Respuesta 200:** `{ id, name }`.
+
+**Errores** — orden: sesión → rol → `name` → existe → es del negocio.
+
+| Código | Cuándo | `code` | Mensaje literal |
+|--------|--------|--------|-----------------|
+| 422 | `name` vacío o largo | `VALIDATION_FAILED` | `name`: "Es requerido, hasta 60 caracteres" |
+| 404 | No existe | `PROFESSIONAL_NOT_FOUND` | "La profesional no existe." |
+| 403 | Es de otro negocio | `FORBIDDEN_RESOURCE` | "Esta profesional pertenece a otro negocio." |
+
+**Notas:** las citas no guardan copia del nombre de la profesional, así que el nombre nuevo se ve
+también en las citas pasadas.
+
+### E-20 · DELETE /v1/business/professionals/{professionalId}
+
+| Autorización | Rol `business`, dueño de la profesional |
+|---|---|
+| Idempotente | El efecto sí; repetirlo responde 404 |
+| Integración en la app | [business-delete-professional.md](./endpoints/business-delete-professional.md) |
+
+**Respuesta 204:** sin cuerpo. Borrado físico.
+
+**Errores** — orden: sesión → rol → existe → es del negocio → es la última → está en uso.
+
+| Código | Cuándo | `code` | Mensaje literal |
+|--------|--------|--------|-----------------|
+| 404 | No existe | `PROFESSIONAL_NOT_FOUND` | "La profesional no existe." |
+| 403 | Es de otro negocio | `FORBIDDEN_RESOURCE` | "Esta profesional pertenece a otro negocio." |
+| 409 | Es la única del negocio | `LAST_PROFESSIONAL` | "El negocio debe tener al menos una profesional." |
+| 409 | Tiene servicios o citas | `PROFESSIONAL_IN_USE` | "Esta profesional tiene servicios o citas registradas y no se puede eliminar. Asigna sus servicios a otra profesional o páusalos." |
+
+**Notas:** si la clave foránea rechaza el borrado por una carrera, la API responde el mismo 409
+`PROFESSIONAL_IN_USE`, nunca 500.
+
+### E-21 · DELETE /v1/business/services/{serviceId}
+
+| Autorización | Rol `business`, dueño del servicio |
+|---|---|
+| Idempotente | El efecto sí; repetirlo responde 404 |
+| Integración en la app | [business-delete-service.md](./endpoints/business-delete-service.md) |
+
+**Respuesta 204:** sin cuerpo. Borrado físico del servicio y, en cascada, de su horario.
+
+**Errores** — orden: sesión → rol → existe → es del negocio → tiene citas.
+
+| Código | Cuándo | `code` | Mensaje literal |
+|--------|--------|--------|-----------------|
+| 404 | No existe | `SERVICE_NOT_FOUND` | "El servicio no existe." |
+| 403 | Es de otro negocio | `FORBIDDEN_RESOURCE` | "Este servicio pertenece a otro negocio." |
+| 409 | Tiene al menos una cita, en cualquier estado | `SERVICE_HAS_APPOINTMENTS` | "Este servicio tiene citas registradas y no se puede eliminar. Puedes pausarlo para que deje de aparecer en el catálogo." |
+
+**Notas:** un servicio con historia se **pausa** (E-18), no se borra. Si la clave foránea rechaza el
+borrado por una carrera, la API responde el mismo 409, nunca 500.
+
 ---
 
 ## 6. Idempotencia y reintentos
@@ -701,12 +772,14 @@ nuevo.
 | Lecturas (E-05, E-06, E-07, E-09, E-11, E-13, E-16) | **Sí**, siempre |
 | E-15 editar servicio (reemplazo completo) | **Sí**: aplicarlo dos veces deja el mismo estado |
 | E-18 pausar / publicar | **Sí** |
+| E-19 editar profesional | **Sí**: reemplaza el nombre |
 | E-04 logout | **Sí**: repetirlo responde 204 |
 | E-08 crear cita | **Sí, con la misma `clientRequestId`** |
 | E-01 registro | No se reintenta sola; repetirla no duplica (409) |
 | E-03 refresh | **No**: rota el token; un reintento con el mismo token da 401 |
 | E-10 cancelar, E-17 responder | **No**: la segunda llamada da 409 aunque la primera haya funcionado. La app debe tratar ese 409 tras un timeout como "probablemente ya se hizo" y recargar |
 | E-12 crear profesional, E-14 crear servicio | **No**: pueden duplicar |
+| E-20, E-21 eliminar | **No** se reintentan solos: el segundo intento da 404 aunque el primero haya funcionado. Tras un timeout, la app recarga la lista y, si el registro ya no está, lo da por hecho |
 
 **Clave de idempotencia de E-08** (`clientRequestId`, en el cuerpo):
 
