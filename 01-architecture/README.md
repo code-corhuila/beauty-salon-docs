@@ -44,6 +44,7 @@ Se decide una vez, se escribe, y se hace cumplir en la revisión.
 |----------|-----------|------|---------|
 | LoginScreen | [login.md](./screens/login.md) | `/login` | auth |
 | SignUpScreen | [registro.md](./screens/registro.md) | `/register` | auth |
+| AccountScreen | [cuenta.md](./screens/cuenta.md) | `/account` | auth |
 | CatalogScreen | [catalogo.md](./screens/catalogo.md) | `/services` | catalog |
 | ServiceDetailScreen | [detalle-servicio.md](./screens/detalle-servicio.md) | `/service/:serviceId` | catalog |
 | BookAppointmentScreen | [agendar-cita.md](./screens/agendar-cita.md) | `/book/:serviceId` | booking |

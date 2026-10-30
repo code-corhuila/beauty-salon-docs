@@ -57,6 +57,20 @@ Al cerrar sesión, en este orden:
 4. Se limpia el caché de imágenes.
 5. Se vacía el estado en memoria y se navega al stack público.
 
+Antes del paso 2 se intenta **una vez** `POST /v1/auth/logout` con el `refreshToken`, para que la API
+lo revoque ([`auth-logout.md`](./endpoints/auth-logout.md)). Si falla por cualquier motivo, se sigue
+con los pasos igual: cerrar sesión nunca falla para la persona.
+
+**Cómo se cumple en la app (HU-12, 2026-10-29):**
+
+| Paso | Implementación |
+|------|----------------|
+| 1 | `httpClient` le pone a cada petición la señal de un `AbortController` compartido; cerrar sesión lo aborta y crea uno nuevo |
+| 2 | `SessionStorage.clearTokens()` sobre el almacenamiento seguro |
+| 3 | Se vacían todas las tablas de la caché local (`service`, `professional`, `business` y, cuando exista, `appointment`). No se borra el archivo de la base: la conexión abierta se sigue usando |
+| 4 | **No aplica todavía**: la app no guarda imágenes propias, porque la API siempre responde `imageUrl: null` ([api-contract.md](./api-contract.md) H-05). Cuando haya imágenes, se limpia aquí |
+| 5 | `SessionState` pasa a `anonymous`, se reinician los stores de las features y se navega al catálogo |
+
 > El paso 3 no es opcional. Las citas cacheadas dicen a qué hora y en qué dirección va a estar una
 > mujer; dejarlas en el dispositivo después de cerrar sesión es exactamente el riesgo que describe
 > [`security-rules.md`](../00-governance/security-rules.md).

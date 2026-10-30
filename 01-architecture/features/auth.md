@@ -28,6 +28,7 @@ viendo precios.
 |----------|------|-----------|
 | [LoginScreen](../screens/login.md) | `/login` | Entrar con correo y contraseña |
 | [SignUpScreen](../screens/registro.md) | `/register` | Crear cuenta eligiendo el rol |
+| [AccountScreen](../screens/cuenta.md) | `/account` | Ver con qué cuenta se está dentro y cerrar la sesión (los dos roles) |
 
 ---
 
@@ -66,6 +67,12 @@ viendo precios.
   otra respuesta (401, o un 5xx como pide [`auth-refresh.md`](../../03-api-and-data/endpoints/auth-refresh.md))
   borra los tokens y arranca anónima. El nombre y el rol salen del `accessToken`, sin verificar la
   firma (api-contract §1.2: solo sirven para decidir qué mostrar)
+- **Al cerrar sesión (`signOut`, HU-12):** sigue el orden de
+  [`authentication.md`](../../03-api-and-data/authentication.md#cierre-de-sesión). Se intenta una
+  vez `POST /v1/auth/logout` con el `refreshToken`; si falla por red, timeout, 401 o 5xx, la sesión
+  se cierra en el dispositivo igual: **cerrar sesión nunca falla para la persona**. Se llega desde
+  [Mi cuenta](../screens/cuenta.md), que hasta HU-13 se abre con un botón en el encabezado del
+  catálogo visible solo con sesión
 
 ---
 

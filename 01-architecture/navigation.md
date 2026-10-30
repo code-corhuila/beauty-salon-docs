@@ -45,6 +45,7 @@
 | `/business/service/new` | `ServiceForm` | `ServiceFormScreen` | `serviceId?: string` (si viene, edita) | Sí | `business` |
 | `/business/professionals` | `BusinessProfessionals` | `BusinessProfessionalsScreen` | — | Sí | `business` |
 | `/business/agenda` | `BusinessAgenda` | `BusinessAgendaScreen` | — | Sí | `business` |
+| `/account` | `Account` | `AccountScreen` | — | Sí | `client` o `business` |
 
 Esta tabla está dibujada en [`flows/manicita-flujos.html`](./flows/manicita-flujos.html), diagrama 2.
 
@@ -60,11 +61,13 @@ RootNavigator                      decide según la sesión
 │   └── Login · SignUp
 ├── ClientTabs                     sesión con rol clienta
 │   ├── Catalog · ServiceDetail · BookAppointment
-│   └── MyAppointments · AppointmentDetail
+│   ├── MyAppointments · AppointmentDetail
+│   └── Account
 └── BusinessTabs                   sesión con rol negocio
     ├── BusinessServices · ServiceForm
     ├── BusinessProfessionals
-    └── BusinessAgenda
+    ├── BusinessAgenda
+    └── Account                    la misma pantalla en los dos roles
 ```
 
 ## Comportamiento de las guardas
