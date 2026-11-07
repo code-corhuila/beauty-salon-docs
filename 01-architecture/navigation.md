@@ -70,6 +70,14 @@ RootNavigator                      decide según la sesión
     └── Account                    la misma pantalla en los dos roles
 ```
 
+> **Cómo se construye (HU-13, 2026-11-06):** los tres grupos de arriba son grupos lógicos de rutas,
+> no tres `IonRouterOutlet`. Hay **un solo outlet** y cada ruta protegida lleva su guarda
+> (`RequireSession`, con el rol que puede entrar). Cambiar de outlet al iniciar sesión desmontaría las
+> páginas en plena navegación, y la vuelta a la ruta pretendida depende de esa navegación. La decisión
+> sigue centralizada: la tabla de rutas y sus guardas viven en `core/routing`, y ninguna pantalla
+> revisa la sesión por su cuenta. El catálogo y el detalle son públicos, así que también los puede
+> abrir una sesión de negocio; solo no están en su inicio.
+
 ## Comportamiento de las guardas
 
 | Situación | Qué hace el `RootNavigator` |
@@ -77,8 +85,8 @@ RootNavigator                      decide según la sesión
 | Ruta pública sin sesión | Deja pasar. El catálogo se explora sin cuenta: es el gancho del producto |
 | Ruta con sesión requerida y sin sesión | Manda a `Login` guardando la ruta pretendida, y vuelve a ella al autenticarse |
 | Ruta de negocio con sesión de clienta | Manda a `Catalog`. No se muestra un error de permiso: la clienta nunca debería haber visto ese enlace |
-| Ruta de clienta con sesión de negocio | Manda a `BusinessAgenda` |
-| Sesión expirada durante la navegación | El interceptor intenta refrescar; si falla, cierra sesión y el navegador raíz monta el `PublicStack` |
+| Ruta de clienta con sesión de negocio | Manda a `BusinessServices`, el inicio del negocio. Sin mensaje de error |
+| Sesión expirada durante la navegación | El interceptor intenta refrescar; si falla, cierra sesión y la guarda de la ruta manda a `Login` |
 
 > El caso que hay que probar sí o sí: una clienta sin cuenta abre el deep link
 > `manicita.app/book/128` que le compartió una amiga. La guarda la manda a `Login`, se registra, y
