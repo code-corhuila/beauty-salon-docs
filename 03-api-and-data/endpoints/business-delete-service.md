@@ -7,7 +7,7 @@
 - **Ficha del contrato:** [E-21](../api-contract.md#e-21--delete-v1businessservicesserviceid)
 
 > Agregado el 2026-10-28 para completar el CRUD de servicios del c3-project (HU-16).
-> **Diseñado, pendiente de implementar** en `beauty-salon-api`: todavía no tiene sonda en
+> Implementado el 2026-11-06 en `beauty-salon-api`; sus sondas están en
 > [`api-contract.md` §10](../api-contract.md#10-sondas).
 
 ---

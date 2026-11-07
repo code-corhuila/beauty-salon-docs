@@ -351,8 +351,8 @@ El motor reporta `NO ACTION` en todas salvo una (salida en §11.4). `NO ACTION` 
 | `revoked_refresh_token.user_id → user_account` | Restringir | Mientras exista la fila, el token sigue revocado |
 
 **¿Este dato se borra de verdad?** Hasta el 2026-10-28 **ninguna fila se borraba desde la API**, salvo
-las de `schedule` al editar un servicio. Con el c3-project se diseñaron dos borrados físicos
-(pendientes de implementar):
+las de `schedule` al editar un servicio. Con el c3-project se agregaron dos borrados físicos
+(implementados el 2026-11-06):
 
 - `DELETE /v1/business/professionals/{id}` (E-20): solo si la profesional **no tiene servicios ni
   citas** y no es la última del negocio. Si no, 409.

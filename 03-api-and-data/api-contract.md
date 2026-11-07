@@ -168,15 +168,15 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 | `ROUTE_NOT_FOUND` | 404 | Ruta inexistente | "La ruta solicitada no existe." |
 | `SERVICE_NOT_FOUND` | 404 | Servicio inexistente | "El servicio no existe." |
 | `APPOINTMENT_NOT_FOUND` | 404 | Cita inexistente | "La cita no existe." |
-| `PROFESSIONAL_NOT_FOUND` | 404 | Profesional inexistente | "La profesional no existe." — E-19 y E-20, pendiente de implementar |
+| `PROFESSIONAL_NOT_FOUND` | 404 | Profesional inexistente | "La profesional no existe." — E-19 y E-20 |
 | `EMAIL_TAKEN` | 409 | Correo registrado | "Ese correo ya tiene una cuenta. Inicia sesión." |
 | `SLOT_TAKEN` | 409 | Cupo tomado | "Alguien acaba de tomar esa hora. Elige otra." |
 | `SCHEDULE_OVERLAP` | 409 | Horario solapado | "El horario se cruza con otro servicio de la misma profesional (día N)." — N es el día ISO |
 | `APPOINTMENT_NOT_CANCELLABLE` | 409 | Cita no cancelable | "Esta cita ya no se puede cancelar: ya fue cancelada o rechazada, o ya pasó." |
 | `APPOINTMENT_ALREADY_RESPONDED` | 409 | Cita ya respondida | "Esta cita ya fue respondida o cancelada, o ya pasó." |
-| `LAST_PROFESSIONAL` | 409 | Última profesional | "El negocio debe tener al menos una profesional." — E-20, pendiente de implementar |
-| `PROFESSIONAL_IN_USE` | 409 | Profesional en uso | "Esta profesional tiene servicios o citas registradas y no se puede eliminar. Asigna sus servicios a otra profesional o páusalos." — E-20, pendiente de implementar |
-| `SERVICE_HAS_APPOINTMENTS` | 409 | Servicio con citas | "Este servicio tiene citas registradas y no se puede eliminar. Puedes pausarlo para que deje de aparecer en el catálogo." — E-21, pendiente de implementar |
+| `LAST_PROFESSIONAL` | 409 | Última profesional | "El negocio debe tener al menos una profesional." — E-20 |
+| `PROFESSIONAL_IN_USE` | 409 | Profesional en uso | "Esta profesional tiene servicios o citas registradas y no se puede eliminar. Asigna sus servicios a otra profesional o páusalos." — E-20 |
+| `SERVICE_HAS_APPOINTMENTS` | 409 | Servicio con citas | "Este servicio tiene citas registradas y no se puede eliminar. Puedes pausarlo para que deje de aparecer en el catálogo." — E-21 |
 | `SERVICE_PAUSED` | 410 | Servicio pausado | "Este servicio ya no está disponible." |
 | `PAYLOAD_TOO_LARGE` | 413 | Petición demasiado grande | "La petición supera el tamaño máximo de 100 KB." |
 | `VALIDATION_FAILED` | 422 | Validación fallida | "Revisa los campos marcados." + `errors` |
@@ -700,8 +700,7 @@ nuevo.
 
 > **E-19, E-20 y E-21 se agregaron el 2026-10-28** para completar los CRUD de profesional y servicio
 > que exige el c3-project (HU-15 y HU-16), según [ADR-017](../01-architecture/decisions/records/ADR-017-borrado-fisico-restringido.md).
-> Están **diseñados y pendientes de implementar**: no tienen sonda en §10 hasta que existan en
-> `beauty-salon-api`.
+> Se **implementaron el 2026-11-06** en `beauty-salon-api` y sus sondas están en §10.
 
 | Autorización | Rol `business`, dueño de la profesional |
 |---|---|
@@ -912,8 +911,38 @@ HTTP y el `code` esperado. Resultado: **49 de 49**.
 | 48 | POST /auth/refresh tras logout | 401 INVALID_REFRESH_TOKEN | 401 INVALID_REFRESH_TOKEN | Sí |
 | 49 | GET /servicios (ruta vieja en español) | 404 ROUTE_NOT_FOUND | 404 ROUTE_NOT_FOUND | Sí |
 
-**Cobertura:** los 18 endpoints en su camino feliz, y 18 de los 19 `code` de §2.2. El que falta es
-`INTERNAL_ERROR`, que por definición no debería observarse.
+### Corrida del 2026-11-06: E-19, E-20 y E-21
+
+Mismo script y mismas comprobaciones, con el sistema levantado con `beauty-salon-infra`. Resultado:
+**67 de 67**: las 49 de arriba y estas 18. El script las intercala en el orden del flujo, así que
+en su salida las otras sondas cambian de número; las referencias de este documento usan la
+numeración de la tabla de arriba.
+
+| # | Llamada | Se esperaba | Se obtuvo | ¿Cuadra? |
+|---|---------|-------------|-----------|----------|
+| 20 | PUT /business/professionals/{id} | 200, nombre recortado | 200, nombre recortado | Sí |
+| 21 | PUT /business/professionals/{id} nombre vacío | 422 VALIDATION_FAILED | 422 VALIDATION_FAILED | Sí |
+| 22 | PUT /business/professionals/{id} inexistente | 404 PROFESSIONAL_NOT_FOUND | 404 PROFESSIONAL_NOT_FOUND | Sí |
+| 23 | PUT /business/professionals/{id} de otro negocio | 403 FORBIDDEN_RESOURCE | 403 FORBIDDEN_RESOURCE | Sí |
+| 24 | PUT /business/professionals/{id} como clienta | 403 FORBIDDEN_ROLE | 403 FORBIDDEN_ROLE | Sí |
+| 25 | DELETE /business/professionals/{id} como clienta | 403 FORBIDDEN_ROLE | 403 FORBIDDEN_ROLE | Sí |
+| 26 | DELETE /business/professionals/{id} inexistente | 404 PROFESSIONAL_NOT_FOUND | 404 PROFESSIONAL_NOT_FOUND | Sí |
+| 27 | DELETE /business/professionals/{id} de otro negocio | 403 FORBIDDEN_RESOURCE | 403 FORBIDDEN_RESOURCE | Sí |
+| 28 | DELETE /business/professionals/{id} la última | 409 LAST_PROFESSIONAL | 409 LAST_PROFESSIONAL | Sí |
+| 29 | DELETE /business/professionals/{id} con servicios | 409 PROFESSIONAL_IN_USE | 409 PROFESSIONAL_IN_USE | Sí |
+| 30 | DELETE /business/professionals/{id} | 204 | 204 | Sí |
+| 31 | DELETE /business/professionals/{id} repetido | 404 PROFESSIONAL_NOT_FOUND | 404 PROFESSIONAL_NOT_FOUND | Sí |
+| 54 | DELETE /business/services/{id} como clienta | 403 FORBIDDEN_ROLE | 403 FORBIDDEN_ROLE | Sí |
+| 55 | DELETE /business/services/{id} inexistente | 404 SERVICE_NOT_FOUND | 404 SERVICE_NOT_FOUND | Sí |
+| 56 | DELETE /business/services/{id} de otro negocio | 403 FORBIDDEN_RESOURCE | 403 FORBIDDEN_RESOURCE | Sí |
+| 57 | DELETE /business/services/{id} con citas | 409 SERVICE_HAS_APPOINTMENTS | 409 SERVICE_HAS_APPOINTMENTS | Sí |
+| 58 | DELETE /business/services/{id} | 204 | 204 | Sí |
+| 59 | DELETE /business/services/{id} repetido | 404 SERVICE_NOT_FOUND | 404 SERVICE_NOT_FOUND | Sí |
+
+**Cobertura:** los 21 endpoints en su camino feliz, y todos los `code` de §2.2 menos
+`INTERNAL_ERROR`, que por definición no debería observarse. No se sondea la carrera de E-20 y E-21,
+en la que la clave foránea rechaza el borrado y la API responde el mismo 409: exigiría forzar dos
+peticiones simultáneas.
 
 ### Lo que no cuadró antes de esta versión
 

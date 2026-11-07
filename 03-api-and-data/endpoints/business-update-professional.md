@@ -7,7 +7,7 @@
 - **Ficha del contrato:** [E-19](../api-contract.md#e-19--put-v1businessprofessionalsprofessionalid)
 
 > Agregado el 2026-10-28 para completar el CRUD de profesionales del c3-project (HU-15).
-> **Diseñado, pendiente de implementar** en `beauty-salon-api`: todavía no tiene sonda en
+> Implementado el 2026-11-06 en `beauty-salon-api`; sus sondas están en
 > [`api-contract.md` §10](../api-contract.md#10-sondas).
 
 ---

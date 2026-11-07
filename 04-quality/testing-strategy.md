@@ -12,7 +12,7 @@ Cómo se prueba ManiCita, con qué herramientas y cuánto. Las herramientas se e
 | `beauty-salon-app` | Unitarias y de componente | **Vitest 4** + jsdom + React Testing Library | `npm run test.unit` | Junto al archivo probado: `getAvailability.test.ts` al lado de `getAvailability.ts` |
 | `beauty-salon-app` | Punta a punta (E2E) | **Cypress 13** contra el servidor de Vite (`http://localhost:5173`) | `npm run test.e2e` | `cypress/e2e/*.cy.ts` |
 | `beauty-salon-api` | Unitarias del dominio | **`node:test`** (incluido en Node, sin dependencias nuevas) | `node --test` | `src/**/*.test.js` |
-| `beauty-salon-api` | Integración contra la API real | **`scripts/smoke-test.ps1`** (PowerShell 7): recorre los 18 endpoints con datos que crea por la propia API, nunca por SQL | `pwsh scripts/smoke-test.ps1` | `scripts/` |
+| `beauty-salon-api` | Integración contra la API real | **`scripts/smoke-test.ps1`** (PowerShell 7): recorre los 21 endpoints con datos que crea por la propia API, nunca por SQL | `pwsh scripts/smoke-test.ps1` | `scripts/` |
 
 > **Por qué Vitest y no Jest**, aunque varias ADR anteriores digan "Jest puro": la app se compila
 > con Vite, y Vitest usa la misma configuración (alias `@core`, `@features`, `@shared`) sin
@@ -124,7 +124,7 @@ La estrategia de arriba es la regla. Esto es lo que existe hoy, para que nadie l
 
 | Qué | Estado |
 |-----|--------|
-| Smoke test de la API | ✅ 49 sondas sobre los 18 endpoints, todas en verde en la última corrida (2026-09-27) |
+| Smoke test de la API | ✅ 67 sondas sobre los 21 endpoints, todas en verde en la última corrida (2026-11-06) |
 | Unitarias de la API (`node:test`) | ⏳ ninguna todavía |
 | Unitarias y de componente de la app | ⏳ solo existe `src/App.test.tsx`, la prueba de ejemplo del andamiaje de Ionic |
 | E2E de la app | ⚠️ `cypress/e2e/test.cy.ts` es la prueba de ejemplo de Ionic: busca el texto "Ready to create an app?", que ya no existe en la app, así que **falla**. Hay que reemplazarla |

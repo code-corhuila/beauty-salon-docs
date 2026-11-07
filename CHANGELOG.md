@@ -5,6 +5,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](http
 - **Flujo de ramas (2026-11-06):** ADR-018 con el flujo `feat/` o `fix/` → `dev` → `qa` → `main` y
   revisión de la otra integrante en cada PR; actualiza `git-conventions.md` y reemplaza en parte a
   ADR-016
+- **E-19, E-20 y E-21 implementados (2026-11-06):** editar y eliminar profesional y eliminar servicio;
+  el smoke test sube a 67 sondas sobre los 21 endpoints
 - **Proyecto de aula del corte 3 (2026-10-28):** ficha del proyecto al inicio del README (fase 0);
   E-19 editar profesional, E-20 eliminar profesional y E-21 eliminar servicio (diseñados, pendientes
   de implementar); pantalla `negocio-profesionales.md`; ADR-016 (ramas `feat/`/`fix/` con PR y merge
