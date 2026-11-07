@@ -15,6 +15,11 @@ Es la pantalla donde el producto cumple su promesa: agendar sin escribir un solo
 
 ---
 
+> **Construida en HU-17 (2026-11-06), con dos simplificaciones:** los días sin cupos no se ven
+> deshabilitados en la tira, porque saberlo exigiría 14 consultas de disponibilidad al abrir la
+> pantalla; y el estado vacío ofrece ver el día siguiente, no la siguiente fecha con cupos. La regla
+> del cupo no cambia: la decide el servidor.
+
 ## Regiones de UI
 
 | Región | Componente | Notas |
