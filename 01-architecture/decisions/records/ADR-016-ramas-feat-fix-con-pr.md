@@ -2,7 +2,7 @@
 
 - **ID:** ADR-016
 - **Fecha:** 2026-10-28
-- **Estado:** Accepted
+- **Estado:** Superseded en parte por [ADR-018](./ADR-018-flujo-dev-qa-main.md) (destino de los PR y uso de `dev` y `qa`); siguen vigentes las ramas `feat/` y `fix/` y el merge commit
 - **Autoría:** Lilly Signey Puentes Rincon y Lizeth Caicedo
 
 ---

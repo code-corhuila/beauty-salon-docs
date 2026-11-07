@@ -5,24 +5,33 @@
 > Este repositorio de documentación es la excepción declarada en el [README raíz](../README.md):
 > no usa ramas, todo se commitea directo a `main`.
 
-> **Actualizado el 2026-10-28 para el proyecto de aula del corte 3 (c3-project).** La guía del curso
-> califica la etiqueta `v1.0.0` en `main` de cada repositorio de código y recomienda trabajar cada
-> tarea en una rama `feat/` o `fix/` unida por Pull Request. Desde esta fecha **nadie commitea
-> directo a `main`** en app, api ni infra: todo entra por PR. La decisión y sus alternativas están en
-> [ADR-016](../01-architecture/decisions/records/ADR-016-ramas-feat-fix-con-pr.md).
+> **Actualizado el 2026-11-06 por la retroalimentación del docente.** En app, api e infra el flujo es
+> `feat/` o `fix/` → `dev` → `qa` → `main`, siempre por Pull Request y con revisión de la otra
+> integrante. **Nadie commitea directo a `dev`, `qa` ni `main`.** La decisión y sus alternativas están
+> en [ADR-018](../01-architecture/decisions/records/ADR-018-flujo-dev-qa-main.md), que reemplaza en
+> este punto a [ADR-016](../01-architecture/decisions/records/ADR-016-ramas-feat-fix-con-pr.md).
 
 ## Ramas
 
-- Desarrollo trunk-based con ramas cortas que salen de `main` y vuelven a `main`.
+| Rama | Para qué sirve | Recibe PR desde |
+|------|----------------|-----------------|
+| `feat/…`, `fix/…` | Una historia o un arreglo | Nace de `dev` |
+| `dev` | Integración de las tareas terminadas | `feat/`, `fix/` y demás ramas de tarea |
+| `qa` | Prueba desde un clon limpio, con el manual | `dev` |
+| `main` | Versión entregable; aquí va la etiqueta `v1.0.0` | `qa` |
+
 - **Una rama por historia de usuario o por arreglo.** Nombre: `<tipo>/hu-<NN>-<resumen>` o
   `<tipo>/<scope>-<resumen>` cuando no hay historia.
   - Tipos: `feat`, `fix`, `chore`, `test`, `docs`.
-  - Ejemplos: `feat/hu-12-logout`, `feat/hu-15-crud-profesionales`, `fix/catalog-empty-state`.
-- Las ramas no se crean por adelantado: se abren al empezar la historia y se borran al hacer merge.
-- Una rama vive pocos días. Antes de abrir el PR se actualiza con `main` (`git pull origin main`).
-- **`develop` y `qa` de `beauty-salon-api` no se usan.** Las creó el docente el 2026-09-01 con solo un
-  commit inicial y no comparten historia con `main`. No se borran (no son del equipo), pero no se
-  promueve código por ellas.
+  - Ejemplos: `feat/hu-13-rutas-por-rol`, `feat/hu-15-crud-profesionales`, `fix/catalog-empty-state`.
+- Las ramas de tarea no se crean por adelantado: se abren al empezar la historia, salen de `dev` y se
+  borran al hacer merge. `dev`, `qa` y `main` no se borran.
+- Una rama de tarea vive pocos días. Antes de abrir el PR se actualiza con `dev`
+  (`git pull origin dev`).
+- `dev` → `qa` → `main` se promueve por grupos de tareas terminadas, no por cada historia.
+- **`develop` de `beauty-salon-api` no se usa:** la rama de integración se llama `dev` en los tres
+  repositorios. La creó el docente el 2026-09-01 y no se borra sin consultarlo con él. `qa` sí se usa:
+  como no compartía historia con `main`, se unió con `--allow-unrelated-histories`, sin push forzado.
 
 ## Commits
 
@@ -61,13 +70,12 @@ Ejemplos:
   `npm run test.unit` en verde; en la API, el smoke test (`scripts/smoke-test.ps1`) y, cuando exista
   (deuda del c3-project), `npm test`. No hay CI todavía: el que
   abre el PR declara en la descripción que lo corrió.
-- Al menos una aprobación. **Merge commit** hacia `main` (botón *Create a merge commit*), **no
-  squash**: el squash junta los commits en uno solo a nombre de quien hace el merge y borra la
-  autoría de cada integrante, que la guía del curso califica.
+- Al menos una aprobación en GitHub. **Merge commit** en todos los PR (botón *Create a merge
+  commit*), **no squash**: el squash junta los commits en uno solo a nombre de quien hace el merge y
+  borra la autoría de cada integrante, que la guía del curso califica.
 
-> Con un equipo de dos, la aprobación la da quien **no** escribió el PR, y el docente la ratifica en
-> la revisión. La regla no se elimina: se declara quién aprueba. Un PR sin aprobación no entra a
-> `main`.
+> Con un equipo de dos, la aprobación la da quien **no** escribió el PR, desde su propia cuenta de
+> GitHub. Un PR sin esa revisión no se fusiona, tampoco en las promociones hacia `qa` y `main`.
 
 ## Releases
 

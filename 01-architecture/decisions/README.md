@@ -37,8 +37,9 @@ Una ADR documenta una decisión de arquitectura importante. Un archivo = una dec
 | [ADR-013](./records/ADR-013-herramientas-de-prueba.md) | Herramientas de prueba: Vitest y Cypress en la app, `node:test` y smoke test en la API | Accepted | 2026-10-07 |
 | [ADR-014](./records/ADR-014-distribucion-github-releases.md) | Distribución por GitHub Releases, con CI en GitHub Actions | Accepted | 2026-10-07 |
 | [ADR-015](./records/ADR-015-cliente-http-axios.md) | Cliente HTTP: una sola instancia de axios con interceptores | Accepted | 2026-10-07 |
-| [ADR-016](./records/ADR-016-ramas-feat-fix-con-pr.md) | Flujo de ramas del c3-project: `feat/` y `fix/` con PR y merge commit hacia `main` | Accepted | 2026-10-28 |
+| [ADR-016](./records/ADR-016-ramas-feat-fix-con-pr.md) | Flujo de ramas del c3-project: `feat/` y `fix/` con PR y merge commit hacia `main` | Superseded en parte por ADR-018 | 2026-10-28 |
 | [ADR-017](./records/ADR-017-borrado-fisico-restringido.md) | Borrado físico restringido de profesionales y servicios sin historia | Accepted | 2026-10-28 |
+| [ADR-018](./records/ADR-018-flujo-dev-qa-main.md) | Flujo de promoción `feat/` y `fix/` → `dev` → `qa` → `main` con revisión de la otra integrante | Accepted | 2026-11-06 |
 
 > La ADR-001 que traía el framework era un ejemplo genérico y el propio archivo pedía reemplazarla.
 > Se reescribió con la decisión real del proyecto, conservando el número y el tema.
@@ -66,6 +67,7 @@ ADR-005  stack (Ionic React + Capacitor, solo Android)
 
 ADR-011  cuatro repositorios
    └──▶ ADR-016  ramas feat/fix con PR y merge commit en los tres repos de código
+           └──▶ ADR-018  flujo feat/fix → dev → qa → main con revisión de la otra integrante
 
 ADR-009  API sobre PostgreSQL
    └──▶ ADR-017  borrado físico solo sin historia (E-19 a E-21)
@@ -79,6 +81,10 @@ ADR-009  API sobre PostgreSQL
 > flujo de ramas que se evalúa y el CRUD completo de dos entidades relacionadas. Ninguna reemplaza a
 > una ADR anterior; ADR-016 reemplaza la práctica de commitear directo a `main` autorizada el
 > 2026-09-18, que nunca tuvo ADR.
+>
+> ADR-018 (2026-11-06) sale de la retroalimentación del docente sobre el avance hacia la Fase 1:
+> reemplaza en ADR-016 el destino de los PR y el uso de `dev` y `qa`, y mantiene las ramas `feat/` y
+> `fix/` y el merge commit.
 
 Si algún día se cambiara el stack otra vez, las otras tres vigentes (006, 007, 008) se marcarían
 `Superseded`: ninguna sobrevive a ese cambio, sin importar si su conclusión termina siendo la misma.
