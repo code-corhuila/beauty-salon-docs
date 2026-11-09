@@ -33,7 +33,7 @@ porque la manicurista tocó después el botón equivocado.
 
 ## Result
 
-- **Status:** ✅ Pasó (4 de 4 pasos de API)
+- **Status:** ✅ Pasó
 - **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Sin defectos encontrados.
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. Sin defectos.

@@ -35,7 +35,7 @@ en el historial en vez de borrarse.
 
 ## Result
 
-- **Status:** 🟡 API ✅ (pasos 1 a 5); paso 6 de la app sin ejecutar
-- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Paso 6: la pantalla de detalle deshabilita Cancelar sin conexión (PR app #17); falta probarlo a mano. Sin defectos encontrados.
+- **Status:** 🟡 Pasó con observación
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16; app `debug` de `fix/app-http-debug` (PR app #26), contra la API local
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. Paso 6: con modo avión, la app **no** guardó la cancelación: al confirmar avisó "No pudimos cancelar tu cita. Revisa tu conexión y reintenta: la cita no cambió." y 15 s después de reconectar la cita seguía `pending`. Pero el botón Cancelar no se deshabilitó antes de intentar. **Defecto D-A:** en Android el WebView no actualiza `navigator.onLine` (sigue en `true` con modo avión: Android reporta `Active default network: none`), así que `useIsOnline` nunca avisa "sin conexión" antes de intentar. Afecta a todos los avisos previos de la app en un celular. Propuesta: usar `@capacitor/network`. Sin corregir.

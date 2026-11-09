@@ -36,7 +36,7 @@ token inservible y no dejar su historial de citas en el dispositivo.
 
 ## Result
 
-- **Status:** 🟡 API ✅ (pasos 1 a 5); paso 6 del dispositivo sin ejecutar
-- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). El paso 6 necesita `chrome://inspect` en un dispositivo; lo cubren en parte las pruebas de `signOut` y `endSession` (Vitest). Sin defectos encontrados.
+- **Status:** ✅ Pasó
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16; app `debug` de `fix/app-http-debug` (PR app #26), contra la API local
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. Paso 6: antes de cerrar sesión, `shared_prefs/cap_sec.xml` tenía `auth.accessToken` y `auth.refreshToken`, y SQLite la caché del catálogo; después, el almacenamiento seguro quedó **vacío**. SQLite no tiene tabla de citas; el catálogo público se vuelve a llenar al aterrizar en Servicios (de 20 a 13 filas: se borró y se recargó). Sin defectos.

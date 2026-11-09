@@ -37,7 +37,7 @@ servicios no puede depender de la red; agendar sí (ver TC-002).
 
 ## Result
 
-- **Status:** ⏳ Sin ejecutar: todo el caso es en la app instalada
-- **Build:** —
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** No hubo Android SDK ni emulador al ejecutar los casos el 2026-11-08. Además, la app en Android todavía no puede hablar con la API local por HTTP (ver `mobile-security.md`). Sin defectos encontrados.
+- **Status:** ✅ Pasó tras corregir un defecto
+- **Build:** app `debug` de `fix/app-cache-catalogo` (PR app #27), contra la API local
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. **Defecto D-B (corregido en el PR app #27):** en la primera ejecución, los pasos 3 y 4 fallaron: sin conexión el catálogo mostraba tarjetas vacías ("$ NaN", sin nombre), porque el plugin de SQLite devuelve objetos y drizzle esperaba arreglos. Con el arreglo: paso 3, 20 servicios desde la caché con nombre, precio y salón, y aviso de sin conexión; paso 4, detalle desde la caché con Agendar deshabilitado ("Necesitas conexión para agendar"); paso 5, al reconectar y deslizar, el catálogo se recargó y el aviso desapareció (el deslizamiento se hizo con eventos táctiles en el WebView: `adb input swipe` no activa el refresher); paso 6, reinstalada y en modo avión, "No se pudo cargar el catálogo" con Reintentar. **Defecto D-C (sin corregir):** el aviso dice "Mostrando la última actualización del ." con la fecha vacía: `CatalogScreen` pasa `fecha: ''` porque la caché no expone cuándo se actualizó.

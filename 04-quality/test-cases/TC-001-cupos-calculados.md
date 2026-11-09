@@ -37,7 +37,7 @@ deja de usar la app.
 
 ## Result
 
-- **Status:** ✅ Pasó (5 de 5 pasos de API)
+- **Status:** ✅ Pasó
 - **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Paso 5: la API **no quita** el cupo de las 10:00, lo devuelve con `isAvailable: false`, como dice `api-contract.md` (E-07); el texto esperado del paso estaba desactualizado y se corrigió. Sin defectos encontrados.
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. Paso 5: la API no quita el cupo de las 10:00, lo devuelve con `isAvailable: false` (E-07); se corrigió el texto esperado. Sin defectos.

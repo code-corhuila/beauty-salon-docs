@@ -36,7 +36,7 @@ profesional. Es la regla que justifica que la app exista.
 
 ## Result
 
-- **Status:** 🟡 API ✅ (pasos 1, 2, 4 y 5); paso 3 de la app sin ejecutar
-- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
-- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
-- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). El paso 3 lo cubre la prueba automática `BookAppointmentScreen_whenSlotIsTaken_warnsAndReloadsTheSlots` (Vitest); falta hacerlo a mano en la app. Sin defectos encontrados.
+- **Status:** ✅ Pasó
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16; app `debug` de `fix/app-http-debug` (PR app #26), contra la API local
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2; emulador Android 16 (API 36, x86_64, WebView 133)
+- **Notes / defects:** Pasos de API: [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1) el 2026-11-08. Pasos de app: en el emulador, manejando el WebView por DevTools Protocol (lo mismo que `chrome://inspect`) y `adb`. Paso 3: la clienta eligió las 8:00 en la app, otra sesión tomó ese cupo por la API y al confirmar la app mostró "Alguien acaba de tomar esa hora. Elige otra.", recargó los cupos (las 8:00 quedó "ocupada"), dejó Confirmar deshabilitado y no se creó ninguna cita. Sin defectos.
