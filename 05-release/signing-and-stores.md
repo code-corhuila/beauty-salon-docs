@@ -45,8 +45,9 @@ Antes del primer APK firmado, `capacitor.config.ts` deja de tener los valores de
 - `versionCode` = `MAJOR × 10000 + MINOR × 100 + PATCH`: `0.1.0` → `100`, `0.2.0` → `200`,
   `1.0.0` → `10000`. Así siempre crece, nunca se repite, y se calcula desde la versión sin llevar un
   contador aparte. CI lo inyecta en `android/app/build.gradle` al construir el release.
-- Hoy los tres números están desalineados: `package.json` dice `0.0.1`, y `build.gradle` dice
-  `versionName "1.0"` con `versionCode 1`. Se alinean en el primer release.
+- Alineados el 2026-11-09 para `v1.0.0`: `package.json` de la app y de la API dicen `1.0.0`, y
+  `build.gradle` dice `versionName "1.0.0"` con `versionCode 10000` (app PR #32, API PR #16). Mientras
+  no haya CI, se cambian a mano en cada release.
 
 ---
 
@@ -91,4 +92,4 @@ no llega a la agenda del negocio.
 |----|-----------|-------------|-------|
 | S-01 | Generar la llave de release, cargarla en los secretos de CI y guardar la copia de respaldo | _por asignar_ | _por asignar_ |
 | S-02 | Señal de versión mínima para forzar actualizaciones | _por asignar_ | _por asignar_ |
-| S-03 | Cambiar `appId` y `appName` y alinear `versionName` y `versionCode` | _por asignar_ | _por asignar_ |
+| S-03 | ✅ Hecha: `appId` `co.edu.corhuila.manicita` y `appName` `ManiCita` (app PR #21); versiones alineadas en `1.0.0` / `10000` (app PR #32, API PR #16) | Lizeth Caicedo | 2026-11-09 |
