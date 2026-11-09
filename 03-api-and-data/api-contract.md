@@ -180,6 +180,7 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 | `SERVICE_PAUSED` | 410 | Servicio pausado | "Este servicio ya no está disponible." |
 | `PAYLOAD_TOO_LARGE` | 413 | Petición demasiado grande | "La petición supera el tamaño máximo de 100 KB." |
 | `VALIDATION_FAILED` | 422 | Validación fallida | "Revisa los campos marcados." + `errors` |
+| `TOO_MANY_ATTEMPTS` | 429 | Demasiados intentos | "Hiciste demasiados intentos de inicio de sesión. Espera unos minutos y vuelve a intentarlo." — solo E-02, con encabezado `Retry-After` |
 | `INTERNAL_ERROR` | 500 | Error interno | "Ocurrió un error inesperado. Intenta de nuevo en un momento." |
 
 Los mensajes de cada campo en `errors` están en la ficha de cada endpoint (§5).
@@ -206,6 +207,7 @@ cuerpo es el **204** de [E-04](#e-04--post-v1authlogout) y de los borrados [E-20
 | 410 | El servicio existe pero está pausado (`SERVICE_PAUSED`) | Si no existe: eso es 404 |
 | 413 | Cuerpo de más de 100 KB | — |
 | 422 | La petición se entendió pero viola una regla: campos inválidos, cupo inexistente, profesional de otro negocio, límite de 20 profesionales | Para JSON mal formado |
+| 429 | Demasiados intentos fallidos de inicio de sesión (`TOO_MANY_ATTEMPTS`), con `Retry-After` en segundos | En cualquier otro endpoint: hoy solo se limita el login |
 | 500 | **Solo** un fallo no previsto (`INTERNAL_ERROR`) | **Ningún error de este contrato es un 500.** Si aparece en una sonda, es un defecto |
 
 **400 contra 422:** 400 es "no te entendí" (el JSON no se puede leer); 422 es "te entendí
@@ -345,8 +347,16 @@ fallaron) → correo repetido. No existe rol de administrador.
 |--------|--------|--------|-----------------|
 | 422 | `email` sin formato de correo | `VALIDATION_FAILED` | `email`: "Formato de correo inválido" |
 | 401 | Correo inexistente **o** contraseña errada | `INVALID_CREDENTIALS` | "Correo o contraseña incorrectos." |
+| 429 | 5 intentos fallidos para el mismo correo desde la misma IP en 15 minutos | `TOO_MANY_ATTEMPTS` | "Hiciste demasiados intentos de inicio de sesión. Espera unos minutos y vuelve a intentarlo." |
 
 **Notas:** a propósito no dice cuál de los dos falló.
+
+**Límite de intentos:** cuenta solo los `INVALID_CREDENTIALS`, por IP y correo (en minúsculas). Al
+quinto fallo, cada intento siguiente responde 429 con `Retry-After` (segundos que faltan para que se
+venza la ventana de 15 minutos), **aunque la contraseña sea correcta**: así no se puede seguir
+probando claves. Un inicio de sesión correcto antes del bloqueo pone el contador en cero. El conteo
+vive en la memoria del proceso: se reinicia si la API se reinicia, y no se comparte entre instancias
+(hoy hay una sola).
 
 ### E-03 · POST /v1/auth/refresh
 
