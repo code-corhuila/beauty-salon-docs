@@ -21,7 +21,7 @@ descubra los pendientes el día de la entrega.
 | Los tokens se guardan solo en el Keystore de Android vía `capacitor-secure-storage-plugin` | Revisar que el único acceso a tokens sea `src/core/storage/secureStorage.ts`; buscar `localStorage`, `Preferences` y `sessionStorage` en `src/` (no debe haber tokens ahí) | ✅ el módulo existe y es el único punto. Se verifica de nuevo cuando se construya auth (HU-08 a HU-13) |
 | SQLite guarda solo la caché del catálogo y las citas **propias** de la clienta | Las tablas locales son las cuatro de [`03-api-and-data/README.md`](../03-api-and-data/README.md); ninguna guarda la agenda del negocio | ✅ esquema local v2 con `service`, `business` y `professional`; `appointment` llega en la v3 con la feature de citas |
 | Cerrar sesión borra tokens, la base local y el caché de imágenes | Prueba manual de [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) más inspección de la base con `chrome://inspect` | ⏳ el cierre de sesión todavía no existe en la app (HU-12) |
-| El respaldo automático de Android no copia la base local | `android:allowBackup="false"` en `AndroidManifest.xml` | ❌ hoy está en `true`: Google Drive podría respaldar la caché con las citas de la clienta |
+| El respaldo automático de Android no copia la base local | `android:allowBackup="false"` en `AndroidManifest.xml` | 🟡 en `false` desde el PR app #21 (2026-11-08), pendiente de unir a `dev` |
 | Ningún dato personal que la app no necesite queda en caché | El celular de la clienta no viaja en el catálogo; la agenda no se cachea | ✅ por contrato |
 
 ## Transporte
@@ -44,9 +44,9 @@ descubra los pendientes el día de la entrega.
 
 | Check | Cómo se verifica | Estado al 2026-10-07 |
 |-------|------------------|----------------------|
-| R8/ProGuard activo en `release` | `minifyEnabled true` en `android/app/build.gradle`, tipo `release` | ❌ hoy en `false` |
-| Sin `console.*` en el JavaScript de release | `esbuild: { drop: ['console', 'debugger'] }` en `vite.config.ts` para el modo producción | ❌ sin configurar |
-| Identificador propio de la app | `appId` en `capacitor.config.ts` distinto de `io.ionic.starter`, y `appName` = ManiCita | ❌ sigue el del andamiaje (`io.ionic.starter`, `frontend`). **Se cambia antes del primer APK firmado**: después de publicado, cambiar el `appId` es publicar otra app |
+| R8/ProGuard activo en `release` | `minifyEnabled true` en `android/app/build.gradle`, tipo `release` | 🟡 activo desde el PR app #21; falta compilar el APK de release y probarlo instalado (no hubo Android SDK al hacer el cambio) |
+| Sin `console.*` en el JavaScript de release | `build.rolldownOptions.output.minify.compress.dropConsole` en `vite.config.ts`. **`esbuild.drop` no sirve:** Vite 8 minifica con Rolldown y esa opción no tiene efecto (se comprobó en el build). Se verifica buscando los mensajes de `console` del propio código en `dist/assets` | 🟡 desde el PR app #21. Queda una llamada indirecta de Ionic (Stencil) en el bundle moderno, y los archivos `-legacy`, que el WebView de Capacitor 8 no carga |
+| Identificador propio de la app | `appId` en `capacitor.config.ts` distinto de `io.ionic.starter`, y `appName` = ManiCita | 🟡 `co.edu.corhuila.manicita` y `ManiCita` desde el PR app #21. **No se vuelve a cambiar**: después de publicado, cambiar el `appId` es publicar otra app |
 | Ninguna credencial en el repo ni en el bundle | `git ls-files` sin `.env`, `.jks` ni `.keystore`; el bundle no contiene secretos (Vite solo expone variables `VITE_*`, y ninguna es secreta) | ✅ en los tres repos de código solo se versiona `.env.example` |
 | El APK se firma con la llave de release, no la de debug | `apksigner verify --print-certs` sobre el APK del release | ⏳ sin llave de release todavía (ver [`05-release/signing-and-stores.md`](../05-release/signing-and-stores.md)) |
 
@@ -71,9 +71,13 @@ descubra los pendientes el día de la entrega.
 
 ## Pendientes que bloquean el primer APK firmado
 
-Estos cuatro se resuelven antes de `v0.2.0`; los demás ⏳ dependen de features o del despliegue:
+Los cuatro tienen su cambio en el PR app #21 (2026-11-08). Quedan resueltos cuando ese PR llegue a
+`main` y se compruebe un APK de release instalado:
 
-1. `appId` y `appName` propios.
-2. `android:allowBackup="false"`.
-3. `minifyEnabled true` en `release`.
-4. `console` eliminado del build de producción.
+1. ~~`appId` y `appName` propios.~~ `co.edu.corhuila.manicita` / `ManiCita`.
+2. ~~`android:allowBackup="false"`.~~
+3. ~~`minifyEnabled true` en `release`.~~ Falta probar el APK con R8.
+4. ~~`console` eliminado del build de producción.~~ Con la opción de Rolldown, no la de esbuild.
+
+El mismo PR registra en el proyecto Android los plugins nativos de SQLite y secure storage, que
+faltaban: sin ellos, un APK compilado sin `npx cap sync` no tenía caché ni almacenamiento seguro.
