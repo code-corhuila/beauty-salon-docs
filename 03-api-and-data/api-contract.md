@@ -32,7 +32,7 @@ Aplican a **todos** los endpoints y no se repiten en cada ficha.
 | Formato de error | `application/problem+json; charset=utf-8`, con la forma de §2 |
 | Nombres de campo | `camelCase` en petición y respuesta, sin excepciones (verificado en §10) |
 | Valores de enumeración | minúsculas en inglés, iguales en la base y en el JSON: `pending`, `client`, `semi_permanent` ([ADR-012](../01-architecture/decisions/records/ADR-012-nombres-en-ingles.md)) |
-| CORS | Abierto a cualquier origen (la app corre en el WebView de Capacitor). Hueco H-02 para producción |
+| CORS | Solo los orígenes de la variable `CORS_ORIGINS` (lista separada por comas). Sin la variable: `http://localhost:5173` (Vite en desarrollo) y `https://localhost` (WebView de Capacitor 8 en Android). Las peticiones sin `Origin` (app nativa, Postman, smoke test) no se ven afectadas. Cerró H-02 |
 
 ### 1.2 Autenticación y roles
 
@@ -975,7 +975,7 @@ queda como prueba del arreglo:
 | # | Hueco | Consecuencia | Dueño | Fecha límite |
 |---|-------|--------------|-------|--------------|
 | H-01 | No hay URL de producción ni despliegue | La app publicada no tiene a dónde apuntar | _por asignar_ | _por asignar_ |
-| H-02 | CORS abierto a todo origen | Aceptable en desarrollo; en producción debe limitarse | _por asignar_ | _por asignar_ |
+| ~~H-02~~ | ~~CORS abierto a todo origen~~ | **Cerrado el 2026-11-08:** la API solo acepta los orígenes de `CORS_ORIGINS` (§1.1). En producción hay que fijar la variable con el dominio real | Lizeth Caicedo | 2026-11-08 |
 | H-03 | La paginación no devuelve `pageSize` servido ni `total`; E-09 no acepta `pageSize` | Si la app pide más de 50, no se entera del recorte por la respuesta | _por asignar_ | _por asignar_ |
 | H-04 | `type` desconocido se ignora en vez de dar 422 | Un filtro mal escrito devuelve todo el catálogo sin aviso | _por asignar_ | _por asignar_ |
 | H-05 | No hay subida de imágenes ni miniaturas; `imageUrl` siempre `null` | Las tarjetas del catálogo no tienen foto | _por asignar_ | _por asignar_ |

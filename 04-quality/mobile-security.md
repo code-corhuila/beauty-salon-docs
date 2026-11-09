@@ -31,7 +31,7 @@ descubra los pendientes el día de la entrega.
 | El build de release habla con la API solo por HTTPS | `VITE_API_BASE_URL` del build de release empieza por `https://` | ⏳ no hay URL de producción ni despliegue de la API (hueco H-01 de [`api-contract.md`](../03-api-and-data/api-contract.md)) |
 | HTTP en claro solo en builds de desarrollo | `cleartextTrafficPermitted` permitido únicamente en el `network_security_config` de la variante `debug` | ⏳ sin configurar; hoy se desarrolla contra `http://localhost:3000/v1` |
 | Certificate pinning en los endpoints de autenticación | Plugin de pinning de Capacitor configurado con el certificado del dominio de la API | ⏳ depende de H-01: no se puede fijar el certificado de un dominio que no existe |
-| CORS de la API limitado al origen de la app en producción | Revisar la configuración de `cors` en `beauty-salon-api` | ⏳ abierto a todo origen (hueco H-02) |
+| CORS de la API limitado al origen de la app en producción | Revisar la configuración de `cors` en `beauty-salon-api` | 🟡 la API ya limita los orígenes con `CORS_ORIGINS` (2026-11-08); falta fijar el dominio de producción, que no existe todavía (H-01) |
 
 ## Permisos
 
