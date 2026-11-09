@@ -125,7 +125,7 @@ La estrategia de arriba es la regla. Esto es lo que existe hoy, para que nadie l
 | Qué | Estado |
 |-----|--------|
 | Smoke test de la API | ✅ 67 sondas sobre los 21 endpoints, todas en verde en la última corrida (2026-11-06) |
-| Unitarias de la API (`node:test`) | ⏳ ninguna todavía |
+| Unitarias de la API (`node:test`) | 🟡 7 pruebas en verde con `npm test` (2026-11-08), solo del módulo `auth`: `auth.routes.test.js` (login por HTTP) y `auth.service.test.js` (`register` directo). Usan la base de infra, no dobles. Faltan los demás módulos |
 | Unitarias y de componente de la app | ⏳ solo existe `src/App.test.tsx`, la prueba de ejemplo del andamiaje de Ionic |
 | E2E de la app | ⚠️ `cypress/e2e/test.cy.ts` es la prueba de ejemplo de Ionic: busca el texto "Ready to create an app?", que ya no existe en la app, así que **falla**. Hay que reemplazarla |
 | Cobertura medida | ⏳ `@vitest/coverage-v8` no está instalado |
