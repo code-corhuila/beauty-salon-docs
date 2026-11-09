@@ -31,13 +31,13 @@ deja de usar la app.
 | 2 | Sin sesión, consultar `GET /v1/services/{id}/availability?date=<fecha>` | 200 con **3 cupos**: `slt_<fecha>_0900`, `_1000` y `_1100` |
 | 3 | Consultar la disponibilidad de una fecha cuyo día **no** tiene horario | 200 con la lista de cupos vacía |
 | 4 | Consultar sin el parámetro `date` | 422 `VALIDATION_FAILED` con el error en el campo `date` |
-| 5 | Agendar el cupo de las 10:00 con una clienta y volver a consultar la misma fecha | 200 con **2 cupos**: el de las 10:00 ya no aparece |
+| 5 | Agendar el cupo de las 10:00 con una clienta y volver a consultar la misma fecha | 200 con los 3 cupos, y el de las 10:00 con `isAvailable: false` (E-07): la app lo muestra ocupado y no deja elegirlo |
 
 ---
 
 ## Result
 
-- **Status:** Pendiente de ejecución manual
-- **Build:** —
-- **Device / OS:** —
-- **Notes / defects:** —
+- **Status:** ✅ Pasó (5 de 5 pasos de API)
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
+- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Paso 5: la API **no quita** el cupo de las 10:00, lo devuelve con `isAvailable: false`, como dice `api-contract.md` (E-07); el texto esperado del paso estaba desactualizado y se corrigió. Sin defectos encontrados.

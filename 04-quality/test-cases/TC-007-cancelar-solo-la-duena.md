@@ -35,7 +35,7 @@ en el historial en vez de borrarse.
 
 ## Result
 
-- **Status:** Pendiente de ejecución manual
-- **Build:** —
-- **Device / OS:** —
-- **Notes / defects:** —
+- **Status:** 🟡 API ✅ (pasos 1 a 5); paso 6 de la app sin ejecutar
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
+- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Paso 6: la pantalla de detalle deshabilita Cancelar sin conexión (PR app #17); falta probarlo a mano. Sin defectos encontrados.

@@ -35,7 +35,7 @@ material; las clientas que ya tenían cita no pueden perderla por eso.
 
 ## Result
 
-- **Status:** Pendiente de ejecución manual
-- **Build:** —
-- **Device / OS:** —
-- **Notes / defects:** —
+- **Status:** ✅ Pasó (6 de 6 pasos de API)
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
+- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). Paso 2: se revisó la primera página del catálogo (hasta 50 servicios). Sin defectos encontrados.

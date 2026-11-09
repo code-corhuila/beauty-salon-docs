@@ -37,7 +37,7 @@ servicios no puede depender de la red; agendar sí (ver TC-002).
 
 ## Result
 
-- **Status:** Pendiente de ejecución manual
+- **Status:** ⏳ Sin ejecutar: todo el caso es en la app instalada
 - **Build:** —
-- **Device / OS:** —
-- **Notes / defects:** —
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
+- **Notes / defects:** No hubo Android SDK ni emulador al ejecutar los casos el 2026-11-08. Además, la app en Android todavía no puede hablar con la API local por HTTP (ver `mobile-security.md`). Sin defectos encontrados.

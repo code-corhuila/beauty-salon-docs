@@ -36,7 +36,7 @@ profesional. Es la regla que justifica que la app exista.
 
 ## Result
 
-- **Status:** Pendiente de ejecución manual
-- **Build:** —
-- **Device / OS:** —
-- **Notes / defects:** —
+- **Status:** 🟡 API ✅ (pasos 1, 2, 4 y 5); paso 3 de la app sin ejecutar
+- **Build:** API `1116727` (`dev` más los PR #7 y #9 a #13), en Docker con PostgreSQL 16
+- **Device / OS:** Windows 11 con Docker Desktop 28.3.2. Sin dispositivo ni emulador Android
+- **Notes / defects:** Pasos de API ejecutados el 2026-11-08 con [`ejecutar-pasos-api.ps1`](./ejecutar-pasos-api.ps1). El paso 3 lo cubre la prueba automática `BookAppointmentScreen_whenSlotIsTaken_warnsAndReloadsTheSlots` (Vitest); falta hacerlo a mano en la app. Sin defectos encontrados.
