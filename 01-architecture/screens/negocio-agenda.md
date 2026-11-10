@@ -21,6 +21,7 @@ pantalla que reemplaza el cuaderno.
 |--------|------------|-------|
 | Encabezado | Selector de día | Tira de días con un punto en los que tienen citas |
 | Cuerpo | Lista de citas del día | Hora, servicio y nombre de la clienta; el estado con [DistintivoEstadoCita](../../02-code-and-ui/components/distintivo-estado-cita.md) |
+| Recordatorio por fila | Enlace con estilo de botón secundario **Recordar por WhatsApp** | En las citas Pendientes y Confirmadas. Abre `https://wa.me/57…` con el mensaje ya escrito (nombre, servicio, día y hora). Si el celular no tiene 10 dígitos, no se muestra |
 | Acciones por fila | Dos [BotonSecundario](../../02-code-and-ui/components/boton-secundario.md) con `fullWidth={false}`: Confirmar, y Rechazar con `isDestructive` | Solo en las citas Pendientes. No se usa `BotonPrimario`: la pantalla tiene una fila por cita, y un botón primario por fila rompería la regla de uno por pantalla |
 
 ---
@@ -44,6 +45,7 @@ pantalla que reemplaza el cuaderno.
 | Elegir un día | Carga las citas de ese día | `getBusinessAgenda` |
 | Tocar Confirmar | La cita pasa a Confirmada y la clienta recibe el aviso | `respondAppointment` |
 | Tocar Rechazar | Pide el motivo y la cita pasa a Rechazada con ese motivo visible para la clienta | `respondAppointment` |
+| Tocar Recordar por WhatsApp | Abre el chat de WhatsApp con la clienta y el recordatorio escrito; la manicurista decide si lo envía | `whatsAppUrl` |
 
 ---
 

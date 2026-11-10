@@ -24,7 +24,8 @@ más que los de cualquier otro.
 | `priceCop` | `number` | Sí | — | Precio en pesos, se formatea como moneda dentro del componente |
 | `durationMinutes` | `number` | Sí | — | Duración, se formatea como texto legible |
 | `salonName` | `string` | Sí | — | Nombre del salón o de la profesional |
-| `imageUrl` | `string` | No | — | Foto del servicio; sin ella se usa un fondo con `color.brandSoft` |
+| `type` | `ServiceType` | No | `'other'` | Tipo del servicio. Sin foto, decide el ícono de la miniatura (`shared/components/serviceTypeIcon.ts`) |
+| `imageUrl` | `string` | No | — | Foto del servicio; sin ella se muestra el ícono del tipo en `color.brand` sobre `color.brandSoft`. Hoy la API no tiene fotos (H-05), así que siempre se ve el ícono |
 | `badge` | `'publicado' \| 'pausado'` | No | — | Solo en la vista del negocio |
 | `onPress` | `() => void` | Sí | — | Abrir el detalle |
 
@@ -48,7 +49,7 @@ más que los de cualquier otro.
 ## Tokens que usa
 
 - Color: `color.surface`, `color.border`, `color.brand` en el precio, `color.textSecondary` en los
-  metadatos, `color.brandSoft` como reemplazo de la foto
+  metadatos, `color.brandSoft` como fondo de la miniatura sin foto y `color.brand` en su ícono
 - Espaciado: `space.md` interno, `space.sm` entre líneas
 - Radio: `radius.md`, `radius.pill` en el distintivo
 - Tipografía: `text.label` en el nombre, `text.caption` en los metadatos
@@ -60,7 +61,7 @@ más que los de cualquier otro.
 - La tarjeta se anuncia como **una sola unidad**, no como cuatro textos sueltos: "Manicure
   semipermanente, 45 mil pesos, 60 minutos, Salón Nails Neiva".
 - Rol `button`, porque toda la tarjeta es tocable.
-- La imagen se marca como decorativa: su información ya está en la etiqueta de la tarjeta.
+- La imagen, o el ícono del tipo cuando no hay foto, se marca como decorativa: su información ya está en la etiqueta de la tarjeta.
 - El distintivo de pausado lleva texto, no solo un color distinto.
 - Con la fuente más grande del sistema la tarjeta **crece en alto**; nunca recorta el nombre.
 

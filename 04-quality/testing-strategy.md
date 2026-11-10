@@ -125,7 +125,7 @@ La estrategia de arriba es la regla. Esto es lo que existe hoy, para que nadie l
 
 | Qué | Estado |
 |-----|--------|
-| Unitarias y de componente de la app (Vitest) | ✅ **215 pruebas en 37 archivos**, todas en verde (2026-11-09). Por capa: 82 de dominio (`auth`, `booking`, `appointments`, `business`), 92 de pantallas y componentes, 41 de `core` y `data` (cliente HTTP, rutas por rol, SQLite, mapeadores) |
+| Unitarias y de componente de la app (Vitest) | ✅ **244 pruebas en 42 archivos**, todas en verde (2026-11-09, con los PR de UI #33 a #36). Por capa: 92 de dominio (`auth`, `booking`, `appointments`, `business`, `catalog`), 111 de pantallas y componentes, 41 de `core` y `data` (cliente HTTP, rutas por rol, SQLite, mapeadores) |
 | E2E de la app (Cypress) | ✅ 4 pruebas en `cypress/e2e/login-y-catalogo.cy.ts`, en verde (2026-11-09): catálogo sin sesión (HU-08), credenciales incorrectas (HU-09), la clienta llega al catálogo y el negocio a sus servicios (HU-09, HU-13). Reemplazó la prueba de ejemplo de Ionic (app PR #31) |
 | Unitarias de la API (`node:test`) | 🟡 **19 pruebas** con `npm test`: `app.test.js` (6), `auth.routes.test.js` (4), `auth.service.test.js` (5) y `loginLimiter.test.js` (4). Las de `auth.*` usan la base de infra, así que necesitan Docker encendido. Faltan los módulos `catalog`, `booking`, `appointments` y `business` |
 | Colección Postman de la API | ✅ 13 peticiones, 13/13 en verde con Newman (2026-11-08) |
@@ -139,7 +139,7 @@ La estrategia de arriba es la regla. Esto es lo que existe hoy, para que nadie l
 | ID | Qué falta | Estado | Responsable | Fecha |
 |----|-----------|--------|-------------|-------|
 | Q-01 | Pruebas unitarias de los casos de uso de `catalog` | ⏳ pendiente: `catalog` solo tiene las 3 de `offlineNotice` | _por asignar_ | _por asignar_ |
-| Q-02 | Pruebas de componente de `CatalogScreen` y `ServiceDetailScreen` en sus cinco estados | ⏳ pendiente (TC-010 sí se ejecutó a mano en el emulador) | _por asignar_ | _por asignar_ |
+| Q-02 | Pruebas de componente de `CatalogScreen` y `ServiceDetailScreen` en sus cinco estados | 🟡 parcial: `ServiceDetailScreen` tiene 2 (dirección, Cómo llegar y Copiar) y `TarjetaServicio` 10; faltan los cinco estados de las dos pantallas (TC-010 sí se ejecutó a mano en el emulador) | _por asignar_ | _por asignar_ |
 | Q-03 | Reemplazar la E2E de ejemplo de Cypress | ✅ hecha el 2026-11-09 (app PR #31) | Lizeth Caicedo | 2026-11-09 |
 | Q-04 | Pruebas unitarias del cálculo de cupos y la hora de Bogotá en la API | ⏳ pendiente: hoy lo cubren el smoke test y TC-001 | _por asignar_ | _por asignar_ |
 | Q-05 | Instalar `@vitest/coverage-v8` y medir la cobertura de `domain/` | ⏳ pendiente | _por asignar_ | _por asignar_ |

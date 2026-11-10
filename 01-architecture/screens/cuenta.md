@@ -24,9 +24,9 @@ hora y en qué dirección va a estar una mujer ([`authentication.md`](../../03-a
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Encabezado | Título "Mi cuenta" y botón atrás | — |
+| Encabezado | Título "Mi cuenta" | Es una pestaña de los dos roles: sin botón atrás |
 | Cuerpo | Nombre y tipo de cuenta | "Clienta" o "Negocio", en texto. Salen del perfil de la sesión, sin ir a la red |
-| Pie | [BotonSecundario](../../02-code-and-ui/components/boton-secundario.md) | Cerrar sesión. Abre un diálogo de confirmación |
+| Pie | [BotonSecundario](../../02-code-and-ui/components/boton-secundario.md) y [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) | Cerrar sesión. Abre un diálogo de confirmación. Debajo, la barra de pestañas |
 
 ---
 

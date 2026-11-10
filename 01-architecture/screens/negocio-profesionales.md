@@ -23,7 +23,7 @@ servicio, y no había forma de corregirla ni de quitarla.
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Encabezado | Título "Profesionales" y botón atrás | Se entra desde la pestaña del negocio |
+| Encabezado | Título "Profesionales" | Es una pestaña del negocio: se entra desde la [BarraInferior](../../02-code-and-ui/components/barra-inferior.md), sin botón atrás |
 | Cuerpo | Lista de profesionales | Una fila por profesional con su nombre y dos acciones: editar y eliminar |
 | Hoja inferior | [CampoFormulario](../../02-code-and-ui/components/campo-formulario.md) + [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) | Se abre para crear o para renombrar; el mismo formulario sirve para los dos |
 | Pie | [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) fijo | Agregar profesional. Se deshabilita al llegar a 20 |
