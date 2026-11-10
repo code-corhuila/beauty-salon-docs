@@ -22,7 +22,7 @@ entrada de la app y **se explora sin cuenta**.
 | Encabezado | Título y fila de filtros | Chips por tipo: tradicional, semipermanente, acrílicas, retiro, decoración |
 | Cuerpo | Lista de [TarjetaServicio](../../02-code-and-ui/components/tarjeta-servicio.md) | `IonList` virtualizada con foto, nombre, precio, duración y nombre del salón |
 | Banner | Aviso de sin conexión | Solo cuando se muestran datos cacheados |
-| Pie | — | Sin CTA fijo: la acción está en cada tarjeta |
+| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) con sesión | Sin CTA fijo: la acción está en cada tarjeta. Sin sesión no hay barra |
 
 ---
 

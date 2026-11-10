@@ -2,6 +2,14 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- **UI/UX alineada al negocio (2026-11-09, app PR #33 a #36):** ícono del tipo de servicio cuando no
+  hay foto (tarjeta y detalle); barra de pestañas abajo para la clienta y el negocio
+  (`barra-inferior.md`, nueva); **Recordar por WhatsApp** en cada cita activa de la agenda; **Cómo
+  llegar** (Google Maps) y **Copiar** con aviso en la dirección del salón. Actualiza `navigation.md`,
+  `tarjeta-servicio.md` y las pantallas `catalogo`, `detalle-servicio`, `negocio-agenda`,
+  `negocio-profesionales` y `cuenta`
+- **Entrega v1.0.0 (2026-11-09):** checklist `releases/v1.0.0.md`, estado real de las pruebas en
+  `testing-strategy.md` y deuda S-03 cerrada (versiones alineadas en `1.0.0` / build `10000`)
 - **Flujo de ramas (2026-11-06):** ADR-018 con el flujo `feat/` o `fix/` → `dev` → `qa` → `main` y
   revisión de la otra integrante en cada PR; actualiza `git-conventions.md` y reemplaza en parte a
   ADR-016

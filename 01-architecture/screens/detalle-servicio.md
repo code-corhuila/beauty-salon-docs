@@ -22,8 +22,8 @@ que funcionar sin sesión y sin venir del catálogo.
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Encabezado | Foto del servicio y botón atrás | Si no hay foto, se usa un fondo con el color del token de marca |
-| Cuerpo | Bloques de información | Nombre, precio, duración, descripción, profesional que atiende, nombre y dirección del salón |
+| Encabezado | Foto del servicio y botón atrás | Si no hay foto, el ícono del tipo de servicio sobre `color.brandSoft`, el mismo de la tarjeta |
+| Cuerpo | Bloques de información | Nombre, precio, duración, descripción, profesional que atiende, nombre y dirección del salón. Debajo de la dirección, dos botones secundarios pequeños: **Cómo llegar** y **Copiar** |
 | Pie | [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) fijo | Agendar. Visible sin hacer scroll |
 
 ---
@@ -46,7 +46,8 @@ que funcionar sin sesión y sin venir del catálogo.
 |----------------------|-----------|-------------|
 | Abrir la pantalla | Carga el detalle por su id | `getServiceDetail` |
 | Tocar Agendar | Navega a `/book/:serviceId`; sin sesión, la guarda pide login y devuelve aquí | — |
-| Tocar la dirección | Copia la dirección al portapapeles | — |
+| Tocar Cómo llegar | Abre Google Maps con la dirección (`https://www.google.com/maps/search/?api=1&query=…`, con ", Colombia" si no lo trae). Sin permiso de ubicación ni plugin | `mapsUrl` |
+| Tocar Copiar | Copia la dirección y avisa "Dirección copiada" (anunciado con `role=status`). Si el portapapeles falla, no pasa nada: la dirección sigue a la vista | — |
 
 ---
 
