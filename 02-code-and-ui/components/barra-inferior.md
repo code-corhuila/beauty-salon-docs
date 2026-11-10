@@ -24,7 +24,7 @@ No recibe props. Lee el rol de `useSessionStore` y la ruta actual de `useLocatio
 | Rol | Pestañas |
 |-----|----------|
 | `client` | Servicios (`/services`) · Mis citas (`/my-appointments`) · Mi cuenta (`/account`) |
-| `business` | Mis servicios (`/business/services`) · Mis profesionales (`/business/professionals`) · Agenda (`/business/agenda`) · Mi cuenta (`/account`) |
+| `business` | Mis servicios (`/business/services`) · Profesionales (`/business/professionals`) · Agenda (`/business/agenda`) · Mi cuenta (`/account`) |
 | Sin sesión | No se muestra |
 
 ---
@@ -44,7 +44,7 @@ No recibe props. Lee el rol de `useSessionStore` y la ruta actual de `useLocatio
 ## Tokens que usa
 
 - Color: `color.surface` de fondo, `color.border` arriba, `color.textSecondary` y `color.brand`
-- Tipografía: 12 px, 500 (600 en la actual)
+- Tipografía: 12 px, 500 (600 en la actual), en una sola línea: un texto que no cabe se corta con "…"
 - Respeta el área segura inferior (`env(safe-area-inset-bottom)`)
 
 ---

@@ -2,6 +2,11 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- **Identidad visual (2026-11-09, app PR #37):** logo de ManiCita, ícono adaptativo de Android y
+  pantalla de inicio clara y oscura; tipografía Poppins empaquetada; íconos de Ionicons en vez de
+  emojis en los estados vacíos; teléfono de la agenda en color de marca. Actualiza
+  `design-system.md` (tipografía, marca e íconos), `estado-vacio.md` (prop `icon`) y
+  `barra-inferior.md` ("Profesionales")
 - **UI/UX alineada al negocio (2026-11-09, app PR #33 a #36):** ícono del tipo de servicio cuando no
   hay foto (tarjeta y detalle); barra de pestañas abajo para la clienta y el negocio
   (`barra-inferior.md`, nueva); **Recordar por WhatsApp** en cada cita activa de la agenda; **Cómo
