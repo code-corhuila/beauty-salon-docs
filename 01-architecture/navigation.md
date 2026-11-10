@@ -81,7 +81,7 @@ RootNavigator                      decide según la sesión
 > **Pestañas (2026-11-09):** `ClientTabs` y `BusinessTabs` se ven como una barra abajo,
 > [`BarraInferior`](../02-code-and-ui/components/barra-inferior.md), con ícono y texto. Como hay un
 > solo outlet, no es `IonTabs`: cada pantalla de pestaña pone la barra en su pie. La clienta tiene
-> Servicios · Mis citas · Mi cuenta; el negocio, Mis servicios · Mis profesionales · Agenda · Mi
+> Servicios · Mis citas · Mi cuenta; el negocio, Mis servicios · Profesionales · Agenda · Mi
 > cuenta. Las pantallas de pestaña no tienen botón atrás; las que se abren desde ellas (detalle,
 > agendar, formulario de servicio) sí, y no muestran la barra.
 

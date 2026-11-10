@@ -45,6 +45,10 @@ distintivos de estado).
 
 ## Tipografía
 
+La familia es **Poppins** (pesos 400, 500, 600 y 700, subconjunto latino con tildes, ñ y ¿¡),
+empaquetada en la app con `@fontsource/poppins` para que se vea igual sin conexión. Se aplica con un
+solo token, `--ion-font-family`; si no carga, cae a la fuente del sistema.
+
 | Token | Tamaño / interlineado | Peso | Uso |
 |-------|-----------------------|------|-----|
 | `text.display` | 28 / 34 | 700 | Título de pantalla |
@@ -55,6 +59,17 @@ distintivos de estado).
 
 Los tamaños son el punto de partida, no un techo: todos escalan con el ajuste de fuente del sistema.
 Nada de `allowFontScaling={false}`.
+
+## Marca e íconos
+
+- **Logo:** una uña almendrada esmaltada con destellos, en blanco y `color.brandSoft` sobre
+  `color.brand` (`#A8456B`). La fuente es `beauty-salon-app/assets/logo-mark.svg`; de ahí salen el
+  ícono de Android, la pantalla de inicio (clara y oscura) y el favicon. `assets/README.md` explica
+  cómo regenerarlos.
+- **Íconos:** solo [Ionicons](https://ionic.io/ionicons) en versión de línea (`*Outline`), en
+  `color.brand` o `color.textSecondary`. **No se usan emojis** en la interfaz: se ven distintos en
+  cada celular y no combinan con los íconos de línea. Solo pueden ir dentro de un texto para la
+  clienta, como el recordatorio de WhatsApp.
 
 ## Elevación
 

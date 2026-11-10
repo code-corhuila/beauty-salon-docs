@@ -24,7 +24,7 @@ componente de primera clase y no una etiqueta de texto centrada.
 | `message` | `string` | Sí | — | Por qué pasa y qué se puede hacer |
 | `actionLabel` | `string` | No | — | Texto de la acción de salida |
 | `onAction` | `() => void` | No | — | Acción de salida |
-| `illustration` | `'catalogo' \| 'citas' \| 'negocio'` | No | `'catalogo'` | Ilustración según el contexto |
+| `icon` | `string` (un ícono de `ionicons/icons`) | No | `searchOutline` | Ícono según el contexto, en `color.brand` sobre un círculo `color.brandSoft`. Error: `alertCircleOutline`; sin resultados: `searchOutline`; sin citas: `calendarOutline`; no disponible: `banOutline`; filtro sin resultados: `filterOutline`; sin servicios: `brushOutline`; sin profesionales: `peopleOutline` |
 
 > Si se pasa `actionLabel` hay que pasar `onAction`. Un estado vacío sin salida deja a la usuaria
 > mirando una pantalla que no la lleva a ninguna parte.
@@ -35,7 +35,7 @@ componente de primera clase y no una etiqueta de texto centrada.
 
 | Estado | Apariencia |
 |--------|------------|
-| Default | Ilustración, título en `text.title`, mensaje en `text.body` centrado, acción abajo |
+| Default | Ícono, título en `text.title`, mensaje en `text.body` centrado, acción abajo |
 | Pressed | Solo aplica al botón de acción |
 | Disabled | No aplica |
 | Loading | No aplica: el vacío se muestra cuando la carga ya terminó |
@@ -49,7 +49,7 @@ componente de primera clase y no una etiqueta de texto centrada.
 
 ## Tokens que usa
 
-- Color: `color.textPrimary`, `color.textSecondary`, `color.brandSoft` de fondo de la ilustración
+- Color: `color.textPrimary`, `color.textSecondary`, `color.brand` en el ícono y `color.brandSoft` de fondo
 - Espaciado: `space.xl` alrededor, `space.md` entre elementos
 - Tipografía: `text.title`, `text.body`
 
@@ -58,7 +58,7 @@ componente de primera clase y no una etiqueta de texto centrada.
 ## Accesibilidad
 
 - Título y mensaje se anuncian juntos al entrar a la pantalla.
-- La ilustración se marca como decorativa.
+- El ícono se marca como decorativo.
 - El botón de acción cumple el área táctil mínima y el contraste AA.
 - El bloque completo sigue siendo legible con la fuente más grande del sistema, con scroll si hace
   falta.
@@ -73,6 +73,6 @@ componente de primera clase y no una etiqueta de texto centrada.
   message={t('catalogo.vacio.mensaje')}
   actionLabel={t('catalogo.vacio.accion')}
   onAction={handleSharePress}
-  illustration="catalogo"
+  icon={searchOutline}
 />
 ```
