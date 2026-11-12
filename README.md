@@ -81,10 +81,15 @@ Es la **documentación de diseño** de ManiCita, escrita antes del código sigui
 SDD descrito en [`00-sdd-guide.md`](./00-sdd-guide.md): primero se decide y se escribe, después
 se implementa.
 
-Este es el único repo de documentación del proyecto. `beauty-salon` (el repo original) se limpió
-el 2026-09-17 y es el **repo de código de la API** ([ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)).
-El código del frontend vive en un repo aparte, aún sin crear. El [`DISCOVERY.md`](./DISCOVERY.md)
-de esta sección (entregable HU-02) se preservó y se trasladó aquí desde `beauty-salon`.
+Este es el único repo de documentación del proyecto y no tiene código. El código vive en tres
+repos hermanos ([ADR-011](./01-architecture/decisions/records/ADR-011-cuatro-repositorios.md)):
+[`beauty-salon-app`](https://github.com/code-corhuila/beauty-salon-app) (la app en Ionic React +
+Capacitor), [`beauty-salon-api`](https://github.com/code-corhuila/beauty-salon-api) (la API con
+las migraciones de la base de datos; antes se llamaba `beauty-salon`,
+[ADR-009](./01-architecture/decisions/records/ADR-009-backend-repo-and-stack.md)) y
+[`beauty-salon-infra`](https://github.com/code-corhuila/beauty-salon-infra) (Docker Compose y el
+manual de implementación). El [`DISCOVERY.md`](./DISCOVERY.md) de esta sección (entregable HU-02)
+se preservó y se trasladó aquí desde `beauty-salon`.
 
 **Estudiantes:** Lilly Signey Puentes Rincon y Lizeth Caicedo
 **Asignatura:** Programación Móvil [G1] — 2026-B · CORHUILA
