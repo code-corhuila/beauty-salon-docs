@@ -38,6 +38,43 @@ etiqueta `v1.0.0`, y no se reduce sin avisar por Moodle.
 
 ---
 
+## Overview & tech
+
+**Problem.** In Neiva, booking a manicure still happens over WhatsApp: the client has to ask for
+prices and free times and wait for an answer, while the manicurist keeps the schedule in a notebook
+and sometimes books two clients at the same hour.
+
+**Users.** ManiCita is a two-sided product: **clients** browse the catalog of services, book an
+appointment on a real free slot and manage their own appointments, while **businesses** (nail
+salons) publish their services with price, duration, professional and opening hours, and confirm or
+reject the appointments on their daily agenda.
+
+**Architecture.** The project is split into four repositories: `beauty-salon-docs` (design and
+decisions), `beauty-salon-app` (mobile app), `beauty-salon-api` (REST API with the database
+migrations) and `beauty-salon-infra` (Docker Compose to run everything). The app talks only to the
+API over HTTP with JWT tokens, and the API is the single source of truth; the app keeps a local
+SQLite copy of the catalog so it can still be read offline.
+
+**Stack.** The app is built with Ionic React, React 19 and TypeScript on Capacitor 8, using Zustand
+for state and axios for HTTP, and the API uses Node.js with Express 4, JWT access and refresh tokens
+with rotation, bcrypt and PostgreSQL 16.
+
+**Key decisions.** The business side is part of the core product, because without published
+services the client catalog would be empty; time slots are never created by hand but calculated as
+*opening hours ÷ service duration*; and double booking is prevented by a partial unique index in
+PostgreSQL, so the API answers **409 `SLOT_TAKEN`** even when two clients confirm at the same
+moment. All naming in code, database and routes is in English ([ADR-012](./01-architecture/decisions/records/ADR-012-nombres-en-ingles.md)),
+and every decision has its own ADR in [`01-architecture/decisions/`](./01-architecture/decisions/).
+
+**How to run.** Clone the four repositories as sibling folders, copy `.env.example` to `.env` in
+`beauty-salon-infra` and run `docker compose up -d --build` to start PostgreSQL and the API on
+`http://localhost:3000/v1`, then load the test users with `docker compose exec api npm run seed`.
+Finally, run `npm ci` and `npm run dev` in `beauty-salon-app` and open `http://localhost:5173`; the
+full step-by-step guide, including Android, is in the
+[implementation manual](https://github.com/code-corhuila/beauty-salon-infra/blob/main/MANUAL-IMPLEMENTACION.md).
+
+---
+
 ## Qué es este repositorio
 
 Es la **documentación de diseño** de ManiCita, escrita antes del código siguiendo el enfoque
