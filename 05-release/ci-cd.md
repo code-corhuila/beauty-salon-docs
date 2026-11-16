@@ -75,7 +75,8 @@ no tienen CI.
 
 | Qué | Estado |
 |-----|--------|
-| `release.yml` de la API | 🟡 existe y creó el Release `v1.0.0` el 2026-11-09, pero en otras corridas termina en `startup_failure`. Lo más probable es que la organización no permita acciones de terceros (usa `softprops/action-gh-release`). Por eso los `ci.yml` usan **solo acciones oficiales** (`actions/checkout`, `actions/setup-node`) |
+| `release.yml` de la API | 🟡 existe; el Release `v1.0.0` del 2026-11-09 está publicado. Hoy no corre porque el cupo de la organización está agotado (fila de arriba). Los `ci.yml` usan solo acciones oficiales (`actions/checkout`, `actions/setup-node`) |
+| **Cupo de Actions de la organización agotado** | ⛔ Los repos **privados** de `code-corhuila` comparten **3.000 minutos de Actions al mes** ([`ACTIONS-POLICY.md`](https://github.com/code-corhuila/.github/blob/main/ACTIONS-POLICY.md) de la organización). Cuando se agotan, GitHub no inicia ningún job en ningún repo privado hasta el día 1 del mes siguiente. En nuestros repos aparece como `startup_failure` en **todas** las corridas desde el 2026-11-09, antes de que existieran los `ci.yml`; en los repos públicos de otros equipos aparece como *"The job was not started because your account is locked due to a billing issue"*. No es un error de los archivos (el YAML es válido) ni de Git. Mientras no vuelva el cupo, **`npm run ci`** corre los mismos pasos en el equipo (`scripts/ci-local.mjs` en la app, `scripts/ci-local.js` en la API) |
 | `ci.yml` de la API (pruebas y smoke test) | ✅ desde el 2026-11-16 (rama `fix/flujo-de-ingreso`): PostgreSQL 16 como `services:`, migraciones, `npm test` (62 pruebas) y smoke test (69 sondas) contra la API levantada. Node 22 |
 | `ci.yml` de la app (lint, tipos, pruebas, build) | ✅ desde el 2026-11-16 (rama `fix/flujo-de-ingreso`): ESLint, `tsc --noEmit`, Vitest con cobertura, build y, en un segundo job, Cypress contra Vite (la API se simula con `cy.intercept`). Node 22 |
 | `release.yml` de la app (APK firmado) | ⏳ no existe; depende de la llave de release (ver [`signing-and-stores.md`](./signing-and-stores.md)) |
@@ -100,3 +101,10 @@ no tienen CI.
 | ID | Qué falta | Responsable | Fecha |
 |----|-----------|-------------|-------|
 | R-05 | Umbral de cobertura (`coverage.thresholds`) y `--max-warnings=0` en el `ci.yml` de la app | _por asignar_ | _por asignar_ |
+
+> **Cumplimiento de la política de Actions de la organización (2026-11-16):** los dos `ci.yml` usan
+> `pull_request` y `push` filtrados a `dev`, `qa` y `main` (R2), `timeout-minutes: 15` (R3),
+> `concurrency` con `cancel-in-progress: true` (R4) y `paths-ignore` para `**/*.md` y `docs/**` (R6).
+> No usan `schedule` ni `workflow_run` (R1). El guardián de la organización desactiva todos los
+> workflows de un repo que gaste más de 60 minutos en un día: por eso Cypress corre solo cuando hay
+> cambios de código y la corrida vieja se cancela con cada commit nuevo.
