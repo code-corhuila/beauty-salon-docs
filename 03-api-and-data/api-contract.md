@@ -310,10 +310,10 @@ y **con**:
 | Campo | Tipo | Obligatorio | Reglas |
 |-------|------|-------------|--------|
 | `role` | string | sí | `client` o `business` |
-| `name` | string | sí | No vacío |
+| `name` | string | sí | No vacío, hasta 60 caracteres |
 | `phone` | string | sí | Exactamente 10 dígitos |
-| `email` | string | sí | Formato de correo. Se guarda en minúsculas |
-| `password` | string | sí | Al menos 8 caracteres |
+| `email` | string | sí | `nombre@dominio.ext`: sin espacios ni puntos dobles, terminación de al menos 2 letras, hasta 254 caracteres. Se guarda en minúsculas |
+| `password` | string | sí | De 8 a 64 caracteres, sin espacios, con al menos una letra y un número (2026-11-16) |
 | `salonName` | string | solo si `role` es `business` | No vacío |
 | `address` | string | solo si `role` es `business` | No vacía |
 

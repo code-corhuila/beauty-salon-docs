@@ -48,6 +48,23 @@ define el resto de la app, así que es la primera decisión del formulario, no l
 
 ---
 
+## Validación de los campos (2026-11-16)
+
+Lo que nunca puede ser válido **no se deja escribir**; lo demás se avisa debajo del campo al salir de
+él y se vuelve a revisar con cada cambio. La API revisa lo mismo (E-01): esto es experiencia, no
+seguridad.
+
+| Campo | Mientras se escribe | Regla y mensaje |
+|-------|---------------------|-----------------|
+| Nombre | Hasta 60 caracteres | Solo letras (con tildes y ñ), espacios, guion o apóstrofo: "Escribe solo letras, sin números ni símbolos" |
+| Celular | Solo números: se quitan puntos, espacios, guiones y paréntesis, también al pegar; hasta 10 | 10 dígitos que empiezan por 3: "Escribe tu celular: 10 números que empiezan por 3" |
+| Correo | Sin espacios; hasta 254 caracteres | `nombre@dominio.ext`, sin puntos dobles ni al inicio o final, con terminación de al menos 2 letras: "Correo incorrecto: escríbelo como nombre@correo.com" |
+| Contraseña | Sin espacios; hasta 64 caracteres | Al menos 8 caracteres, con una letra y un número: "Usa al menos 8 caracteres, con una letra y un número" |
+| Nombre del salón | Hasta 60 caracteres | Obligatorio para negocio |
+| Dirección | Hasta 120 caracteres | Obligatoria para negocio |
+
+---
+
 ## Datos que la alimentan
 
 Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor

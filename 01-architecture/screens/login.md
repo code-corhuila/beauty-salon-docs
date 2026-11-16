@@ -48,6 +48,15 @@ publicar), nunca al abrir la app.
 
 ---
 
+## Validación de los campos (2026-11-16)
+
+| Campo | Mientras se escribe | Regla |
+|-------|---------------------|-------|
+| Correo | Sin espacios | Mismo formato que el registro. Si no cumple, al salir del campo se ve "Correo incorrecto: escríbelo como nombre@correo.com" y **Entrar** queda desactivado: no se gasta un viaje a la API |
+| Contraseña | Sin espacios | No se valida la forma: una contraseña errada la responde la API con "Correo o contraseña incorrectos." |
+
+---
+
 ## Datos que la alimentan
 
 Recorrido completo de la pantalla hasta los datos (regla R2 del curso). Las entidades del servidor
