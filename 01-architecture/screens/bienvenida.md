@@ -38,7 +38,7 @@ la vuelva a ver. Si el almacenamiento está bloqueado, la pantalla se muestra y 
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Marca | Logo y una frase: "Tu manicure, sin esperar respuesta por WhatsApp" | Sin barra superior ni botón atrás |
+| Marca | Franja con degradado suave, logo con sombra, "ManiCita" y el lema **"Nail art studio"** en mayúsculas espaciadas con el color de la marca (2026-11-16) | Sin barra superior ni botón atrás |
 | Caminos | Dos tarjetas grandes, una debajo de la otra | **Quiero agendar** ("Mira servicios, precios y horas libres") y **Quiero ofrecer mis servicios** ("Publica tu salón y recibe citas") |
 | Cuenta | Enlace "¿Ya tienes cuenta? Entrar" | Va a `/login` |
 | Lo más pedido | Carrusel horizontal de tarjetas compactas | Hasta 8 servicios de [E-22](../../03-api-and-data/endpoints/catalog-popular-services.md). Se desliza con el dedo; cada tarjeta muestra nombre, precio, duración y salón |
