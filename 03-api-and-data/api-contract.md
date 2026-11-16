@@ -773,6 +773,27 @@ también en las citas pasadas.
 **Notas:** un servicio con historia se **pausa** (E-18), no se borra. Si la clave foránea rechaza el
 borrado por una carrera, la API responde el mismo 409, nunca 500.
 
+### E-22 · GET /v1/services/popular
+
+> **E-22 se agregó el 2026-11-16** para el carrusel "Lo más pedido" de la
+> [pantalla de bienvenida](../01-architecture/screens/bienvenida.md).
+
+| Autorización | Anónimo |
+|---|---|
+| Idempotente | Sí |
+| Integración en la app | [catalog-popular-services.md](./endpoints/catalog-popular-services.md) |
+
+**Consulta:** `limit` (número, no; por defecto 8, se corrige al rango 1–20).
+
+**Respuesta 200:** `{ items: ServiceSummary[] }`, **solo publicados**, sin paginar. Orden: más citas
+`pending`, `confirmed` o `completed` pedidas en los últimos 30 días; a igual número, el más reciente;
+después por `id`. Sin citas en ese tiempo, salen los más recientes. El conteo no se devuelve.
+
+**Errores:** ninguno propio (`limit` inválido se corrige).
+
+**Notas:** la ruta se registra **antes** de `/services/{serviceId}`; si no, Express tomaría
+`popular` como un `serviceId` y respondería 404 `SERVICE_NOT_FOUND`.
+
 ---
 
 ## 6. Idempotencia y reintentos

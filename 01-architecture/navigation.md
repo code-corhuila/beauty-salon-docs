@@ -34,6 +34,7 @@
 
 | Ruta (deep link) | Nombre en el navegador | Pantalla | Argumentos requeridos | Sesión | Rol |
 |------------------|------------------------|----------|-----------------------|--------|-----|
+| `/welcome` | `Welcome` | `WelcomeScreen` | — | No | — |
 | `/login` | `Login` | `LoginScreen` | — | No | — |
 | `/register` | `SignUp` | `SignUpScreen` | — | No | — |
 | `/services` | `Catalog` | `CatalogScreen` | — | No | — |
@@ -57,6 +58,7 @@ Esta tabla es la fuente única de verdad de qué pantallas existen. Cada una est
 ```
 RootNavigator                      decide según la sesión
 ├── PublicStack                    sin sesión
+│   ├── Welcome                    entrada la primera vez: agendar u ofrecer servicios
 │   ├── Catalog · ServiceDetail    el catálogo se explora sin cuenta
 │   └── Login · SignUp
 ├── ClientTabs                     sesión con rol clienta
@@ -84,6 +86,16 @@ RootNavigator                      decide según la sesión
 > Servicios · Mis citas · Mi cuenta; el negocio, Mis servicios · Profesionales · Agenda · Mi
 > cuenta. Las pantallas de pestaña no tienen botón atrás; las que se abren desde ellas (detalle,
 > agendar, formulario de servicio) sí, y no muestran la barra.
+
+> **Entrada para visitantes (2026-11-16):** quien abría la app sin sesión caía directo en el
+> catálogo, sin forma visible de crear cuenta ni de registrarse como negocio. Ahora:
+> - La ruta `/` sin sesión lleva a [`Welcome`](./screens/bienvenida.md) **la primera vez** en ese
+>   celular, y al catálogo las siguientes (marca `manicita.welcomeSeen` en `localStorage`). Con
+>   sesión, `/` sigue llevando al inicio del rol.
+> - Los visitantes también tienen barra abajo: **Inicio** (`/welcome`) · **Servicios** (`/services`) ·
+>   **Entrar** (`/login`). Desde Entrar se llega a Crear cuenta.
+> - "Quiero ofrecer mis servicios" abre `/register?role=business`, con el rol **Negocio** ya
+>   elegido en [`registro.md`](./screens/registro.md). Cualquier otro valor de `role` se ignora.
 
 ## Comportamiento de las guardas
 

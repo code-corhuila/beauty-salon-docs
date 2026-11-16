@@ -42,6 +42,7 @@ define el resto de la app, así que es la primera decisión del formulario, no l
 | Acción de la usuaria | Resultado | Caso de uso |
 |----------------------|-----------|-------------|
 | Elegir el rol | Cambia los campos del formulario | — |
+| Llegar desde "Quiero ofrecer mis servicios" de la [bienvenida](./bienvenida.md) (`/register?role=business`) | El rol **Negocio** ya viene elegido y se ven los campos del salón. Se puede cambiar a Clienta. Otro valor de `role` se ignora (2026-11-16) | — |
 | Tocar Crear cuenta | Registra, abre sesión y va a la ruta pretendida o al inicio de su rol | `signUp` |
 | Tocar Ya tengo cuenta | Navega a `/login` conservando la ruta pretendida | — |
 

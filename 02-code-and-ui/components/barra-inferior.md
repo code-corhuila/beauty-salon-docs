@@ -25,7 +25,7 @@ No recibe props. Lee el rol de `useSessionStore` y la ruta actual de `useLocatio
 |-----|----------|
 | `client` | Servicios (`/services`) · Mis citas (`/my-appointments`) · Mi cuenta (`/account`) |
 | `business` | Mis servicios (`/business/services`) · Profesionales (`/business/professionals`) · Agenda (`/business/agenda`) · Mi cuenta (`/account`) |
-| Sin sesión | No se muestra |
+| Sin sesión | Inicio (`/welcome`) · Servicios (`/services`) · Entrar (`/login`). Antes no se mostraba y el visitante no tenía a dónde ir ni cómo crear cuenta (2026-11-16) |
 
 ---
 

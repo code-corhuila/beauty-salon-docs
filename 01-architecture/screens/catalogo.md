@@ -10,8 +10,9 @@
 
 ## Propósito
 
-Ver todos los servicios de manicure publicados en la ciudad y filtrarlos por tipo. Es la pantalla de
-entrada de la app y **se explora sin cuenta**.
+Ver todos los servicios de manicure publicados en la ciudad y filtrarlos por tipo. **Se explora sin
+cuenta.** Desde el 2026-11-16 la primera pantalla para un visitante nuevo es la
+[bienvenida](./bienvenida.md); el catálogo es la entrada de las veces siguientes y el inicio de la clienta.
 
 ---
 
@@ -22,7 +23,8 @@ entrada de la app y **se explora sin cuenta**.
 | Encabezado | Título y fila de filtros | Chips por tipo: tradicional, semipermanente, acrílicas, retiro, decoración |
 | Cuerpo | Lista de [TarjetaServicio](../../02-code-and-ui/components/tarjeta-servicio.md) | `IonList` virtualizada con foto, nombre, precio, duración y nombre del salón |
 | Banner | Aviso de sin conexión | Solo cuando se muestran datos cacheados |
-| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) con sesión | Sin CTA fijo: la acción está en cada tarjeta. Sin sesión no hay barra |
+| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) | Sin CTA fijo: la acción está en cada tarjeta. Sin sesión, la barra de visitante (Inicio · Servicios · Entrar) |
+| Encabezado, sin sesión | Botón **Entrar** junto al título | Lleva a `/login`. Antes el catálogo no tenía ninguna forma visible de iniciar sesión o crear cuenta (2026-11-16) |
 
 ---
 

@@ -18,6 +18,7 @@ reemplaza la pregunta de WhatsApp "¿cuánto vale y qué días tienes?".
 
 | Pantalla | Ruta | Propósito |
 |----------|------|-----------|
+| [WelcomeScreen](../screens/bienvenida.md) | `/welcome` | Primera pantalla de un visitante nuevo: elegir agendar u ofrecer servicios, y ver lo más pedido (2026-11-16) |
 | [CatalogScreen](../screens/catalogo.md) | `/services` | Listar los servicios publicados y filtrarlos por tipo |
 | [ServiceDetailScreen](../screens/detalle-servicio.md) | `/service/:serviceId` | Ver descripción, precio, duración, profesional y dirección, y entrar a agendar |
 
@@ -40,7 +41,8 @@ reemplaza la pregunta de WhatsApp "¿cuánto vale y qué días tienes?".
 - **Casos de uso:** `getPublishedServices`, `getServiceDetail`
 - **Repositorios:** `CatalogRepository`
 - **Endpoints:** [`GET /v1/services`](../../03-api-and-data/endpoints/catalog-list-services.md),
-  [`GET /v1/services/{id}`](../../03-api-and-data/endpoints/catalog-service-detail.md)
+  [`GET /v1/services/{id}`](../../03-api-and-data/endpoints/catalog-service-detail.md),
+  [`GET /v1/services/popular`](../../03-api-and-data/endpoints/catalog-popular-services.md)
 - **Persistencia local:** tablas [`service`](../../03-api-and-data/entities/service.md),
   [`professional`](../../03-api-and-data/entities/professional.md) y
   [`business`](../../03-api-and-data/entities/business.md)
