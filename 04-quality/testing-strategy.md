@@ -95,16 +95,16 @@ prueba** en [`test-cases/`](./test-cases/), además de la prueba automatizada qu
 
 | Regla | Prueba automatizada | Caso de prueba |
 |-------|---------------------|----------------|
-| Los cupos se calculan del horario y la duración, no se guardan | Unitaria de `getAvailability`; sonda `GET /services/{id}/availability` | [TC-001](./test-cases/TC-001-cupos-calculados.md) |
-| Un cupo no se agenda dos veces | Sonda `POST /appointments cupo tomado` (409 `SLOT_TAKEN`) | [TC-002](./test-cases/TC-002-sin-doble-agendamiento.md) |
-| Reintentar el envío no crea una segunda cita | Sonda `POST /appointments mismo clientRequestId` | [TC-003](./test-cases/TC-003-reintento-idempotente.md) |
-| Una profesional no tiene dos horarios que se pisen | Sonda `horario solapado` (409 `SCHEDULE_OVERLAP`) | [TC-004](./test-cases/TC-004-horario-sin-solape.md) |
-| Pausar no es borrar | Sondas de pausa (410 `SERVICE_PAUSED`) y agenda | [TC-005](./test-cases/TC-005-pausar-no-borra.md) |
-| El negocio responde una cita una sola vez | Sonda `respond ya respondida` (409) | [TC-006](./test-cases/TC-006-responder-una-vez.md) |
-| Solo la dueña cancela su cita, y una sola vez | Sondas de cancelación (403, 409) | [TC-007](./test-cases/TC-007-cancelar-solo-la-duena.md) |
-| Cada rol ve solo lo suyo | Sondas `FORBIDDEN_ROLE` y `FORBIDDEN_RESOURCE` | [TC-008](./test-cases/TC-008-cada-rol-ve-lo-suyo.md) |
+| Los cupos se calculan del horario y la duración, no se guardan | API: `booking.service.test.js` (3 cupos en 3 horas de 60 min, 2 con 90 min, cupo agendado ocupado) y `bogota.test.js`; app: unitaria de `getAvailability`; sonda `GET /services/{id}/availability` | [TC-001](./test-cases/TC-001-cupos-calculados.md) |
+| Un cupo no se agenda dos veces | `booking.service.test.js`: secuencial y **simultáneo** (dos clientas a la vez, entra una); sonda `POST /appointments cupo tomado` (409 `SLOT_TAKEN`) | [TC-002](./test-cases/TC-002-sin-doble-agendamiento.md) |
+| Reintentar el envío no crea una segunda cita | `booking.service.test.js` (misma cita y una sola fila); sonda `POST /appointments mismo clientRequestId` | [TC-003](./test-cases/TC-003-reintento-idempotente.md) |
+| Una profesional no tiene dos horarios que se pisen | `business.agenda.test.js`; sonda `horario solapado` (409 `SCHEDULE_OVERLAP`) | [TC-004](./test-cases/TC-004-horario-sin-solape.md) |
+| Pausar no es borrar | `business.agenda.test.js` (sale del catálogo, la cita sigue en la agenda) y `booking.service.test.js` (410); sondas de pausa y agenda; app: la caché borra el pausado (`CatalogRepositoryImpl.test.ts`) | [TC-005](./test-cases/TC-005-pausar-no-borra.md) |
+| El negocio responde una cita una sola vez | `business.agenda.test.js`; sonda `respond ya respondida` (409) | [TC-006](./test-cases/TC-006-responder-una-vez.md) |
+| Solo la dueña cancela su cita, y una sola vez | `appointments.service.test.js` (403, 409 y el cupo se libera); sondas de cancelación | [TC-007](./test-cases/TC-007-cancelar-solo-la-duena.md) |
+| Cada rol ve solo lo suyo | `appointments.service.test.js` y `business.agenda.test.js`; sondas `FORBIDDEN_ROLE` y `FORBIDDEN_RESOURCE`; app: `RequireSession.test.tsx` | [TC-008](./test-cases/TC-008-cada-rol-ve-lo-suyo.md) |
 | Cerrar sesión invalida el token de refresco | Sondas de refresh y logout | [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) |
-| El catálogo se ve sin conexión | De componente de `CatalogScreen` (pendiente) | [TC-010](./test-cases/TC-010-catalogo-sin-conexion.md) |
+| El catálogo se ve sin conexión | `CatalogRepositoryImpl.test.ts` (14, contra un SQLite real), `proxy.test.ts` (escritura atómica) y `CatalogScreen.test.tsx` (aviso con fecha) | [TC-010](./test-cases/TC-010-catalogo-sin-conexion.md) |
 
 ---
 
@@ -113,38 +113,38 @@ prueba** en [`test-cases/`](./test-cases/), además de la prueba automatizada qu
 - Las pruebas unitarias, de componente y el linter corren **en cada push a `main` y en cada PR**, en
   GitHub Actions. Si fallan, el cambio no se da por terminado (DoD).
 - El smoke test de la API corre en el mismo pipeline de la API, con PostgreSQL como servicio del job.
-- Las E2E de Cypress corren antes de cada release (no en cada push: necesitan el servidor de Vite
-  levantado y tardan más que las unitarias).
+- Las E2E de Cypress también corren en cada PR desde el 2026-11-16 (job `e2e` del `ci.yml` de la
+  app): tardan unos 2 minutos y atraparon un cambio de flujo que las unitarias no veían.
 - El detalle de etapas está en [`05-release/ci-cd.md`](../05-release/ci-cd.md).
 
 ---
 
-## Estado real al 2026-11-09 (entrega v1.0.0)
+## Estado real al 2026-11-16
 
 La estrategia de arriba es la regla. Esto es lo que existe hoy, para que nadie la lea como un hecho:
 
 | Qué | Estado |
 |-----|--------|
-| Unitarias y de componente de la app (Vitest) | ✅ **245 pruebas en 42 archivos**, todas en verde (2026-11-09, con los PR de UI #33 a #37). Por capa: 92 de dominio (`auth`, `booking`, `appointments`, `business`, `catalog`), 112 de pantallas y componentes, 41 de `core` y `data` (cliente HTTP, rutas por rol, SQLite, mapeadores) |
-| E2E de la app (Cypress) | ✅ 4 pruebas en `cypress/e2e/login-y-catalogo.cy.ts`, en verde (2026-11-09): catálogo sin sesión (HU-08), credenciales incorrectas (HU-09), la clienta llega al catálogo y el negocio a sus servicios (HU-09, HU-13). Reemplazó la prueba de ejemplo de Ionic (app PR #31) |
-| Unitarias de la API (`node:test`) | 🟡 **19 pruebas** con `npm test`: `app.test.js` (6), `auth.routes.test.js` (4), `auth.service.test.js` (5) y `loginLimiter.test.js` (4). Las de `auth.*` usan la base de infra, así que necesitan Docker encendido. Faltan los módulos `catalog`, `booking`, `appointments` y `business` |
+| Unitarias y de componente de la app (Vitest) | ✅ **302 pruebas en 47 archivos** en `dev`, todas en verde, y **308** al unirse con `main`, que trae las 6 del almacenamiento seguro en web (app PR #40; se comprobó el resultado unido). Desde la v1.0.0 del 2026-11-09 (245) se sumaron, además de esas 6: caché SQLite contra un SQLite real (`CatalogRepositoryImpl.test.ts`, 16) y escritura atómica (2), estados de Catálogo (9) y Detalle (6), casos de uso del catálogo (6), bienvenida y lo más pedido (9), marca de bienvenida (3), rutas de visitante (3), registro como negocio (2) y barra de visitante (1) |
+| E2E de la app (Cypress) | ✅ **6 pruebas** en `cypress/e2e/login-y-catalogo.cy.ts`: la primera vez sale la bienvenida y "Quiero agendar" lleva al catálogo (HU-08); "Quiero ofrecer mis servicios" abre el registro con Negocio; la segunda vez abre en el catálogo con "Entrar"; credenciales incorrectas (HU-09); la clienta llega al catálogo y el negocio a sus servicios (HU-09, HU-13) |
+| Pruebas de la API (`node:test`) | ✅ **62 pruebas en 10 archivos** con `npm test`, en verde dos corridas seguidas sobre la misma base: `app.test.js` (6), `auth.routes` (4), `auth.service` (5), `loginLimiter` (4), `bogota` (6), `booking.service` (11), `appointments.service` (6), `business.service` (3), `business.agenda` (11) y `catalog.service` (6). Todas menos `app`, `loginLimiter` y `bogota` usan la base de infra |
 | Colección Postman de la API | ✅ 13 peticiones, 13/13 en verde con Newman (2026-11-08) |
-| Smoke test de la API | ✅ 67 sondas sobre los 21 endpoints, en verde (2026-11-08, al probar `qa` desde un clon limpio) |
-| Casos de prueba manuales | ✅ TC-001 a TC-010 ejecutados el 2026-11-08: pasos de API con `test-cases/ejecutar-pasos-api.ps1` y pasos de app en el emulador Android |
-| Cobertura medida | ⏳ `@vitest/coverage-v8` no está instalado |
-| CI que corra pruebas | ⏳ no existe; el único workflow es `release.yml` de la API, y hoy termina en `startup_failure` |
+| Smoke test de la API | ✅ **69 sondas** sobre los 22 endpoints, en verde (2026-11-16) |
+| Casos de prueba manuales | ✅ TC-001 a TC-010 ejecutados el 2026-11-08 (pasos de API con `test-cases/ejecutar-pasos-api.ps1` y de app en el emulador). Desde el 2026-11-16 cada uno tiene además prueba automatizada (tabla de reglas críticas, arriba) |
+| Cobertura medida | ✅ `npm run test.coverage` (`@vitest/coverage-v8`). Medida el 2026-11-16 con las 302 pruebas: **total** líneas 85,7 %, sentencias 84,1 %, funciones 85,1 %, ramas 80,3 %. **`domain/`** (27 archivos): líneas 95,3 %, sentencias 94,7 %, funciones 100 %, ramas 88,0 %. **Stores** (8): líneas 98,3 %, sentencias 93,8 %, funciones 100 %, **ramas 71,4 %**, por debajo del 80 % de la regla (Q-07) |
+| CI que corra pruebas | ✅ `ci.yml` en la app (lint, tipos, Vitest con cobertura, build y Cypress) y en la API (PostgreSQL 16, `npm test` y smoke test), en cada PR y en cada push a `dev`, `qa` y `main` (2026-11-16). Detalle en [`ci-cd.md`](../05-release/ci-cd.md) |
 
 ### Deuda de pruebas
 
 | ID | Qué falta | Estado | Responsable | Fecha |
 |----|-----------|--------|-------------|-------|
-| Q-01 | Pruebas unitarias de los casos de uso de `catalog` | ⏳ pendiente: `catalog` solo tiene las 3 de `offlineNotice` | _por asignar_ | _por asignar_ |
-| Q-02 | Pruebas de componente de `CatalogScreen` y `ServiceDetailScreen` en sus cinco estados | 🟡 parcial: `ServiceDetailScreen` tiene 2 (dirección, Cómo llegar y Copiar) y `TarjetaServicio` 10; faltan los cinco estados de las dos pantallas (TC-010 sí se ejecutó a mano en el emulador) | _por asignar_ | _por asignar_ |
-| Q-03 | Reemplazar la E2E de ejemplo de Cypress | ✅ hecha el 2026-11-09 (app PR #31) | Lizeth Caicedo | 2026-11-09 |
-| Q-04 | Pruebas unitarias del cálculo de cupos y la hora de Bogotá en la API | ⏳ pendiente: hoy lo cubren el smoke test y TC-001 | _por asignar_ | _por asignar_ |
-| Q-05 | Instalar `@vitest/coverage-v8` y medir la cobertura de `domain/` | ⏳ pendiente | _por asignar_ | _por asignar_ |
-| Q-06 | Workflow de CI que corra lint, unitarias y smoke test (ver `05-release/ci-cd.md`) | ⏳ pendiente | _por asignar_ | _por asignar_ |
+| Q-01 | Pruebas unitarias de los casos de uso de `catalog` | ✅ hecha: `catalogUseCases.test.ts` (6) y `getPopularServices` en la bienvenida (app PR #42 y #43) | Lilly Puentes | 2026-11-13 |
+| Q-02 | Pruebas de componente de `CatalogScreen` y `ServiceDetailScreen` en sus cinco estados | ✅ hecha: carga, cargado, vacío, vacío por filtro, error con reintento y sin conexión en las dos pantallas (app PR #42) | Lilly Puentes | 2026-11-13 |
+| Q-03 | Reemplazar la E2E de ejemplo de Cypress | ✅ hecha el 2026-11-09 (app PR #31); ampliada a 6 con la bienvenida el 2026-11-16 | Lizeth Caicedo, Lilly Puentes | 2026-11-16 |
+| Q-04 | Pruebas unitarias del cálculo de cupos y la hora de Bogotá en la API | ✅ hecha: `bogota.test.js` (6, puras) y `booking.service.test.js` (11, contra la base) | Lilly Puentes | 2026-11-16 |
+| Q-05 | Instalar `@vitest/coverage-v8` y medir la cobertura de `domain/` | ✅ hecha: `npm run test.coverage` (app PR #42). `domain/` en 95,3 % de líneas | Lilly Puentes | 2026-11-13 |
+| Q-06 | Workflow de CI que corra lint, unitarias y smoke test | ✅ hecha: `ci.yml` en app y API (rama `fix/flujo-de-ingreso`) | Lilly Puentes | 2026-11-16 |
+| Q-07 | Subir las ramas de los stores de Zustand al 80 % y configurar el umbral en `vite.config.ts` (ver R-05 de `ci-cd.md`) | ⏳ pendiente: hoy 71,4 % de ramas | _por asignar_ | _por asignar_ |
 
-> La deuda que queda abierta es de **cobertura y automatización**, no de funcionalidad sin probar:
-> las reglas críticas de la tabla de arriba están cubiertas por el smoke test, la colección Postman
-> y los casos TC-001 a TC-010.
+> La deuda que queda abierta es de **cobertura fina**, no de funcionalidad sin probar: cada regla
+> crítica tiene prueba automatizada, sonda y caso de prueba.

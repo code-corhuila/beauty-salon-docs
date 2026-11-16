@@ -991,6 +991,22 @@ queda como prueba del arreglo:
 
 ---
 
+### Corrida del 2026-11-16: E-22 y las restricciones de la migración `0002`
+
+Mismo script, con la API de la rama `fix/flujo-de-ingreso` levantada con `beauty-salon-infra` sobre
+una base que ya tenía los datos de las pruebas automáticas. Resultado: **69 de 69**: las 67 de
+arriba y estas 2.
+
+| # | Llamada | Se esperaba | Se obtuvo | ¿Cuadra? |
+|---|---------|-------------|-----------|----------|
+| 36 | GET /services/popular?limit=3 | 200, entre 1 y 3 servicios, todos con su negocio | 200, 3 servicios | Sí |
+| 63 | GET /services/popular después de pausar el servicio de la corrida | 200, sin el pausado | 200, sin el pausado | Sí |
+
+La sonda 36 revisa la forma y el límite, no qué servicio sale primero: el orden depende de las citas
+que haya en la base, y eso lo prueba `catalog.service.test.js` con datos propios. Las restricciones de
+la migración `0002` (D-01 a D-05) no se sondean por HTTP, porque el código ya rechaza esos datos antes
+de llegar al motor: se comprobaron con una inserción manual inválida por regla, directo en PostgreSQL.
+
 ## 11. Huecos declarados
 
 | # | Hueco | Consecuencia | Dueño | Fecha límite |

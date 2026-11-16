@@ -48,7 +48,7 @@ no tienen CI.
 
 | Evento | App | API |
 |--------|-----|-----|
-| Push a `main` o PR hacia `main` (`ci.yml`) | Etapas 1–5 | Etapas 1–3 |
+| Cualquier PR, y push a `dev`, `qa` o `main` (`ci.yml`, 2026-11-16) | Etapas 1–5 y Cypress | Etapas 1–3 |
 | Tag `vX.Y.Z` (`release.yml`) | Etapas 1–7 | Etapas 1–4 |
 | Antes del tag, a mano | Cypress (`npm run test.e2e`) contra la API de `beauty-salon-infra` y los [casos de prueba](../04-quality/test-cases/) que apliquen | — |
 
@@ -71,19 +71,32 @@ no tienen CI.
 
 ---
 
-## Estado real al 2026-10-07
+## Estado real al 2026-11-16
 
 | Qué | Estado |
 |-----|--------|
-| `release.yml` de la API | ✅ existe: con cada tag `v*.*.*` crea el GitHub Release con notas generadas. Aún no se ha creado ningún tag |
-| `ci.yml` de la API (pruebas y smoke test) | ⏳ no existe |
-| `ci.yml` de la app (lint, tipos, pruebas, build) | ⏳ no existe |
+| `release.yml` de la API | 🟡 existe y creó el Release `v1.0.0` el 2026-11-09, pero en otras corridas termina en `startup_failure`. Lo más probable es que la organización no permita acciones de terceros (usa `softprops/action-gh-release`). Por eso los `ci.yml` usan **solo acciones oficiales** (`actions/checkout`, `actions/setup-node`) |
+| `ci.yml` de la API (pruebas y smoke test) | ✅ desde el 2026-11-16 (rama `fix/flujo-de-ingreso`): PostgreSQL 16 como `services:`, migraciones, `npm test` (62 pruebas) y smoke test (69 sondas) contra la API levantada. Node 22 |
+| `ci.yml` de la app (lint, tipos, pruebas, build) | ✅ desde el 2026-11-16 (rama `fix/flujo-de-ingreso`): ESLint, `tsc --noEmit`, Vitest con cobertura, build y, en un segundo job, Cypress contra Vite (la API se simula con `cy.intercept`). Node 22 |
 | `release.yml` de la app (APK firmado) | ⏳ no existe; depende de la llave de release (ver [`signing-and-stores.md`](./signing-and-stores.md)) |
 | Script `test` | ⚠️ la app no tiene `npm test`: sus scripts son `test.unit` y `test.e2e` (los del andamiaje de Ionic). La DoD usa esos nombres |
 
 | ID | Qué falta | Responsable | Fecha |
 |----|-----------|-------------|-------|
-| R-01 | `ci.yml` de la API con PostgreSQL de servicio y el smoke test | _por asignar_ | _por asignar_ |
-| R-02 | `ci.yml` de la app con lint, tipos, Vitest y build | _por asignar_ | _por asignar_ |
+| R-01 | ~~`ci.yml` de la API con PostgreSQL de servicio y el smoke test~~ ✅ | Lilly Puentes | 2026-11-16 |
+| R-02 | ~~`ci.yml` de la app con lint, tipos, Vitest y build~~ ✅ | Lilly Puentes | 2026-11-16 |
 | R-03 | `release.yml` de la app que firme y adjunte el APK | _por asignar_ | _por asignar_ |
 | R-04 | Desplegar la API con HTTPS (H-01) | _por asignar_ | _por asignar_ |
+
+> **Desviaciones del pipeline de arriba (2026-11-16, regla R5):**
+> - **Cypress corre en cada PR**, no solo antes del tag: tarda unos 2 minutos y atrapó un cambio de
+>   flujo (la bienvenida) que las unitarias no veían.
+> - **ESLint corre sin `--max-warnings=0`** y **la cobertura se mide pero no corta el pipeline**: hoy
+>   no hay advertencias y `domain/` pasa del 80 %, pero el umbral todavía no se configuró en
+>   `vite.config.ts`. Queda como deuda R-05.
+> - **Node 22** en los dos `ci.yml`: la prueba de la hora de Bogotá usa los temporizadores simulados
+>   de `node:test`, que en Node 20 todavía no simulan `Date` de forma estable.
+
+| ID | Qué falta | Responsable | Fecha |
+|----|-----------|-------------|-------|
+| R-05 | Umbral de cobertura (`coverage.thresholds`) y `--max-warnings=0` en el `ci.yml` de la app | _por asignar_ | _por asignar_ |

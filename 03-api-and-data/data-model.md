@@ -117,7 +117,7 @@ Una persona registrada que puede iniciar sesión.
 |------------|-------|
 | `role` es `client` o `business` | **motor** (`user_account_role_check`) |
 | `email` es único, comparando exacto | **motor** (`user_account_email_key`) |
-| `email` es único **sin distinguir mayúsculas** | **solo dominio**: el código pasa el correo a minúsculas antes de guardarlo y de buscarlo; una inserción manual con `Ana@x.com` junto a `ana@x.com` pasa. **pendiente** índice único sobre `lower(email)` (D-01) |
+| `email` es único **sin distinguir mayúsculas** | **motor** desde el 2026-11-12: índice único `uq_user_account_email_lower` sobre `lower(email)` (migración `0002`). El código además lo guarda en minúsculas. Cerrada D-01 |
 | `email` tiene formato de correo | **solo dominio** |
 | `phone` tiene exactamente 10 dígitos | **solo dominio** |
 | `name` no es vacío | **solo dominio** (el motor solo exige que no sea nulo) |
@@ -149,7 +149,7 @@ Quien atiende. No inicia sesión; se crea y se lista solo a través de su negoci
 |------------|-------|
 | Pertenece a un negocio existente | **motor** (`professional_business_id_fkey`) |
 | `name` no es vacío y tiene hasta 60 caracteres, sin espacios al borde | **solo dominio** |
-| Un negocio tiene como máximo 20 profesionales | **solo dominio**, y además con carrera: dos altas simultáneas pueden dejar 21. Ver D-04 |
+| Un negocio tiene como máximo 20 profesionales | **dominio con bloqueo** desde el 2026-11-12: al crear, se bloquea la fila del negocio (`SELECT … FOR UPDATE`) antes de contar, y dos altas simultáneas ya no dejan 21. Cerrada D-04 |
 
 **Relaciones:** N : 1 con `Business`; 1 : N con `Service` y `Appointment`.
 
@@ -161,10 +161,10 @@ Lo que se publica en el catálogo, con su horario.
 |------------|-------|
 | `price_cop` es mayor que cero | **motor** (`service_price_cop_check`) |
 | `duration_minutes` es mayor que cero y múltiplo de 15 | **motor** (`service_duration_minutes_check`) |
-| `duration_minutes` está entre 15 y 240 | **solo dominio**: el motor acepta 255, 300… **pendiente** (D-02) |
+| `duration_minutes` está entre 15 y 240 | **motor** desde el 2026-11-12: `service_duration_minutes_check` exige 15–240 y múltiplo de 15 (migración `0002`). Cerrada D-02 |
 | `type` es uno de los cinco tipos | **motor** (`service_type_check`) |
 | `name` tiene hasta 60 caracteres y no es vacío; `description` no es vacía | **solo dominio** |
-| La profesional pertenece **al mismo negocio** que el servicio | **solo dominio**: son dos claves foráneas independientes; el motor aceptaría una profesional de otro negocio. **pendiente** (D-03) |
+| La profesional pertenece **al mismo negocio** que el servicio | **motor** desde el 2026-11-12: foránea compuesta `fk_service_professional_same_business` hacia la única `(id, business_id)` de `professional` (migración `0002`). Cerrada D-03 |
 | Tiene al menos una franja de horario | **solo dominio** |
 | Sus franjas no se solapan con las de **otro** servicio de la misma profesional | **solo dominio**, y con carrera: dos altas simultáneas pueden solaparse. No se puede expresar con una restricción simple porque cruza dos tablas |
 | Pausar no borra: `is_published = false` | **solo dominio**. El borrado físico (E-21) solo aplica a servicios sin citas; ver §5 y §6 |
@@ -197,8 +197,8 @@ La reserva de una clienta sobre un cupo.
 | `client_id` es una cuenta con rol `client` | **solo dominio** |
 | `professional_id` y `business_id` son los del servicio | **solo dominio** (se copian del servicio al crear) |
 | `service_name`, `price_cop` y `duration_minutes` son una **copia** del servicio al agendar y no cambian después | **solo dominio** (nada los actualiza; editar el servicio no los toca) |
-| `price_cop` y `duration_minutes` de la copia son mayores que cero | **solo dominio**: la tabla no repite los `CHECK` de `service`. **pendiente** (D-05) |
-| `rejection_reason` tiene valor si y solo si `status` es `rejected` | **solo dominio**. **pendiente** (D-05) |
+| `price_cop` y `duration_minutes` de la copia son mayores que cero | **motor** desde el 2026-11-12: `appointment_price_cop_check` y `appointment_duration_minutes_check` (migración `0002`). Cerrada D-05 |
+| `rejection_reason` tiene valor si y solo si `status` es `rejected` | **motor** desde el 2026-11-12: `appointment_rejection_reason_check`, `(status = 'rejected') = (rejection_reason IS NOT NULL)` (migración `0002`). Cerrada D-05 |
 | Transiciones válidas: `pending → confirmed \| rejected` (negocio), `pending \| confirmed → cancelled` (clienta, solo antes de la hora) | **solo dominio** |
 | `completed` y `no_show` | **pendiente**: el motor los acepta, pero **ningún endpoint los asigna todavía** (D-06) |
 
@@ -717,11 +717,11 @@ declara en §13.
 
 | # | Qué prometió el documento | Qué hace hoy el sistema | Dueño | Tarea que lo cierra |
 |---|---------------------------|-------------------------|-------|---------------------|
-| D-01 | Correo único sin distinguir mayúsculas | Solo el código lo normaliza; el motor compara exacto | _por asignar_ | Migración: índice único sobre `lower(email)` |
-| D-02 | Duración entre 15 y 240 minutos | El motor acepta cualquier múltiplo de 15 | _por asignar_ | Migración: ampliar `service_duration_minutes_check` |
-| D-03 | La profesional de un servicio es del mismo negocio | Dos foráneas independientes; el motor no lo cruza | _por asignar_ | Migración: única `(id, business_id)` en `professional` y foránea compuesta desde `service` |
-| D-04 | Máximo 20 profesionales por negocio | Solo el código, con carrera entre dos altas simultáneas | _por asignar_ | Bloquear la fila del negocio (`SELECT … FOR UPDATE`) al crear profesional |
-| D-05 | Copias de precio y duración positivas; `rejection_reason` solo en rechazadas | Solo el código | _por asignar_ | Migración: `CHECK` en `appointment` |
+| D-01 | Correo único sin distinguir mayúsculas | ✅ **Cerrada el 2026-11-12** (API PR #20): índice único sobre `lower(email)` | Lilly Puentes | Migración `0002_db_constraints.sql` |
+| D-02 | Duración entre 15 y 240 minutos | ✅ **Cerrada el 2026-11-12** (API PR #20) | Lilly Puentes | Migración `0002`: `service_duration_minutes_check` con 15–240 |
+| D-03 | La profesional de un servicio es del mismo negocio | ✅ **Cerrada el 2026-11-12** (API PR #20) | Lilly Puentes | Migración `0002`: única `(id, business_id)` y foránea compuesta |
+| D-04 | Máximo 20 profesionales por negocio | ✅ **Cerrada el 2026-11-12** (API PR #20): prueba de carrera que falla sin el bloqueo | Lilly Puentes | `SELECT … FOR UPDATE` sobre el negocio al crear profesional |
+| D-05 | Copias de precio y duración positivas; `rejection_reason` solo en rechazadas | ✅ **Cerrada el 2026-11-12** (API PR #20) | Lilly Puentes | Migración `0002`: tres `CHECK` en `appointment` |
 | D-06 | Estados `completed` y `no_show` | El motor los acepta, ningún endpoint los asigna | _por asignar_ | Decidir quién los marca (el negocio, o un proceso al pasar la hora) y agregar el endpoint |
 | D-07 | Índices alineados con las consultas de §7.1 | Faltan tres, sobran dos | _por asignar_ | Migración de índices (§7.3 y §7.4) |
 | D-08 | `updated_at` siempre cierto | Solo el código lo actualiza | _por asignar_ | Migración: disparador `BEFORE UPDATE` |

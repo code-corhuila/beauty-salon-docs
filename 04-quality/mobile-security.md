@@ -5,7 +5,7 @@ reglas y el inventario de datos sensibles; aquí, **cómo se verifica cada una a
 build**, en Ionic + Capacitor sobre Android y en la API Express.
 
 Cada release copia esta lista en su checklist ([`05-release/releases/`](../05-release/releases/))
-y la marca. La columna **Estado al 2026-10-07** dice cómo está hoy, para que el primer release no
+y la marca. La columna **Estado al 2026-11-16** dice cómo está hoy (revisada después de la sustentación), para que el primer release no
 descubra los pendientes el día de la entrega.
 
 > Recordatorio del inventario: el riesgo de ManiCita **no es financiero, es de privacidad**. El
@@ -16,33 +16,33 @@ descubra los pendientes el día de la entrega.
 
 ## Almacenamiento en el dispositivo
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
-| Los tokens se guardan solo en el Keystore de Android vía `capacitor-secure-storage-plugin` | Revisar que el único acceso a tokens sea `src/core/storage/secureStorage.ts`; buscar `localStorage`, `Preferences` y `sessionStorage` en `src/` (no debe haber tokens ahí) | ✅ el módulo existe y es el único punto. Se verifica de nuevo cuando se construya auth (HU-08 a HU-13) |
+| Los tokens se guardan solo en el Keystore de Android vía `capacitor-secure-storage-plugin` | Revisar que el único acceso a tokens sea `src/core/storage/secureStorage.ts`; buscar `localStorage`, `Preferences` y `sessionStorage` en `src/` (no debe haber tokens ahí) | ✅ es el único punto. **En el navegador** (respaldo web, solo desarrollo y demo) el plugin guardaba los tokens en `localStorage` en base64; desde el 2026-11-12 en web viven **solo en memoria** y al arrancar se borran los que quedaron de versiones anteriores (app PR #40, `secureStorage.test.ts`). Recargar la pestaña cierra la sesión en web; en Android no cambia nada |
 | SQLite guarda solo la caché del catálogo y las citas **propias** de la clienta | Las tablas locales son las cuatro de [`03-api-and-data/README.md`](../03-api-and-data/README.md); ninguna guarda la agenda del negocio | ✅ esquema local v2 con `service`, `business` y `professional`; `appointment` llega en la v3 con la feature de citas |
-| Cerrar sesión borra tokens, la base local y el caché de imágenes | Prueba manual de [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) más inspección de la base con `chrome://inspect` | ⏳ el cierre de sesión todavía no existe en la app (HU-12) |
-| El respaldo automático de Android no copia la base local | `android:allowBackup="false"` en `AndroidManifest.xml` | 🟡 en `false` desde el PR app #21 (2026-11-08), pendiente de unir a `dev` |
-| Ningún dato personal que la app no necesite queda en caché | El celular de la clienta no viaja en el catálogo; la agenda no se cachea | ✅ por contrato |
+| Cerrar sesión borra tokens, la base local y el caché de imágenes | Prueba manual de [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) más inspección de la base con `chrome://inspect` | ✅ existe desde HU-12 (`endSession`). Desde el 2026-11-13 en el navegador también se borra la copia de la base en IndexedDB: `jeep-sqlite` no la guardaba ni la vaciaba sin `saveToStore` (app PR #41) |
+| El respaldo automático de Android no copia la base local | `android:allowBackup="false"` en `AndroidManifest.xml` | ✅ en `false` desde el PR app #21 (2026-11-08) |
+| Ningún dato personal que la app no necesite queda en caché | El celular de la clienta no viaja en el catálogo; la agenda no se cachea | ✅ por contrato. Además, la caché borra los servicios pausados o eliminados y los negocios y profesionales que se quedan sin servicios: la dirección de un negocio, que puede ser una casa, no se guarda más de lo necesario (app PR #41) |
 
 ## Transporte
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
 | El build de release habla con la API solo por HTTPS | `VITE_API_BASE_URL` del build de release empieza por `https://` | ⏳ no hay URL de producción ni despliegue de la API (hueco H-01 de [`api-contract.md`](../03-api-and-data/api-contract.md)) |
-| HTTP en claro solo en builds de desarrollo | `cleartextTrafficPermitted` permitido únicamente en el `network_security_config` de la variante `debug` | ⏳ sin configurar; hoy se desarrolla contra `http://localhost:3000/v1` |
+| HTTP en claro solo en builds de desarrollo | `cleartextTrafficPermitted` permitido únicamente en el `network_security_config` de la variante `debug` | ✅ solo en `src/debug/res/xml/network_security_config.xml`, hacia `10.0.2.2`, `localhost` y `127.0.0.1` (app PR #26). Para probar en un celular físico se agrega la IP del equipo solo al compilar y no se versiona |
 | Certificate pinning en los endpoints de autenticación | Plugin de pinning de Capacitor configurado con el certificado del dominio de la API | ⏳ depende de H-01: no se puede fijar el certificado de un dominio que no existe |
 | CORS de la API limitado al origen de la app en producción | Revisar la configuración de `cors` en `beauty-salon-api` | 🟡 la API ya limita los orígenes con `CORS_ORIGINS` (2026-11-08); falta fijar el dominio de producción, que no existe todavía (H-01) |
 
 ## Permisos
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
 | Solo los permisos mínimos | `AndroidManifest.xml`: hoy solo `INTERNET`. Notificaciones y cámara se agregan cuando exista la feature que los usa, y se piden en el momento de usarlos | ✅ |
 | Ningún permiso "por si acaso" | No hay permisos declarados sin una feature que los use | ✅ |
 
 ## Build
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
 | R8/ProGuard activo en `release` | `minifyEnabled true` en `android/app/build.gradle`, tipo `release` | 🟡 activo desde el PR app #21; falta compilar el APK de release y probarlo instalado (no hubo Android SDK al hacer el cambio) |
 | Sin `console.*` en el JavaScript de release | `build.rolldownOptions.output.minify.compress.dropConsole` en `vite.config.ts`. **`esbuild.drop` no sirve:** Vite 8 minifica con Rolldown y esa opción no tiene efecto (se comprobó en el build). Se verifica buscando los mensajes de `console` del propio código en `dist/assets` | 🟡 desde el PR app #21. Queda una llamada indirecta de Ionic (Stencil) en el bundle moderno, y los archivos `-legacy`, que el WebView de Capacitor 8 no carga |
@@ -52,20 +52,24 @@ descubra los pendientes el día de la entrega.
 
 ## Dependencias
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
-| Sin vulnerabilidades altas o críticas en dependencias de producción | `npm audit --omit=dev --audit-level=high` en `beauty-salon-app` y en `beauty-salon-api` | ⏳ no se ha corrido como parte de un release |
+| Sin vulnerabilidades altas o críticas en dependencias de producción | `npm audit --omit=dev --audit-level=high` en `beauty-salon-app` y en `beauty-salon-api` | ✅ app: 0 altas desde el 2026-11-12 (`follow-redirects` 1.16.0 → 1.16.3, app PR #40). API: 0. **Riesgo aceptado:** 8 moderadas en la app, de `react-router` 6 (la v7 que las corrige no funciona con `@ionic/react-router` 9; las fallas son un redirect con `\` en `<Link>`/`useNavigate` y la hidratación SSR, y la app solo navega a rutas fijas y no usa SSR) y de herramientas de compilación de Ionic (`ts-morph`, `minimatch`), que no llegan al APK |
 | Ningún SDK de terceros recolecta datos sin que se sepa | Revisar `dependencies` de la app: hoy no hay SDK de analítica ni de publicidad | ✅ |
 
 ## API (lo que protege a la app desde el servidor)
 
-| Check | Cómo se verifica | Estado al 2026-10-07 |
+| Check | Cómo se verifica | Estado al 2026-11-16 |
 |-------|------------------|----------------------|
 | Cada ruta exige el rol correcto y cada recurso se valida contra su dueño | Sondas `FORBIDDEN_ROLE` y `FORBIDDEN_RESOURCE` del smoke test; [TC-008](./test-cases/TC-008-cada-rol-ve-lo-suyo.md) | ✅ |
 | Contraseñas con bcrypt; nunca en respuestas ni en logs | Revisar `src/modules/auth` | ✅ |
 | El refresh token rota y se revoca al cerrar sesión | Sondas de refresh y logout; [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) | ✅ |
 | Los errores no filtran detalles internos | Todo error sale como `problem+json` con `code` estable; nunca un 500 con traza | ✅ |
-| El correo es único sin importar mayúsculas también en la base | Índice único sobre `lower(email)` | ⏳ hoy solo lo garantiza el código (deuda D-01 de [`data-model.md`](../03-api-and-data/data-model.md)) |
+| El correo es único sin importar mayúsculas también en la base | Índice único sobre `lower(email)` | ✅ índice `uq_user_account_email_lower` desde la migración `0002_db_constraints.sql` (API PR #20, 2026-11-12). La misma migración cierra D-02, D-03 y D-05 en el motor |
+| El motor rechaza datos que el código ya no deja pasar | Migración `0002`: duración 15–240, profesional del mismo negocio que el servicio, copias de la cita positivas y motivo solo en rechazadas. Se comprobó con una inserción manual inválida por regla | ✅ desde el 2026-11-12 (API PR #20) |
+| Dos altas simultáneas no pasan el máximo de 20 profesionales | `createProfessional` bloquea la fila del negocio (`SELECT … FOR UPDATE`); prueba de carrera en `business.service.test.js` que falla sin el bloqueo | ✅ desde el 2026-11-12 (D-04, API PR #20) |
+| Encabezados de seguridad, CORS por entorno y límite de intentos de login | `helmet`, `CORS_ORIGINS` y 5 intentos fallidos por 15 minutos (429 con `Retry-After`); pruebas en `app.test.js` y `loginLimiter.test.js` | ✅ desde el 2026-11-08 |
+| La base de datos no queda expuesta a la red local | `docker-compose.yml` de infra publica PostgreSQL solo en `127.0.0.1`; la API sí escucha en todas las interfaces para el celular físico | ✅ desde el 2026-11-12 (infra PR #8). Comprobado: desde la IP de red del equipo la API responde y la base no |
 
 ---
 
