@@ -20,10 +20,13 @@ cuenta.** Desde el 2026-11-16 la primera pantalla para un visitante nuevo es la
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Encabezado | Título y fila de filtros | Chips por tipo: tradicional, semipermanente, acrílicas, retiro, decoración |
-| Cuerpo | Lista de [TarjetaServicio](../../02-code-and-ui/components/tarjeta-servicio.md) | `IonList` virtualizada con foto, nombre, precio, duración y nombre del salón |
+| Encabezado | Foto de cabecera (`public/img/inicio.jpg`), saludo ("Hola, <nombre>" con sesión; "Tu estudio de uñas, a un toque" sin ella) y subtítulo | Desde el 2026-11-16 esta pantalla se llama **Inicio** en la barra |
+| Categorías | Fila de chips por tipo: Todos, tradicional, semipermanente, acrílicas, retiro, decoración | Filtra la lista de abajo |
+| Lo más pedido | Carrusel horizontal de [E-22](../../03-api-and-data/endpoints/catalog-popular-services.md) | Movido desde la bienvenida (2026-11-16) |
+| Cuerpo | "Todos los servicios" (o el tipo elegido) con la cantidad, y la lista de [TarjetaServicio](../../02-code-and-ui/components/tarjeta-servicio.md) | Cada tarjeta lleva la foto del servicio o, si no tiene, la foto de su tipo (`public/img`, licencia de Unsplash, ver `CREDITOS.md`), empaquetada para verse sin conexión |
+| Invitación, sin sesión | Tarjeta "¿Tienes un salón o atiendes uñas?" | Lleva al registro del salón |
 | Banner | Aviso de sin conexión | Solo cuando se muestran datos cacheados |
-| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) | Sin CTA fijo: la acción está en cada tarjeta. Sin sesión, la barra de visitante (Inicio · Servicios · Entrar) |
+| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) | Sin CTA fijo: la acción está en cada tarjeta. Sin sesión, la barra de visitante (Inicio · Entrar) |
 | Encabezado, sin sesión | Botón **Entrar** junto al título | Lleva a `/login`. Antes el catálogo no tenía ninguna forma visible de iniciar sesión o crear cuenta (2026-11-16) |
 
 ---

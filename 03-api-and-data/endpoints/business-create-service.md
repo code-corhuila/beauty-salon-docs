@@ -58,9 +58,15 @@ para navegar de vuelta a la lista con el servicio ya visible.
 |--------|-------------|-----------------|
 | 422 | Validación fallida | `ValidationFailed` con `errors` por campo. **El formulario conserva todo lo escrito** |
 | 403 | Sesión de clienta | `Unauthorized` |
-| 409 | Horario que se solapa con otro servicio de la misma profesional | Mensaje que señala el día en conflicto |
 | 401 | Sesión expirada | Refresco transparente y un reintento |
 | 5xx o timeout | Transitorio | Sin reintento automático. Error con reintentar, conservando el formulario |
+
+> **Ya no hay 409 por horario (2026-11-16).** Hasta esa fecha, un horario que se cruzaba con otro
+> servicio de la misma profesional respondía 409 `SCHEDULE_OVERLAP`, y una manicurista que ofrece
+> manicure y semipermanente los lunes de 09:00 a 17:00 no podía guardar el segundo. Ahora los servicios
+> de una misma profesional **pueden compartir horario**; que no tenga dos clientas a la vez lo cuidan la
+> [disponibilidad](./booking-availability.md) y la [creación de la cita](./booking-create-appointment.md).
+> Si falla el guardado, la pantalla sube hasta el banner de error para que se vea.
 
 ---
 

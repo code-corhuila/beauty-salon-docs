@@ -12,6 +12,7 @@ y en cada ficha de [`endpoints/`](./endpoints/).
 ```
 Verificado el 2026-09-27 contra el sistema levantado con beauty-salon-infra
 (beauty-salon-api con el formato de error problem+json). Las sondas están en §10.
+Última corrida: 2026-11-16, 24 endpoints (E-23 y E-24 nuevos), 74 de 74 sondas.
 ```
 
 ---
@@ -44,12 +45,13 @@ Aplican a **todos** los endpoints y no se repiten en cada ficha.
 | ¿Hay refresco? | Sí, con **rotación**: cada refresco entrega un `refreshToken` nuevo y revoca el usado. Reusar uno ya usado responde 401 `INVALID_REFRESH_TOKEN` |
 | ¿Qué lleva dentro? | JWT HS256. `accessToken`: `sub` (id de la cuenta), `role`, `name`, `iat`, `exp`. La app **puede leer** `role` y `name` para decidir qué pantalla mostrar; **no debe confiar** en ellos para nada más. La API vuelve a verificar el rol en cada petición |
 | ¿Qué pasa al expirar? | 401 `SESSION_EXPIRED`. La app refresca una vez y reintenta; si el refresco falla, cierra sesión |
-| ¿Cómo se cierra sesión? | [E-04](#e-04--post-v1authlogout) revoca el `refreshToken`. **El `accessToken` no se revoca**: sigue valiendo hasta vencer (60 min como máximo) |
+| ¿Cómo se cierra sesión? | [E-04](#e-04--post-v1authlogout) revoca el `refreshToken`. **El `accessToken` no se revoca**: sigue valiendo hasta vencer (60 min como máximo). Cambiar la contraseña con [E-24](#e-24--post-v1authpasswordreset) cierra **todas** las sesiones de la cuenta: los `refreshToken` emitidos antes dejan de servir (2026-11-16) |
 | ¿Qué roles hay? | Lista cerrada: `client`, `business`. Cualquier otro valor se rechaza con 422 |
 | Tolerancia de reloj | Ninguna necesaria: el servidor valida `exp` con **su** reloj. La hora del teléfono no interviene |
 | ¿Quién es el autor? | **Sale del token, nunca del cuerpo.** Ningún endpoint acepta `clientId`, `businessId` ni `userId` en la petición |
 
-**Endpoints anónimos:** E-01, E-02, E-03, E-04 (estos dos piden `refreshToken`), E-05, E-06 y E-07.
+**Endpoints anónimos:** E-01, E-02, E-03, E-04 (estos dos piden `refreshToken`), E-05, E-06, E-07,
+E-22, y E-23 y E-24 (recuperar la contraseña con un código al correo, 2026-11-16).
 Todos los demás exigen sesión y un rol exacto (ver cada ficha).
 
 ### 1.3 Identificadores, importes, moneda y fechas
@@ -159,6 +161,7 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 | `code` | HTTP | `title` | `detail` literal por omisión |
 |--------|------|---------|------------------------------|
 | `MALFORMED_JSON` | 400 | Petición mal formada | "El cuerpo de la petición no es un JSON válido." |
+| `INVALID_RESET_CODE` | 400 | Código inválido | "El código no es correcto o ya venció. Revisa el correo o pide uno nuevo." — solo E-24 (2026-11-16) |
 | `AUTH_REQUIRED` | 401 | Sesión requerida | "Inicia sesión para continuar." |
 | `SESSION_EXPIRED` | 401 | Sesión vencida | "Tu sesión venció. Inicia sesión de nuevo." |
 | `INVALID_CREDENTIALS` | 401 | Credenciales inválidas | "Correo o contraseña incorrectos." |
@@ -171,7 +174,6 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 | `PROFESSIONAL_NOT_FOUND` | 404 | Profesional inexistente | "La profesional no existe." — E-19 y E-20 |
 | `EMAIL_TAKEN` | 409 | Correo registrado | "Ese correo ya tiene una cuenta. Inicia sesión." |
 | `SLOT_TAKEN` | 409 | Cupo tomado | "Alguien acaba de tomar esa hora. Elige otra." |
-| `SCHEDULE_OVERLAP` | 409 | Horario solapado | "El horario se cruza con otro servicio de la misma profesional (día N)." — N es el día ISO |
 | `APPOINTMENT_NOT_CANCELLABLE` | 409 | Cita no cancelable | "Esta cita ya no se puede cancelar: ya fue cancelada o rechazada, o ya pasó." |
 | `APPOINTMENT_ALREADY_RESPONDED` | 409 | Cita ya respondida | "Esta cita ya fue respondida o cancelada, o ya pasó." |
 | `LAST_PROFESSIONAL` | 409 | Última profesional | "El negocio debe tener al menos una profesional." — E-20 |
@@ -185,10 +187,18 @@ Cambiar un `code` sí es un cambio rompiente (§9).
 
 Los mensajes de cada campo en `errors` están en la ficha de cada endpoint (§5).
 
+> **`SCHEDULE_OVERLAP` ya no existe (2026-11-16).** E-14 y E-15 respondían 409 cuando el horario de un
+> servicio se cruzaba con otro servicio de la misma profesional. Se retiró porque bloqueaba un uso
+> normal (manicure y semipermanente con la misma profesional, los lunes de 09:00 a 17:00): ahora los
+> servicios pueden compartir horario y el cruce se controla en las **citas** (E-07 y E-08, §7). Quitar
+> un `code` es rompiente según §9; se hizo dentro de `/v1` porque el formulario de servicio de la app
+> trata cualquier 409 mostrando el `detail` de la API (no compara este `code`) y no hay versión
+> publicada que dependa de él.
+
 ### 2.3 Los errores sin cuerpo
 
 **No hay.** Todo error, incluido el 401, trae el cuerpo de §2.1. El único código **exitoso** sin
-cuerpo es el **204** de [E-04](#e-04--post-v1authlogout) y de los borrados [E-20](#e-20--delete-v1businessprofessionalsprofessionalid) y [E-21](#e-21--delete-v1businessservicesserviceid).
+cuerpo es el **204** de [E-04](#e-04--post-v1authlogout), de [E-24](#e-24--post-v1authpasswordreset) y de los borrados [E-20](#e-20--delete-v1businessprofessionalsprofessionalid) y [E-21](#e-21--delete-v1businessservicesserviceid).
 
 ---
 
@@ -198,12 +208,13 @@ cuerpo es el **204** de [E-04](#e-04--post-v1authlogout) y de los borrados [E-20
 |--------|---------------|-----------|
 | 200 | Operación con cuerpo: lecturas, actualizaciones, cancelar, responder | — |
 | 201 | Se creó un recurso: registro, cita, servicio, profesional. Devuelve el recurso con su `id`. **También** al repetir una creación de cita con la misma `clientRequestId` (§6) | Nunca para actualizaciones |
-| 204 | Cerrar sesión y eliminar (E-20, E-21) | Si hay algo que devolver |
-| 400 | El cuerpo no es JSON válido (`MALFORMED_JSON`) | Para reglas de negocio ni para campos inválidos: eso es 422 |
+| 202 | Se aceptó pedir el código de recuperación (E-23). Responde igual exista o no la cuenta | — |
+| 204 | Cerrar sesión, cambiar la contraseña (E-24) y eliminar (E-20, E-21) | Si hay algo que devolver |
+| 400 | El cuerpo no es JSON válido (`MALFORMED_JSON`), o el código de recuperación no sirve (`INVALID_RESET_CODE`, solo E-24) | Para otras reglas de negocio ni para campos inválidos: eso es 422 |
 | 401 | No hay credencial, venció, o no vale (`AUTH_REQUIRED`, `SESSION_EXPIRED`, `INVALID_CREDENTIALS`, `INVALID_REFRESH_TOKEN`) | Si la credencial vale pero el rol no alcanza |
 | 403 | La credencial vale pero no alcanza: rol equivocado o recurso de otra persona | Si el recurso no existe (ver D-05) |
 | 404 | El recurso o la ruta no existen | Para validación |
-| 409 | Conflicto con el estado actual o con otra operación: cupo tomado, correo repetido, horario solapado, cita ya respondida o no cancelable, borrar algo que tiene historia o la última profesional | Para validación de campos |
+| 409 | Conflicto con el estado actual o con otra operación: cupo tomado (o una cita de la misma profesional que se cruza), correo repetido, cita ya respondida o no cancelable, borrar algo que tiene historia o la última profesional | Para validación de campos |
 | 410 | El servicio existe pero está pausado (`SERVICE_PAUSED`) | Si no existe: eso es 404 |
 | 413 | Cuerpo de más de 100 KB | — |
 | 422 | La petición se entendió pero viola una regla: campos inválidos, cupo inexistente, profesional de otro negocio, límite de 20 profesionales | Para JSON mal formado |
@@ -441,7 +452,7 @@ vive en la memoria del proceso: se reinicia si la API se reinicia, y no se compa
 | `slots` | array | no | Cupos del día ordenados por hora. Vacío si ese día no se atiende |
 | `slots[].id` | string | no | `slt_AAAAMMDD_HHmm` |
 | `slots[].startsAt` | string | no | Instante con `-05:00` |
-| `slots[].isAvailable` | boolean | no | `false` si ya está tomado por una cita activa **o** ya pasó |
+| `slots[].isAvailable` | boolean | no | `false` si se cruza con una cita activa de la profesional **o** ya pasó |
 
 **Errores** — orden: `date` → servicio existe → publicado.
 
@@ -454,6 +465,13 @@ vive en la memoria del proceso: se reinicia si la API se reinicia, y no se compa
 
 **Notas:** los cupos se calculan partiendo cada franja del horario de ese día en bloques de
 `durationMinutes`; un bloque que no cabe completo al final de la franja no se ofrece.
+
+**Cupo ocupado (2026-11-16):** un cupo `[inicio, inicio + durationMinutes)` sale con
+`isAvailable: false` si se cruza con **cualquier** cita activa (`pending` o `confirmed`) de la misma
+profesional, de cualquiera de sus servicios y de cualquier duración. Ejemplo: con una cita de
+semipermanente de 120 min a las 09:00, el manicure de 60 min de la misma profesional no ofrece ni las
+09:00 ni las 10:00. Antes solo se marcaba el cupo que empezaba a la misma hora exacta, lo que bastaba
+mientras dos servicios de una profesional no podían compartir horario.
 
 ### E-08 · POST /v1/appointments
 
@@ -480,7 +498,8 @@ vive en la memoria del proceso: se reinicia si la API se reinicia, y no se compa
    termina aquí**, aunque el servicio ya esté pausado
 4. el servicio existe (404) → está publicado (410)
 5. `slotId` tiene el formato (422) → coincide con un cupo del horario y no ha pasado (422)
-6. el cupo no está tomado (409)
+6. el intervalo de la cita nueva no se cruza con otra cita activa de la profesional, de cualquier
+   servicio (409)
 
 | Código | Cuándo | `code` | Mensaje literal |
 |--------|--------|--------|-----------------|
@@ -490,12 +509,18 @@ vive en la memoria del proceso: se reinicia si la API se reinicia, y no se compa
 | 404 | El servicio no existe | `SERVICE_NOT_FOUND` | "El servicio no existe." |
 | 410 | El servicio está pausado | `SERVICE_PAUSED` | "Este servicio ya no está disponible." |
 | 422 | Cupo con formato inválido, fuera del horario o ya pasado | `VALIDATION_FAILED` | `slotId`: "Cupo inexistente o vencido" |
-| **409** | **Otra clienta tomó el cupo** | **`SLOT_TAKEN`** | "Alguien acaba de tomar esa hora. Elige otra." |
+| **409** | **Otra clienta tomó el cupo, o la profesional ya tiene una cita activa que se cruza con ese horario** (de este u otro servicio) | **`SLOT_TAKEN`** | "Alguien acaba de tomar esa hora. Elige otra." |
 
 **Notas:** contraintuitivo: un `slotId` inventado sobre un servicio pausado responde **410**, no
 422, porque el servicio se comprueba antes que el cupo. Y un reintento con la misma
 `clientRequestId` responde **201 con la cita original** aunque entre tanto se haya pausado el
 servicio.
+
+**Cómo se evita el cruce (2026-11-16):** la creación corre en una transacción que primero toma
+`pg_advisory_xact_lock(hashtext(professional_id))`, así que dos agendamientos de la misma profesional
+se atienden de uno en uno. Dentro, busca citas activas cuyo intervalo se cruce con
+`[inicio, inicio + durationMinutes)`; si hay alguna, responde 409 `SLOT_TAKEN`. El índice único
+parcial `uq_appointment_professional_slot_active` sigue debajo como red para la misma hora exacta.
 
 ### E-09 · GET /v1/appointments/mine
 
@@ -588,7 +613,7 @@ negocio del token.
 
 | Autorización | Rol `business` |
 |---|---|
-| Idempotente | No: un reintento tras un timeout puede crear el servicio dos veces (el segundo choca por horario con 409 si es la misma profesional) |
+| Idempotente | No: un reintento tras un timeout puede crear el servicio dos veces. Desde el 2026-11-16 el segundo ya no choca por horario: se crea igual y hay que borrarlo (E-21) |
 | Integración en la app | [business-create-service.md](./endpoints/business-create-service.md) |
 
 **Petición**
@@ -605,16 +630,17 @@ negocio del token.
 
 **Respuesta 201:** `ServiceDetail` con `isPublished: true`.
 
-**Errores** — orden: sesión → rol → **todos los campos a la vez** → profesional del negocio →
-solape.
+**Errores** — orden: sesión → rol → **todos los campos a la vez** → profesional del negocio.
 
 | Código | Cuándo | `code` | Mensaje literal |
 |--------|--------|--------|-----------------|
 | 422 | Campos | `VALIDATION_FAILED` | `name`: "Es requerido, hasta 60 caracteres" · `type`: "Tipo de servicio inválido" · `description`: "Es requerida" · `priceCop`: "Debe ser un entero mayor a 0" · `durationMinutes`: "Debe ser múltiplo de 15, entre 15 y 240" · `professionalId`: "Es requerido" · `schedule`: "Debe incluir al menos un día de atención" o "Cada día debe tener weekday (1-7), startTime y endTime válidos, con endTime después de startTime" |
 | 422 | La profesional es de otro negocio o no existe | `VALIDATION_FAILED` | `professionalId`: "No pertenece a este negocio" |
-| 409 | Franja que se cruza con otro servicio de la misma profesional | `SCHEDULE_OVERLAP` | "El horario se cruza con otro servicio de la misma profesional (día N)." |
 
-**Notas:** no se puede crear un servicio pausado. `imageUrl` no se recibe (H-05).
+**Notas:** no se puede crear un servicio pausado. `imageUrl` no se recibe (H-05). **Varios servicios
+de la misma profesional pueden compartir horario** (2026-11-16): hasta esa fecha respondía 409
+`SCHEDULE_OVERLAP`, que ya no existe (§2.2). Que la profesional no tenga dos clientas a la vez lo
+cuidan E-07 y E-08.
 
 ### E-15 · PUT /v1/business/services/{serviceId}
 
@@ -627,8 +653,8 @@ solape.
 
 **Respuesta 200:** `ServiceDetail`.
 
-**Errores** — orden: sesión → rol → campos → existe → es del negocio → profesional → solape (con
-**otros** servicios; el propio no cuenta).
+**Errores** — orden: sesión → rol → campos → existe → es del negocio → profesional. Desde el
+2026-11-16 no hay chequeo de solape con otros servicios (ver E-14).
 
 | Código | Cuándo | `code` | Mensaje literal |
 |--------|--------|--------|-----------------|
@@ -636,7 +662,6 @@ solape.
 | 404 | No existe | `SERVICE_NOT_FOUND` | "El servicio no existe." |
 | 403 | Es de otro negocio | `FORBIDDEN_RESOURCE` | "Este servicio pertenece a otro negocio." |
 | 422 | Profesional ajena | `VALIDATION_FAILED` | `professionalId`: "No pertenece a este negocio" |
-| 409 | Solape | `SCHEDULE_OVERLAP` | "El horario se cruza con otro servicio de la misma profesional (día N)." |
 
 **Notas:** todo-o-nada: el servicio y su horario se reemplazan en una transacción. Las citas ya
 agendadas **no cambian**: conservan nombre, precio, duración y hora, aunque queden fuera del horario
@@ -794,6 +819,82 @@ después por `id`. Sin citas en ese tiempo, salen los más recientes. El conteo 
 **Notas:** la ruta se registra **antes** de `/services/{serviceId}`; si no, Express tomaría
 `popular` como un `serviceId` y respondería 404 `SERVICE_NOT_FOUND`.
 
+### E-23 · POST /v1/auth/password/forgot
+
+> **E-23 y E-24 se agregaron el 2026-11-16** para "¿Olvidaste tu contraseña?" en
+> [Login](../01-architecture/screens/login.md) y la pantalla
+> [Recuperar contraseña](../01-architecture/screens/recuperar-clave.md). Tabla nueva `password_reset` en
+> la migración `0003` ([data-model.md §2.8](./data-model.md#28-passwordreset--raíz-de-agregado-técnica)).
+
+| Autorización | Anónimo |
+|---|---|
+| Idempotente | En efecto sí: repetirlo antes de un minuto no envía otro correo. Pasado el minuto, envía un código nuevo y anula el anterior |
+| Integración en la app | [auth-password-forgot.md](./endpoints/auth-password-forgot.md) |
+
+**Petición:** `email` (string, sí; mismo formato que E-01).
+
+**Respuesta 202:** `{ "message": "Si el correo tiene una cuenta, le enviamos un código." }`. **La misma
+respuesta exista o no la cuenta**, y también si el correo no se pudo enviar.
+
+**Errores**
+
+| Código | Cuándo | `code` | Mensaje literal |
+|--------|--------|--------|-----------------|
+| 422 | `email` sin formato de correo | `VALIDATION_FAILED` | `email`: "Formato de correo inválido" |
+
+**Notas:**
+
+- Si el correo tiene cuenta, la API genera un código de **6 números**, guarda solo su HMAC-SHA256,
+  lo envía por correo y lo deja vigente **15 minutos**. Pedir uno nuevo anula los anteriores sin usar:
+  solo sirve el último que llegó.
+- **A lo sumo un correo por minuto por cuenta.** Si ya hay un código sin usar de menos de 60 s, no se
+  crea otro ni se envía nada, y la respuesta es el mismo 202.
+- **No sirve para averiguar qué correos están registrados:** el código HTTP, el cuerpo y el texto son
+  los mismos con o sin cuenta. Un fallo del servidor de correo se registra en la consola de la API y
+  no cambia la respuesta.
+- El correo sale por SMTP con las variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`,
+  `SMTP_PASS` y `MAIL_FROM` (nodemailer). En local, `beauty-salon-infra` trae **Mailpit**, que atrapa
+  los correos y los muestra en `http://localhost:8025`. Sin `SMTP_HOST` no se envía nada y el código se
+  escribe en la consola de la API.
+
+### E-24 · POST /v1/auth/password/reset
+
+| Autorización | Anónimo; exige el código que llegó al correo |
+|---|---|
+| Idempotente | **No**: el código sirve una vez. Repetir la llamada con el mismo código responde 400 |
+| Integración en la app | [auth-password-reset.md](./endpoints/auth-password-reset.md) |
+
+**Petición**
+
+| Campo | Tipo | Obligatorio | Reglas |
+|-------|------|-------------|--------|
+| `email` | string | sí | Formato de correo, como en E-01 |
+| `code` | string | sí | Exactamente 6 números |
+| `newPassword` | string | sí | La misma regla de E-01: de 8 a 64 caracteres, sin espacios, con al menos una letra y un número |
+
+**Respuesta 204:** sin cuerpo. La contraseña quedó cambiada. **No inicia sesión**: la app vuelve a
+Login y la persona entra con la contraseña nueva (E-02).
+
+**Errores** — orden: **los tres campos a la vez** (422) → hay un código vigente de esa cuenta con menos
+de 5 intentos → el código coincide.
+
+| Código | Cuándo | `code` | Mensaje literal |
+|--------|--------|--------|-----------------|
+| 422 | Campos inválidos | `VALIDATION_FAILED` | `email`: "Formato de correo inválido" · `code`: "Son 6 números" · `newPassword`: "De 8 a 64 caracteres, sin espacios, con al menos una letra y un número" |
+| 400 | Correo sin cuenta, código errado, vencido, ya usado o anulado, o 5 intentos errados | `INVALID_RESET_CODE` | "El código no es correcto o ya venció. Revisa el correo o pide uno nuevo." |
+
+**Notas:**
+
+- **Un solo error para todo**, a propósito: no dice si el correo tiene cuenta ni si el código existió.
+- Cada código errado suma un intento. Al quinto, el código deja de servir **aunque después llegue el
+  correcto**; hay que pedir otro con E-23.
+- **Cierra todas las sesiones:** pone `password_changed_at = now()` en la cuenta, y desde ese momento
+  E-03 rechaza con 401 `INVALID_REFRESH_TOKEN` todo `refreshToken` emitido antes. Un `accessToken` ya
+  emitido sigue valiendo hasta vencer (60 min como máximo), igual que con E-04 (§1.2).
+- Cambiar la contraseña, gastar el código y fechar el cambio pasan en una sola transacción, con la
+  fila del código bloqueada (`FOR UPDATE`): dos llamadas simultáneas con el mismo código no cambian
+  la contraseña dos veces.
+
 ---
 
 ## 6. Idempotencia y reintentos
@@ -805,9 +906,11 @@ después por `id`. Sin citas en ese tiempo, salen los más recientes. El conteo 
 | E-18 pausar / publicar | **Sí** |
 | E-19 editar profesional | **Sí**: reemplaza el nombre |
 | E-04 logout | **Sí**: repetirlo responde 204 |
+| E-23 pedir código | **No se reintenta sola**, aunque repetirla es inofensivo: siempre responde 202 y antes de un minuto no envía otro correo |
 | E-08 crear cita | **Sí, con la misma `clientRequestId`** |
 | E-01 registro | No se reintenta sola; repetirla no duplica (409) |
 | E-03 refresh | **No**: rota el token; un reintento con el mismo token da 401 |
+| E-24 cambiar contraseña | **No**: el código sirve una vez; un reintento tras un timeout da 400 `INVALID_RESET_CODE` aunque el primero haya funcionado. La app lo muestra bajo el campo del código y la persona puede probar entrar con la contraseña nueva |
 | E-10 cancelar, E-17 responder | **No**: la segunda llamada da 409 aunque la primera haya funcionado. La app debe tratar ese 409 tras un timeout como "probablemente ya se hizo" y recargar |
 | E-12 crear profesional, E-14 crear servicio | **No**: pueden duplicar |
 | E-20, E-21 eliminar | **No** se reintentan solos: el segundo intento da 404 aunque el primero haya funcionado. Tras un timeout, la app recarga la lista y, si el registro ya no está, lo da por hecho |
@@ -832,9 +935,11 @@ lecturas) están en [`api-networking.md`](./api-networking.md): 10 s lecturas, 8
 | Recurso | Estrategia | Qué pasa |
 |---------|------------|----------|
 | Un cupo | **La decide el motor** | Dos clientas agendan el mismo cupo a la vez: una recibe 201 y la otra 409 `SLOT_TAKEN`, siempre. Probado en §10 |
+| Citas de una profesional que se cruzan (2026-11-16) | **Bloqueo por profesional** (`pg_advisory_xact_lock`) y chequeo de intervalos dentro de la transacción | Dos clientas al mismo tiempo, en horas que se cruzan de **dos servicios distintos** de la misma profesional: una recibe 201 y la otra 409 `SLOT_TAKEN`. Lo prueba `booking.service.test.js` |
 | Un servicio (E-15, E-18) | **Gana el último** | Si el negocio edita el mismo servicio desde dos dispositivos, **se pierde el cambio anterior sin aviso**. Se acepta: un negocio es una sola persona |
 | Una cita (E-10, E-17) | **Gana el último, con una ventana** | Se comprueba el estado y luego se actualiza, en dos pasos. Si la clienta cancela y el negocio confirma en el mismo instante, puede quedar el estado del segundo. Hueco H-07 |
-| Horario (solape) | Solo dominio | Dos servicios creados a la vez para la misma profesional pueden solaparse ([data-model.md §2.4](./data-model.md#24-service--raíz-de-agregado)) |
+| ~~Horario (solape)~~ | Ya no aplica (2026-11-16) | Los servicios de una profesional pueden compartir horario; lo que no se cruza son sus citas (fila de arriba, [data-model.md §2.4](./data-model.md#24-service--raíz-de-agregado)) |
+| Un código de recuperación (E-24) | **Bloqueo de la fila** (`FOR UPDATE`) | Dos llamadas con el mismo código a la vez: una cambia la contraseña (204) y la otra recibe 400 `INVALID_RESET_CODE` |
 
 No hay `version` ni `ETag` en esta versión.
 
@@ -906,7 +1011,7 @@ HTTP y el `code` esperado. Resultado: **49 de 49**.
 | 12 | GET /business/professionals como clienta | 403 FORBIDDEN_ROLE | 403 FORBIDDEN_ROLE | Sí |
 | 13 | POST /business/services | 201 | 201 | Sí |
 | 14 | POST /business/services tipo en español | 422 VALIDATION_FAILED | 422 VALIDATION_FAILED | Sí |
-| 15 | POST /business/services horario solapado | 409 SCHEDULE_OVERLAP | 409 SCHEDULE_OVERLAP | Sí |
+| 15 | POST /business/services horario solapado | 409 SCHEDULE_OVERLAP | 409 SCHEDULE_OVERLAP | Sí (cambió el 2026-11-16: ver la corrida de esa fecha) |
 | 16 | GET /business/services | 200, con `schedule` | 200, con `schedule` | Sí |
 | 17 | PUT /business/services/{id} | 200, precio nuevo | 200, precio nuevo | Sí |
 | 18 | PUT /business/services/{id} inexistente | 404 SERVICE_NOT_FOUND | 404 SERVICE_NOT_FOUND | Sí |
@@ -1006,6 +1111,28 @@ La sonda 36 revisa la forma y el límite, no qué servicio sale primero: el orde
 que haya en la base, y eso lo prueba `catalog.service.test.js` con datos propios. Las restricciones de
 la migración `0002` (D-01 a D-05) no se sondean por HTTP, porque el código ya rechaza esos datos antes
 de llegar al motor: se comprobaron con una inserción manual inválida por regla, directo en PostgreSQL.
+
+### Corrida del 2026-11-16: E-23, E-24 y servicios con el mismo horario
+
+Mismo script, con la API de la rama `fix/servicios-y-clave` levantada con `beauty-salon-infra` (ya con
+Mailpit). Resultado: **74 de 74**: las 69 de arriba, con la 15 cambiada, y estas 5 nuevas. La 15
+lleva el número de la primera tabla; las nuevas, el de la salida del script, que las pone justo
+después de las de login.
+
+| # | Llamada | Se esperaba | Se obtuvo | ¿Cuadra? |
+|---|---------|-------------|-----------|----------|
+| 15 | POST /business/services mismo horario y misma profesional (antes "horario solapado", 409 `SCHEDULE_OVERLAP`) | 201 | 201 | Sí |
+| 9 | POST /auth/password/forgot | 202 | 202 | Sí |
+| 10 | POST /auth/password/forgot correo sin cuenta | 202 (la misma respuesta) | 202 | Sí |
+| 11 | POST /auth/password/forgot correo mal escrito | 422 VALIDATION_FAILED | 422 VALIDATION_FAILED | Sí |
+| 12 | POST /auth/password/reset código errado | 400 INVALID_RESET_CODE | 400 INVALID_RESET_CODE | Sí |
+| 13 | POST /auth/password/reset campos inválidos | 422 VALIDATION_FAILED | 422 VALIDATION_FAILED | Sí |
+
+El camino feliz de E-24 (código correcto, 204 y sesiones cerradas) no se sondea por HTTP, porque el
+código solo viaja por correo: lo prueba `passwordReset.service.test.js` (12 pruebas), que lee el
+correo de la memoria de la API. Que una cita de otro servicio de la misma profesional ocupe los cupos
+que se cruzan, y que de dos clientas a la vez en horas que se cruzan entre solo una, lo prueba
+`booking.service.test.js`.
 
 ## 11. Huecos declarados
 

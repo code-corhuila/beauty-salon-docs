@@ -21,7 +21,8 @@ publicar), nunca al abrir la app.
 | Región | Componente | Notas |
 |--------|------------|-------|
 | Encabezado | Logo y título | Explica por qué se pide la sesión: "Inicia sesión para agendar" |
-| Cuerpo | [CampoFormulario](../../02-code-and-ui/components/campo-formulario.md) x2 | Correo y contraseña, con mostrar/ocultar contraseña |
+| Cuerpo | [CampoFormulario](../../02-code-and-ui/components/campo-formulario.md) x2 | Correo y contraseña, con mostrar/ocultar contraseña. Debajo de la contraseña, el enlace **"¿Olvidaste tu contraseña?"** (2026-11-16) |
+| Aviso | Banner informativo | Solo al volver de [Recuperar contraseña](./recuperar-clave.md): "Listo, cambiaste tu contraseña. Entra con la nueva." Se oculta si el intento de entrar falla |
 | Pie | [BotonPrimario](../../02-code-and-ui/components/boton-primario.md) | Entrar. Debajo, enlace a `/register` |
 
 ---
@@ -45,6 +46,7 @@ publicar), nunca al abrir la app.
 | Escribir correo y contraseña | Se habilita el botón | — (validación local) |
 | Tocar Entrar | Autentica y vuelve a la ruta pretendida, o al inicio de su rol | `signIn` |
 | Tocar Crear cuenta | Navega a `/register` conservando la ruta pretendida | — |
+| Tocar "¿Olvidaste tu contraseña?" | Navega a `/forgot-password` ([Recuperar contraseña](./recuperar-clave.md)) llevando el correo ya escrito y la ruta pretendida. Al terminar, vuelve aquí con el correo lleno y el aviso de contraseña cambiada | — |
 
 ---
 

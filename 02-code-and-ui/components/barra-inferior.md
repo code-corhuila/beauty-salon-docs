@@ -23,9 +23,9 @@ No recibe props. Lee el rol de `useSessionStore` y la ruta actual de `useLocatio
 
 | Rol | Pestañas |
 |-----|----------|
-| `client` | Servicios (`/services`) · Mis citas (`/my-appointments`) · Mi cuenta (`/account`) |
+| `client` | Inicio (`/services`) · Mis citas (`/my-appointments`) · Mi cuenta (`/account`). Hasta el 2026-11-16 la primera se llamaba Servicios |
 | `business` | Mis servicios (`/business/services`) · Profesionales (`/business/professionals`) · Agenda (`/business/agenda`) · Mi cuenta (`/account`) |
-| Sin sesión | Inicio (`/welcome`) · Servicios (`/services`) · Entrar (`/login`). Antes no se mostraba y el visitante no tenía a dónde ir ni cómo crear cuenta (2026-11-16) |
+| Sin sesión | Inicio (`/services`) · Entrar (`/login`). Antes no se mostraba y el visitante no tenía a dónde ir ni cómo crear cuenta; luego tuvo Inicio (`/welcome`) · Servicios · Entrar, y desde el 2026-11-16 la bienvenida ya no es pestaña |
 
 ---
 

@@ -34,13 +34,14 @@ de seguridad que se marca en cada release.
 | [TC-001](./test-cases/TC-001-cupos-calculados.md) | Los cupos se calculan del horario y la duración | booking | API |
 | [TC-002](./test-cases/TC-002-sin-doble-agendamiento.md) | Un cupo no se agenda dos veces | booking | API |
 | [TC-003](./test-cases/TC-003-reintento-idempotente.md) | Reintentar el envío no crea una segunda cita | booking | API |
-| [TC-004](./test-cases/TC-004-horario-sin-solape.md) | Una profesional no tiene dos horarios que se pisen | business | API |
+| [TC-004](./test-cases/TC-004-horario-sin-solape.md) | Una profesional no tiene dos citas que se crucen (reescrito el 2026-11-16: los servicios ya pueden compartir horario) | business, booking | API |
 | [TC-005](./test-cases/TC-005-pausar-no-borra.md) | Pausar no es borrar | business, catalog | API |
 | [TC-006](./test-cases/TC-006-responder-una-vez.md) | El negocio responde una cita una sola vez | business | API |
 | [TC-007](./test-cases/TC-007-cancelar-solo-la-duena.md) | Solo la dueña cancela su cita, y una sola vez | appointments | API |
 | [TC-008](./test-cases/TC-008-cada-rol-ve-lo-suyo.md) | Cada rol ve solo lo suyo | auth | API |
 | [TC-009](./test-cases/TC-009-cerrar-sesion-revoca.md) | Cerrar sesión invalida el token y limpia el dispositivo | auth | API |
 | [TC-010](./test-cases/TC-010-catalogo-sin-conexion.md) | El catálogo se ve sin conexión | catalog | App (Android) |
+| [TC-011](./test-cases/TC-011-recuperar-contrasena.md) | Recuperar la contraseña con un código sin delatar cuentas, y cerrar las sesiones abiertas (2026-11-16) | auth | API |
 
 > Los casos describen los pasos en la app y en la API. Mientras la pantalla de una feature no exista,
 > el caso se ejecuta contra la API (Postman o el smoke test) y los pasos de la app quedan pendientes.

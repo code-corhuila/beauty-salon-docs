@@ -55,7 +55,8 @@ en validación, `errors` ([`api-contract.md`](./api-contract.md) §2). El interc
 un error tipado que conserva `code` y `detail`:
 
 - **La app decide con `code`**, nunca comparando el texto de `detail`: el mismo 409 puede ser
-  `SLOT_TAKEN`, `EMAIL_TAKEN` o `SCHEDULE_OVERLAP`, y cada uno lleva a una pantalla distinta.
+  `SLOT_TAKEN`, `EMAIL_TAKEN` o `APPOINTMENT_NOT_CANCELLABLE`, y cada uno lleva a una pantalla distinta
+  (`SCHEDULE_OVERLAP` se retiró el 2026-11-16; ver [`api-contract.md`](./api-contract.md) §2.2).
 - **La persona lee `detail`**, que ya viene en español y dice qué hacer. No se reemplaza por un
   "ocurrió un error" genérico.
 

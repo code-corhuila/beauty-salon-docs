@@ -45,6 +45,13 @@ no esté prestando. Es la pantalla de inicio del lado del negocio.
 | Tocar un servicio | Navega al formulario en modo edición | — |
 | Mover el interruptor | Publica o pausa el servicio; cambio optimista que se revierte si falla | `pauseService` |
 
+**La lista se refresca sola (2026-11-16).** Ionic deja montadas las páginas ya visitadas, así que al
+volver del formulario la lista seguía mostrando los datos viejos aunque el servicio sí se hubiera
+guardado. Ahora la pantalla escucha `src/shared/hooks/cambiosDeDatos.ts` y vuelve a cargar cuando
+[el formulario](./negocio-servicio-form.md) guarda, elimina o pausa un servicio (`'servicios'`) y
+cuando [Mis profesionales](./negocio-profesionales.md) guarda o elimina una profesional
+(`'profesionales'`, porque cada fila muestra el nombre de la profesional).
+
 ---
 
 ## Datos que la alimentan

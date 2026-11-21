@@ -102,7 +102,9 @@ a una manicurista de Neiva.
 
 - **Unitarias:** `createService` rechazando cada campo obligatorio faltante y duraciones que no son
   múltiplo de 15; `pauseService` verificando que las citas existentes sobreviven; `setSchedule` con
-  horarios que se solapan.
+  horarios que se solapan (hasta el 2026-11-16; desde entonces dos servicios de la misma profesional
+  pueden compartir horario, y lo que se prueba es que sus citas no se crucen:
+  [TC-004](../../04-quality/test-cases/TC-004-horario-sin-solape.md)).
 - **De componente:** `ServiceFormScreen` conservando los datos tras un error de red;
   `BusinessServicesScreen` en estado vacío.
 - **Integración:** publicar un servicio y verificar que aparece en el catálogo de la clienta con

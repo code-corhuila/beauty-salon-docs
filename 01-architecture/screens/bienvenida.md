@@ -24,7 +24,7 @@ no sabía cómo crear su cuenta, y un salón que quería ofrecer servicios no te
 | Primera vez que se abre la app en ese celular o navegador, sin sesión | La ruta `/` lleva aquí |
 | Las veces siguientes, sin sesión | La ruta `/` lleva al catálogo, como antes |
 | Con sesión | Nunca se muestra sola: la ruta `/` lleva al inicio del rol (catálogo o Mis servicios) |
-| Cualquier momento, sin sesión | Se puede volver con la pestaña **Inicio** de la barra de visitante |
+| Desde el Inicio, si se llegó con "Quiero agendar" | Una flecha en el encabezado del Inicio vuelve aquí (2026-11-16). Ya no es una pestaña de la barra |
 
 La marca "ya vio la bienvenida" se guarda en `localStorage` con la clave `manicita.welcomeSeen`. Es un
 dato de interfaz, no sensible: la regla de [`security-rules.md`](../../00-governance/security-rules.md)
@@ -38,11 +38,11 @@ la vuelva a ver. Si el almacenamiento está bloqueado, la pantalla se muestra y 
 
 | Región | Componente | Notas |
 |--------|------------|-------|
-| Marca | Franja con degradado suave, logo con sombra, "ManiCita" y el lema **"Nail art studio"** en mayúsculas espaciadas con el color de la marca (2026-11-16) | Sin barra superior ni botón atrás |
+| Marca | Foto de fondo (`public/img/bienvenida.jpg`) con un velo claro, logo con sombra, "ManiCita", el lema **"Nail art studio"** en mayúsculas espaciadas y una frase que habla de los dos lados de la app: agendar y publicar servicios (2026-11-16) | Sin barra superior ni botón atrás |
 | Caminos | Dos tarjetas grandes, una debajo de la otra | **Quiero agendar** ("Mira servicios, precios y horas libres") y **Quiero ofrecer mis servicios** ("Publica tu salón y recibe citas") |
 | Cuenta | Enlace "¿Ya tienes cuenta? Entrar" | Va a `/login` |
-| Lo más pedido | Carrusel horizontal de tarjetas compactas | Hasta 8 servicios de [E-22](../../03-api-and-data/endpoints/catalog-popular-services.md). Se desliza con el dedo; cada tarjeta muestra nombre, precio, duración y salón |
-| Pie | [BarraInferior](../../02-code-and-ui/components/barra-inferior.md) de visitante | Inicio · Servicios · Entrar |
+| Lo más pedido | Se pasó al [Inicio](./catalogo.md) el 2026-11-16 | Antes era un carrusel aquí |
+| Pie | Sin barra desde el 2026-11-16 | La bienvenida es solo para la primera vez |
 
 ---
 

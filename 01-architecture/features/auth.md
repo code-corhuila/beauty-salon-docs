@@ -29,6 +29,7 @@ viendo precios.
 | [LoginScreen](../screens/login.md) | `/login` | Entrar con correo y contraseña |
 | [SignUpScreen](../screens/registro.md) | `/register` | Crear cuenta eligiendo el rol |
 | [AccountScreen](../screens/cuenta.md) | `/account` | Ver con qué cuenta se está dentro y cerrar la sesión (los dos roles) |
+| [ForgotPasswordScreen](../screens/recuperar-clave.md) | `/forgot-password` | Cambiar la contraseña olvidada con un código que llega al correo (2026-11-16) |
 
 ---
 
@@ -51,12 +52,15 @@ viendo precios.
 
 ## Datos
 
-- **Casos de uso:** `signIn`, `signUp`, `signOut`, `restoreSession`
+- **Casos de uso:** `signIn`, `signUp`, `signOut`, `restoreSession`, y desde el 2026-11-16
+  `requestResetCode` y `resetPassword` (`domain/passwordReset.ts`)
 - **Repositorios:** `AuthRepository`, `SessionStorage`
 - **Endpoints:** [`POST /v1/auth/login`](../../03-api-and-data/endpoints/auth-login.md),
   [`POST /v1/auth/register`](../../03-api-and-data/endpoints/auth-register.md),
   [`POST /v1/auth/refresh`](../../03-api-and-data/endpoints/auth-refresh.md),
-  [`POST /v1/auth/logout`](../../03-api-and-data/endpoints/auth-logout.md)
+  [`POST /v1/auth/logout`](../../03-api-and-data/endpoints/auth-logout.md),
+  [`POST /v1/auth/password/forgot`](../../03-api-and-data/endpoints/auth-password-forgot.md),
+  [`POST /v1/auth/password/reset`](../../03-api-and-data/endpoints/auth-password-reset.md)
 - **Persistencia local:** los tokens van **solo** al plugin de secure storage de Capacitor, nunca a SQLite.
   El perfil de la sesión activa (nombre, rol) se guarda en memoria y se vuelve a pedir al restaurar.
 - **Estrategia offline:** online-only. Sin conexión no se puede iniciar sesión, pero **una sesión ya
@@ -73,6 +77,11 @@ viendo precios.
   se cierra en el dispositivo igual: **cerrar sesión nunca falla para la persona**. Se llega desde
   [Mi cuenta](../screens/cuenta.md), que hasta HU-13 se abre con un botón en el encabezado del
   catálogo visible solo con sesión
+- **Al olvidar la contraseña (2026-11-16):** desde Login, "¿Olvidaste tu contraseña?" abre
+  [Recuperar contraseña](../screens/recuperar-clave.md) con el correo ya escrito. `requestResetCode`
+  pide el código (la respuesta es la misma exista o no la cuenta) y `resetPassword` lo envía con la
+  contraseña nueva. Al terminar **no** se abre sesión: se vuelve a Login con el correo lleno y el
+  aviso de contraseña cambiada. La API cierra las demás sesiones de la cuenta
 
 ---
 
@@ -103,5 +112,8 @@ viendo precios.
   ausente y expirado; que `signOut` borre token, base local y caché de imágenes.
 - **De componente:** `LoginScreen` en sus cuatro estados; que el error de credenciales aparezca junto
   al campo y no reemplace la pantalla.
+- **Recuperar contraseña (2026-11-16):** `passwordReset.test.ts` (validación y traducción de cada
+  respuesta de la API) y `ForgotPasswordScreen.test.tsx` (los dos pasos, reenviar con cuenta regresiva,
+  código errado bajo el campo y vuelta a Login con el aviso).
 - **Integración:** el flujo completo de deep link — abrir `/book/128` sin sesión, registrarse y
   volver a `/book/128`.

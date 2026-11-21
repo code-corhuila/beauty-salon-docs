@@ -37,6 +37,7 @@
 | `/welcome` | `Welcome` | `WelcomeScreen` | — | No | — |
 | `/login` | `Login` | `LoginScreen` | — | No | — |
 | `/register` | `SignUp` | `SignUpScreen` | — | No | — |
+| `/forgot-password` | `ForgotPassword` | `ForgotPasswordScreen` | — (recibe el correo por el estado de la navegación, no por la URL) | No | — |
 | `/services` | `Catalog` | `CatalogScreen` | — | No | — |
 | `/service/:serviceId` | `ServiceDetail` | `ServiceDetailScreen` | `serviceId: string` | No | — |
 | `/book/:serviceId` | `BookAppointment` | `BookAppointmentScreen` | `serviceId: string` | Sí | `client` |
@@ -60,7 +61,7 @@ RootNavigator                      decide según la sesión
 ├── PublicStack                    sin sesión
 │   ├── Welcome                    entrada la primera vez: agendar u ofrecer servicios
 │   ├── Catalog · ServiceDetail    el catálogo se explora sin cuenta
-│   └── Login · SignUp
+│   └── Login · SignUp · ForgotPassword
 ├── ClientTabs                     sesión con rol clienta
 │   ├── Catalog · ServiceDetail · BookAppointment
 │   ├── MyAppointments · AppointmentDetail
@@ -92,10 +93,24 @@ RootNavigator                      decide según la sesión
 > - La ruta `/` sin sesión lleva a [`Welcome`](./screens/bienvenida.md) **la primera vez** en ese
 >   celular, y al catálogo las siguientes (marca `manicita.welcomeSeen` en `localStorage`). Con
 >   sesión, `/` sigue llevando al inicio del rol.
-> - Los visitantes también tienen barra abajo: **Inicio** (`/welcome`) · **Servicios** (`/services`) ·
->   **Entrar** (`/login`). Desde Entrar se llega a Crear cuenta.
+> - Los visitantes también tienen barra abajo: **Inicio** (`/services`) · **Entrar** (`/login`).
+>   Desde Entrar se llega a Crear cuenta. Hasta el 2026-11-16 eran tres pestañas (Inicio en
+>   `/welcome`, Servicios y Entrar); ver la nota de abajo.
 > - "Quiero ofrecer mis servicios" abre `/register?role=business`, con el rol **Negocio** ya
 >   elegido en [`registro.md`](./screens/registro.md). Cualquier otro valor de `role` se ignora.
+
+> **Inicio en una sola pestaña (2026-11-16, rama `feat/inicio-y-diseno` de la app):** las pestañas
+> Inicio y Servicios se juntaron en **Inicio** (`/services`): saludo, categorías, lo más pedido, todos
+> los servicios y, sin sesión, la invitación para salones. La clienta queda con Inicio · Mis citas ·
+> Mi cuenta. La [bienvenida](./screens/bienvenida.md) ya no es pestaña ni lleva barra: se ve solo la
+> primera vez. Si se llegó al Inicio desde "Quiero agendar", el encabezado muestra una flecha para
+> volver a la bienvenida (estado de navegación `fromWelcome`, no la URL).
+
+> **Recuperar contraseña (2026-11-16):** [`ForgotPassword`](./screens/recuperar-clave.md) es pública
+> y sin guarda. Se abre desde el enlace "¿Olvidaste tu contraseña?" de Login, que le pasa el correo
+> escrito y la ruta pretendida en el estado de la navegación (no en la URL, para que el correo no
+> quede en el historial). Al cambiar la contraseña vuelve a `/login` con `replace`, el correo lleno y
+> el aviso de contraseña cambiada.
 
 ## Comportamiento de las guardas
 

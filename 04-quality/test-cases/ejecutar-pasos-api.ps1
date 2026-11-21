@@ -1,10 +1,11 @@
-# Ejecuta los pasos de API de TC-001 a TC-009 contra la API levantada y deja un registro por paso.
-# Los pasos que piden la app (modo avión, chrome://inspect, emulador) quedan marcados como no
-# ejecutados: se hacen a mano. Crea sus propios datos por la API, nunca por SQL.
+# Ejecuta los pasos de API de TC-001 a TC-009 y TC-011 contra la API levantada y deja un registro
+# por paso. Los pasos que piden la app (modo avión, chrome://inspect, emulador) quedan marcados como
+# no ejecutados: se hacen a mano. Crea sus propios datos por la API, nunca por SQL. TC-011 lee el
+# código de recuperación en Mailpit, el buzón de prueba de beauty-salon-infra.
 #
 # Uso (PowerShell 7), con la API de beauty-salon-infra levantada:
-#   pwsh 04-quality/test-cases/ejecutar-pasos-api.ps1 [-BaseUrl http://localhost:3000/v1] [-Out tc-resultados.json]
-param([string]$BaseUrl = "http://localhost:3000/v1", [string]$Out = "tc-resultados.json")
+#   pwsh 04-quality/test-cases/ejecutar-pasos-api.ps1 [-BaseUrl http://localhost:3000/v1] [-MailpitUrl http://localhost:8025] [-Out tc-resultados.json]
+param([string]$BaseUrl = "http://localhost:3000/v1", [string]$MailpitUrl = "http://localhost:8025", [string]$Out = "tc-resultados.json")
 $ErrorActionPreference = 'Stop'
 $results = [System.Collections.Generic.List[object]]::new()
 $sfx = "$(Get-Date -Format 'HHmmss')$(Get-Random -Maximum 999)"
@@ -41,8 +42,8 @@ function NewClient($tag) {
   $r = Call POST '/auth/register' @{ role = 'client'; name = "Clienta $tag"; phone = '3001112233'; email = "cli$tag$sfx@test.com"; password = 'Secreta123' }
   [pscustomobject]@{ token = $r.json.accessToken; refresh = $r.json.refreshToken }
 }
-function Service($biz, $prof, $start, $end, $weekday = 1) {
-  Call POST '/business/services' @{ name = "Servicio $start-$end"; type = 'traditional'; description = 'Prueba'; priceCop = 30000; durationMinutes = 60; professionalId = $prof; schedule = @(@{ weekday = $weekday; startTime = $start; endTime = $end }) } $biz.token
+function Service($biz, $prof, $start, $end, $weekday = 1, $duration = 60) {
+  Call POST '/business/services' @{ name = "Servicio $start-$end"; type = 'traditional'; description = 'Prueba'; priceCop = 30000; durationMinutes = $duration; professionalId = $prof; schedule = @(@{ weekday = $weekday; startTime = $start; endTime = $end }) } $biz.token
 }
 function Book($client, $serviceId, $slotId, $requestId = [guid]::NewGuid().ToString()) {
   Call POST '/appointments' @{ serviceId = $serviceId; slotId = $slotId; clientRequestId = $requestId } $client.token
@@ -94,17 +95,26 @@ $same = @($mine.json.items | Where-Object { $_.service.id -eq $svc3 })
 Rec 'TC-003' 3 'Una sola cita para ese cupo' "$(Got $mine) citas de ese servicio=$($same.Count)" ($mine.status -eq 200 -and $same.Count -eq 1)
 Rec 'TC-003' 4 'Modo avión y reintento en la app' 'No ejecutado aquí: requiere la app en un celular' $false 'Cubierto por la prueba automática BookAppointmentScreen_retryAfterTimeout_resendsTheSameKey (Vitest).'
 
-# ---------------- TC-004 Horario sin solape ----------------
-$b4 = NewBusiness 'c'
-$r = Service $b4 $b4.prof '09:00' '12:00'
-$r1 = Service $b4 $b4.prof '10:00' '11:00'
-Rec 'TC-004' 1 '409 SCHEDULE_OVERLAP con el día' "$(Got $r1) detail=$($r1.json.detail)" ($r1.status -eq 409 -and $r1.json.code -eq 'SCHEDULE_OVERLAP' -and $r1.json.detail -match '1')
-$r2 = Service $b4 $b4.prof '12:00' '13:00'
-Rec 'TC-004' 2 '201: el borde no solapa' (Got $r2) ($r2.status -eq 201)
+# ---------------- TC-004 Una profesional no tiene dos citas que se crucen ----------------
+# Desde el 2026-11-16 dos servicios de la misma profesional pueden compartir horario; lo que no se
+# puede es que dos citas suyas se crucen, aunque sean de servicios distintos.
+$b4 = NewBusiness 'c'; $c4a = NewClient 'e'; $c4b = NewClient 'f'
+$MONID = $MON -replace '-', ''
+$r = Service $b4 $b4.prof '09:00' '12:00'; $mani = $r.json.id
+$r1 = Service $b4 $b4.prof '09:00' '13:00' 1 120; $semi = $r1.json.id
+Rec 'TC-004' 1 '201: la misma profesional puede compartir horario' (Got $r1) ($r1.status -eq 201)
+$r2 = Book $c4a $mani "slt_$($MONID)_1000"
+Rec 'TC-004' 2 '201 pending (servicio de 60 min, lunes 10:00)' "$(Got $r2) estado=$($r2.json.status)" ($r2.status -eq 201 -and $r2.json.status -eq 'pending')
+$r = Slots $semi $MON
+$s09 = $r.json.slots | Where-Object { $_.id -like '*_0900' }; $s11 = $r.json.slots | Where-Object { $_.id -like '*_1100' }
+Rec 'TC-004' 3 '09:00 ocupado (se cruza con la cita de las 10:00) y 11:00 libre' "$(Got $r) 09:00=$($s09.isAvailable) 11:00=$($s11.isAvailable)" ($r.status -eq 200 -and $s09 -and -not $s09.isAvailable -and $s11.isAvailable)
+$r3 = Book $c4b $semi "slt_$($MONID)_0900"
+Rec 'TC-004' 4 '409 SLOT_TAKEN' (Got $r3) ($r3.status -eq 409 -and $r3.json.code -eq 'SLOT_TAKEN')
 $other = Call POST '/business/professionals' @{ name = 'Otra profesional' } $b4.token
-$r3 = Service $b4 $other.json.id '10:00' '11:00'
-Rec 'TC-004' 3 '201 con otra profesional' (Got $r3) ($r3.status -eq 201)
-Rec 'TC-004' 4 'Error junto al horario y el formulario conserva lo escrito' 'No ejecutado aquí: requiere la app' $false 'Cubierto por la prueba automática ServiceFormScreen_whenScheduleOverlaps_showsTheApiMessageAndKeepsTheForm (Vitest, rama HU-16).'
+$r5 = Service $b4 $other.json.id '09:00' '13:00' 1 120
+$free = (Slots $r5.json.id $MON).json.slots | Where-Object { $_.id -like '*_0900' }
+Rec 'TC-004' 5 '201 y su 09:00 libre: la cita de otra profesional no la ocupa' "$(Got $r5) 09:00=$($free.isAvailable)" ($r5.status -eq 201 -and $free.isAvailable)
+Rec 'TC-004' 6 'En la app: guardar el segundo servicio y ver el 09:00 deshabilitado al agendar' 'No ejecutado aquí: requiere la app' $false 'Pendiente de ejecutar en dispositivo. La regla de la API la cubren booking.service.test.js y business.agenda.test.js.'
 
 # ---------------- TC-005 Pausar no borra ----------------
 $r = Service $b1 $b1.prof '18:00' '19:00'; $svc5 = $r.json.id
@@ -180,6 +190,39 @@ Rec 'TC-009' 4 '204 (idempotente)' (Got $r) ($r.status -eq 204)
 $r = Call POST '/auth/refresh' @{ refreshToken = $newRefresh }
 Rec 'TC-009' 5 '401 INVALID_REFRESH_TOKEN' (Got $r) ($r.status -eq 401 -and $r.json.code -eq 'INVALID_REFRESH_TOKEN')
 Rec 'TC-009' 6 'Sin tokens ni citas en el dispositivo' 'No ejecutado aquí: requiere chrome://inspect en un dispositivo' $false 'Cubierto por las pruebas automáticas de signOut y endSession (Vitest).'
+
+# ---------------- TC-011 Recuperar la contraseña con un código ----------------
+# El código solo viaja por correo: se lee de Mailpit (beauty-salon-infra), en el asunto del mensaje.
+$c11mail = "cli11$sfx@test.com"
+$reg = Call POST '/auth/register' @{ role = 'client'; name = 'Clienta olvido'; phone = '3001112233'; email = $c11mail; password = 'Secreta123' }
+$oldRefresh = $reg.json.refreshToken
+# El cierre de sesiones compara segundos enteros: se espera uno para que el token quede claramente antes.
+Start-Sleep -Seconds 1
+$r = Call POST '/auth/password/forgot' @{ email = $c11mail }
+Rec 'TC-011' 1 '202 con el mensaje genérico' "$(Got $r) message=$($r.json.message)" ($r.status -eq 202)
+$r2 = Call POST '/auth/password/forgot' @{ email = "nadie$sfx@test.com" }
+Rec 'TC-011' 2 '202 con el mismo mensaje: no delata si la cuenta existe' "$(Got $r2) igual=$($r2.json.message -eq $r.json.message)" ($r2.status -eq 202 -and $r2.json.message -eq $r.json.message)
+$code = $null
+try {
+  $box = Invoke-RestMethod -Uri "$MailpitUrl/api/v1/messages?limit=50"
+  # To es una lista: .Address sobre un arreglo choca con el método Address de los arreglos.
+  $msg = $box.messages | Where-Object { @($_.To | ForEach-Object { $_.Address }) -contains $c11mail } | Select-Object -First 1
+  if ($msg -and $msg.Subject -match '(\d{6})') { $code = $Matches[1] }
+} catch {}
+Rec 'TC-011' 3 'Llega un correo con un código de 6 números' "código=$([bool]$code)" ([bool]$code) $(if (-not $code) { "No se pudo leer Mailpit en $MailpitUrl." } else { '' })
+$wrong = if ($code -eq '000000') { '111111' } else { '000000' }
+$r = Call POST '/auth/password/reset' @{ email = $c11mail; code = $wrong; newPassword = 'Nueva1234' }
+Rec 'TC-011' 4 '400 INVALID_RESET_CODE' (Got $r) ($r.status -eq 400 -and $r.json.code -eq 'INVALID_RESET_CODE')
+$r = Call POST '/auth/password/reset' @{ email = $c11mail; code = "$code"; newPassword = 'Nueva1234' }
+Rec 'TC-011' 5 '204' (Got $r) ($r.status -eq 204)
+$old = Call POST '/auth/login' @{ email = $c11mail; password = 'Secreta123' }
+$new = Call POST '/auth/login' @{ email = $c11mail; password = 'Nueva1234' }
+Rec 'TC-011' 6 'La vieja da 401 y la nueva 200' "vieja=$(Got $old) nueva=$(Got $new)" ($old.status -eq 401 -and $new.status -eq 200)
+$r = Call POST '/auth/refresh' @{ refreshToken = $oldRefresh }
+Rec 'TC-011' 7 '401 INVALID_REFRESH_TOKEN: las sesiones anteriores se cerraron' (Got $r) ($r.status -eq 401 -and $r.json.code -eq 'INVALID_REFRESH_TOKEN')
+$r = Call POST '/auth/password/reset' @{ email = $c11mail; code = "$code"; newPassword = 'Otra12345' }
+Rec 'TC-011' 8 '400 INVALID_RESET_CODE: el código sirve una vez' (Got $r) ($r.status -eq 400 -and $r.json.code -eq 'INVALID_RESET_CODE')
+Rec 'TC-011' 9 'En la app: de Login a Recuperar contraseña y de vuelta con el aviso' 'No ejecutado aquí: requiere la app' $false 'Pendiente de ejecutar en dispositivo. Cubierto por ForgotPasswordScreen.test.tsx y LoginScreen.test.tsx (Vitest).'
 
 Rec 'TC-010' '1-6' 'Catálogo sin conexión en el emulador' 'No ejecutado: todo el caso requiere la app instalada en un emulador' $false 'No hay Android SDK en este equipo.'
 

@@ -37,8 +37,14 @@
 ```
 horario de atención de la profesional ese día
   dividido en bloques del tamaño de durationMinutes
-  menos los bloques ocupados por citas Pendientes o Confirmadas
+  menos los bloques que se cruzan con una cita Pendiente o Confirmada de la profesional
 ```
+
+**Qué es "ocupado" (2026-11-16):** un bloque `[inicio, inicio + durationMinutes)` no está disponible
+si se cruza con **cualquier** cita activa de la misma profesional, de **cualquiera de sus servicios** y
+de cualquier duración. Como dos servicios de una profesional ya pueden compartir horario, una cita de
+semipermanente de 120 min a las 09:00 deja sin disponibilidad las 09:00 y las 10:00 del manicure de
+60 min de esa profesional. Antes solo se marcaba el bloque que empezaba a la misma hora exacta.
 
 **Mapeo DTO a dominio:**
 

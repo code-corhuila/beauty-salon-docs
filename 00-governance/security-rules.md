@@ -13,6 +13,7 @@ Antes de las reglas, el inventario: sin saber qué se protege, la regla es un ad
 | Dirección y celular del negocio | Negocio | Media: es información pública del comercio, pero el celular no se expone en el catálogo hasta que hay cita confirmada | Servidor |
 | Tokens de sesión | Ambos | Crítica: dan acceso a la cuenta | Solo Keystore de Android |
 | Contraseña | Ambos | Crítica | Nunca se almacena en el dispositivo, ni siquiera cifrada |
+| Código para recuperar la contraseña (2026-11-16) | Ambos | Crítica mientras vive: con el correo permite poner una contraseña nueva | Llega solo al correo de la cuenta. En el servidor, solo su HMAC; vence a los 15 minutos, 5 intentos, un solo uso. La app no lo guarda |
 
 > **El riesgo real de ManiCita no es financiero, es de privacidad.** No hay pagos en la app, pero el
 > historial de citas dice a qué hora y en qué dirección estará una mujer determinada. Esa es la razón

@@ -75,6 +75,32 @@ con los pasos igual: cerrar sesión nunca falla para la persona.
 > mujer; dejarlas en el dispositivo después de cerrar sesión es exactamente el riesgo que describe
 > [`security-rules.md`](../00-governance/security-rules.md).
 
+## Recuperar la contraseña (2026-11-16)
+
+Quien olvidó la contraseña la cambia sola desde "¿Olvidaste tu contraseña?" en Login
+([`recuperar-clave.md`](../01-architecture/screens/recuperar-clave.md)), en dos llamadas anónimas:
+
+1. [`POST /v1/auth/password/forgot`](./endpoints/auth-password-forgot.md) (E-23) envía un código de 6
+   números al correo. Responde **el mismo 202 exista o no la cuenta**, para que no sirva para averiguar
+   qué correos están registrados.
+2. [`POST /v1/auth/password/reset`](./endpoints/auth-password-reset.md) (E-24) recibe el correo, el
+   código y la contraseña nueva, y responde 204.
+
+| Regla | Cómo |
+|-------|------|
+| El código no se guarda | Solo su HMAC-SHA256 (tabla `password_reset`, migración `0003`), comparado en tiempo constante |
+| Vence | A los 15 minutos |
+| Se agota | A los 5 intentos errados deja de servir, aunque después llegue el correcto |
+| Sirve una vez | Al usarlo se marca; pedir uno nuevo anula los anteriores |
+| No llena el buzón | A lo sumo un correo por minuto por cuenta |
+| Un solo error | Correo sin cuenta, código errado, vencido, usado o agotado: el mismo 400 `INVALID_RESET_CODE` |
+| Cierra las sesiones | La cuenta guarda `password_changed_at` y el refresco rechaza (401) todo `refreshToken` emitido antes. El `accessToken` de otro dispositivo vive hasta 60 minutos más, como tras E-04 |
+| No abre sesión | La app vuelve a Login con el correo lleno; la persona entra con la contraseña nueva |
+
+El correo sale por SMTP (`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`).
+En local lo atrapa Mailpit (`http://localhost:8025`); sin `SMTP_HOST` el código se escribe en la
+consola de la API.
+
 ## Reglas
 
 - Nunca se registran tokens ni credenciales en los logs.

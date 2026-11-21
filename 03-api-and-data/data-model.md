@@ -64,6 +64,7 @@ recorrerlas.
 | `svc_` | `Service` |
 | `sch_` | `Schedule` |
 | `apt_` | `Appointment` |
+| `pwr_` | `PasswordReset` (2026-11-16) |
 | `slt_` | Cupo (no se guarda; ver §1) |
 
 ---
@@ -90,6 +91,7 @@ Lo que no está en este glosario no puede aparecer como nombre de tabla ni como 
 | **Agenda** | Las citas de un negocio en un día |
 | **Clave de solicitud** (`client_request_id`) | Un UUID que genera la app al agendar, para que un reintento no cree dos citas |
 | **Refresh token revocado** | El identificador (`jti`) de un token de refresco que ya no sirve, por rotación o por cierre de sesión |
+| **Código de recuperación** (`PasswordReset`) | Un código de 6 números que la API envía al correo de la cuenta para cambiar la contraseña olvidada. Vence a los 15 minutos, admite 5 intentos y sirve una sola vez. **Solo se guarda su HMAC**, nunca el código (2026-11-16) |
 
 ---
 
@@ -107,6 +109,7 @@ UserAccount ──1:0..1── Business ──1:N── Professional
 
 UserAccount (client) ──1:N── Appointment ──N:1── Service / Professional / Business
 UserAccount ──1:N── RevokedRefreshToken
+UserAccount ──1:N── PasswordReset   (desde el 2026-11-16, migración 0003)
 ```
 
 ### 2.1 `UserAccount` — raíz de agregado
@@ -123,9 +126,10 @@ Una persona registrada que puede iniciar sesión.
 | `name` no es vacío | **solo dominio** (el motor solo exige que no sea nulo) |
 | La contraseña tiene al menos 8 caracteres | **solo dominio** (el motor nunca la ve; ver §9) |
 | Una cuenta `business` tiene exactamente un negocio | **solo dominio**: el registro crea ambos en la misma transacción; el motor garantiza *a lo sumo uno* (`business_user_id_key`) |
+| Al cambiar la contraseña con un código (E-24), los `refreshToken` emitidos antes dejan de servir | **solo dominio** desde el 2026-11-16: E-24 pone `password_changed_at = now()` y E-03 rechaza con 401 todo token cuyo `iat` sea anterior. Columna de la migración `0003` |
 
 **Relaciones:** 1 : 0..1 con `Business`; 1 : N con `Appointment` (como clienta); 1 : N con
-`RevokedRefreshToken`.
+`RevokedRefreshToken`; 1 : N con `PasswordReset`.
 
 ### 2.2 `Business` — raíz de agregado
 
@@ -166,7 +170,7 @@ Lo que se publica en el catálogo, con su horario.
 | `name` tiene hasta 60 caracteres y no es vacío; `description` no es vacía | **solo dominio** |
 | La profesional pertenece **al mismo negocio** que el servicio | **motor** desde el 2026-11-12: foránea compuesta `fk_service_professional_same_business` hacia la única `(id, business_id)` de `professional` (migración `0002`). Cerrada D-03 |
 | Tiene al menos una franja de horario | **solo dominio** |
-| Sus franjas no se solapan con las de **otro** servicio de la misma profesional | **solo dominio**, y con carrera: dos altas simultáneas pueden solaparse. No se puede expresar con una restricción simple porque cruza dos tablas |
+| ~~Sus franjas no se solapan con las de **otro** servicio de la misma profesional~~ | **Retirada el 2026-11-16.** Bloqueaba un uso normal: una manicurista que ofrece manicure y semipermanente los lunes de 09:00 a 17:00 no podía guardar el segundo servicio. Ahora los servicios de una misma profesional **pueden compartir horario**; lo que no puede pasar es que dos **citas** suyas se crucen, y eso se cuida en `Appointment` (§2.6) |
 | Pausar no borra: `is_published = false` | **solo dominio**. El borrado físico (E-21) solo aplica a servicios sin citas; ver §5 y §6 |
 
 **Relaciones:** N : 1 con `Business` y `Professional`; 1 : N con `Schedule` y `Appointment`.
@@ -192,6 +196,7 @@ La reserva de una clienta sobre un cupo.
 |------------|-------|
 | `status` es uno de los seis valores | **motor** (`appointment_status_check`) |
 | **Una profesional no tiene dos citas activas (`pending` o `confirmed`) a la misma hora** | **motor** (`uq_appointment_professional_slot_active`, índice único parcial). Es la regla que evita el doble agendamiento; la API la traduce a `409 SlotTaken` |
+| **Una profesional no tiene dos citas activas cuyos intervalos `[starts_at, starts_at + duration_minutes)` se crucen**, aunque sean de servicios distintos y de duraciones distintas | **dominio con bloqueo** desde el 2026-11-16: al crear la cita (E-08), la API abre una transacción, toma `pg_advisory_xact_lock(hashtext(professional_id))`, busca citas activas que se crucen y responde `409 SLOT_TAKEN` si hay alguna. Dos clientas al mismo tiempo en horas que se cruzan de dos servicios: entra una. La disponibilidad (E-07) aplica el mismo cruce. El índice de arriba sigue como red del motor para la misma hora exacta |
 | La misma clienta con la misma `client_request_id` no crea dos citas | **motor** (`uq_appointment_client_request`) |
 | `starts_at` coincide con un cupo del horario del servicio y está en el futuro al crearla | **solo dominio** |
 | `client_id` es una cuenta con rol `client` | **solo dominio** |
@@ -212,6 +217,26 @@ Un token de refresco que ya no sirve.
 |------------|-------|
 | Un `jti` se revoca una sola vez | **motor** (`revoked_refresh_token_pkey`); la API usa `ON CONFLICT DO NOTHING` para distinguir "lo revoqué ahora" de "ya estaba revocado" |
 | Solo se guarda el `jti`, nunca el token | **solo dominio** |
+
+**Relaciones:** N : 1 con `UserAccount`.
+
+### 2.8 `PasswordReset` — raíz de agregado (técnica)
+
+> Agregada el 2026-11-16 con la migración `0003_password_reset.sql`, para recuperar la contraseña
+> ([E-23 y E-24](./api-contract.md#e-23--post-v1authpasswordforgot)).
+
+Un código pedido para cambiar la contraseña olvidada.
+
+| Invariante | Marca |
+|------------|-------|
+| Pertenece a una cuenta existente; se borra con ella | **motor** (`password_reset_user_id_fkey`, `ON DELETE CASCADE`) |
+| `attempts` no es negativo | **motor** (`password_reset_attempts_check`) |
+| Solo se guarda el HMAC-SHA256 del código (`code_hash`), nunca el código | **solo dominio** |
+| Vence a los 15 minutos (`expires_at`) | **solo dominio** (la API calcula `expires_at` al crearlo) |
+| Admite 5 intentos errados; al quinto ya no sirve aunque llegue el código correcto | **solo dominio** |
+| Sirve una sola vez: al usarlo se marca `used_at` | **solo dominio**, con `SELECT … FOR UPDATE` sobre la fila al cambiar la contraseña |
+| Pedir un código nuevo anula los anteriores sin usar de esa cuenta | **solo dominio** (misma transacción que el alta) |
+| A lo sumo un correo por minuto por cuenta | **solo dominio**: si hay un código sin usar de menos de 60 s, E-23 no crea otro ni envía correo |
 
 **Relaciones:** N : 1 con `UserAccount`.
 
@@ -255,6 +280,13 @@ instante.
 | `professional` | `name` | text | no | — | Nombre visible |
 | `professional` | `created_at` | timestamp with time zone | no | `now()` | Alta |
 | `professional` | `updated_at` | timestamp with time zone | no | `now()` | Último cambio (hoy no hay endpoint que lo cambie) |
+| `password_reset` | `id` | text | no | — | Identidad, `pwr_…` (migración `0003`, 2026-11-16) |
+| `password_reset` | `user_id` | text | no | — | La cuenta que pidió el código |
+| `password_reset` | `code_hash` | text | no | — | HMAC-SHA256 de `id:código`; nunca el código |
+| `password_reset` | `expires_at` | timestamp with time zone | no | — | Creación + 15 minutos |
+| `password_reset` | `attempts` | integer | no | `0` | Intentos errados con este código |
+| `password_reset` | `used_at` | timestamp with time zone | **sí** | — | Cuándo se usó o se anuló por uno nuevo. Nulo = sigue vigente si no ha vencido |
+| `password_reset` | `created_at` | timestamp with time zone | no | `now()` | Cuándo se pidió |
 | `revoked_refresh_token` | `jti` | text | no | — | Identificador del token revocado |
 | `revoked_refresh_token` | `user_id` | text | no | — | Dueño del token |
 | `revoked_refresh_token` | `expires_at` | timestamp with time zone | no | — | Cuándo vence el token; después la fila sobra |
@@ -285,7 +317,8 @@ instante.
 | `user_account` | `email` | text | no | — | Correo, en minúsculas |
 | `user_account` | `password_hash` | text | no | — | Resultado de bcrypt; nunca la contraseña |
 | `user_account` | `created_at` | timestamp with time zone | no | `now()` | Alta |
-| `user_account` | `updated_at` | timestamp with time zone | no | `now()` | Último cambio (hoy no hay endpoint que lo cambie) |
+| `user_account` | `updated_at` | timestamp with time zone | no | `now()` | Último cambio. Desde el 2026-11-16 lo cambia E-24 al poner la contraseña nueva |
+| `user_account` | `password_changed_at` | timestamp with time zone | **sí** | — | Cuándo se cambió la contraseña con un código (E-24). Los `refreshToken` emitidos antes ya no sirven. Nulo = nunca se cambió (migración `0003`) |
 
 ---
 
@@ -324,6 +357,9 @@ de §2 sostienen.
 | `uq_appointment_client_request` | `appointment` | índice único | Idempotencia de la creación |
 | `revoked_refresh_token_pkey` | `revoked_refresh_token` | primaria | Un `jti` se revoca una vez |
 | `revoked_refresh_token_user_id_fkey` | `revoked_refresh_token` | foránea | El dueño existe |
+| `password_reset_pkey` | `password_reset` | primaria | Identidad (migración `0003`) |
+| `password_reset_user_id_fkey` | `password_reset` | foránea | La cuenta existe; se borra con ella |
+| `password_reset_attempts_check` | `password_reset` | comprobación | `attempts >= 0` |
 | `schema_migration_pkey` | `schema_migration` | primaria | Una migración se registra una vez |
 
 > Los dos `uq_…` son **índices únicos**, no restricciones: por eso aparecen en §11.3 y no en
@@ -349,6 +385,7 @@ El motor reporta `NO ACTION` en todas salvo una (salida en §11.4). `NO ACTION` 
 | `appointment.professional_id → professional` | Restringir | Ídem |
 | `appointment.business_id → business` | Restringir | Ídem |
 | `revoked_refresh_token.user_id → user_account` | Restringir | Mientras exista la fila, el token sigue revocado |
+| `password_reset.user_id → user_account` | **Cascada** (migración `0003`) | Un código no tiene sentido sin su cuenta ni valor histórico |
 
 **¿Este dato se borra de verdad?** Hasta el 2026-10-28 **ninguna fila se borraba desde la API**, salvo
 las de `schedule` al editar un servicio. Con el c3-project se agregaron dos borrados físicos
@@ -393,7 +430,7 @@ incremental (usa caché con vencimiento; ver [`offline-sync.md`](./offline-sync.
 | Q1 | Catálogo: servicios publicados, opcionalmente por `type`, ordenados por `created_at DESC, id DESC` | Alta — pantalla de inicio | `idx_service_type` solo con filtro; sin filtro, ninguno (ver 7.3) |
 | Q2 | Servicio por `id` (detalle, disponibilidad, crear cita, editar, pausar) | Alta | `service_pkey` |
 | Q3 | Franjas de un servicio en un día de la semana | Alta — disponibilidad | `idx_schedule_service` |
-| Q4 | Citas activas de una profesional en un rango de un día | Alta — disponibilidad | `uq_appointment_professional_slot_active` (sus columnas son justo `professional_id, starts_at` y su condición es justo "activas") |
+| Q4 | Citas activas de una profesional que se cruzan con un día (disponibilidad) o con el intervalo de la cita nueva (crear cita, desde el 2026-11-16), de cualquiera de sus servicios | Alta — disponibilidad y cada agendamiento | `uq_appointment_professional_slot_active` (sus columnas son justo `professional_id, starts_at` y su condición es justo "activas") |
 | Q5 | Cita por `client_id` + `client_request_id` (idempotencia) | Alta — cada agendamiento | `uq_appointment_client_request` |
 | Q6 | Mis citas: por `client_id`, ordenadas por `starts_at DESC, id DESC` | Media | `idx_appointment_client` (filtra; el orden se resuelve aparte) |
 | Q7 | Agenda: por `business_id` en un rango de `starts_at` | Media | `idx_appointment_business` (filtra; el rango se resuelve aparte) |
@@ -401,8 +438,9 @@ incremental (usa caché con vencimiento; ver [`offline-sync.md`](./offline-sync.
 | Q9 | Negocio por `user_id` | **Alta — en cada petición del lado del negocio** | `business_user_id_key` |
 | Q10 | Profesionales de un negocio, por `name, id` | Baja | `idx_professional_business` |
 | Q11 | Servicios de un negocio (lista propia) | Media | `idx_service_business` |
-| Q12 | Franjas de los otros servicios de una profesional (chequeo de solape) | Baja — al crear o editar | `idx_service_professional` + `idx_schedule_service` |
+| ~~Q12~~ | ~~Franjas de los otros servicios de una profesional (chequeo de solape)~~ | Ya no se hace desde el 2026-11-16: los servicios pueden compartir horario (§2.4) | — |
 | Q13 | Revocar un `jti` | Media — cada refresco y logout | `revoked_refresh_token_pkey` |
+| Q14 | Último código vigente de una cuenta, por `email` (E-23 y E-24) | Baja — solo al recuperar la contraseña | `idx_password_reset_user_active` (`user_id, created_at DESC` solo de los no usados) |
 
 ### 7.2 Índices que existen
 
@@ -411,6 +449,9 @@ Los 21 de §11.3: una primaria por tabla (7 + `schema_migration`), `user_account
 `idx_professional_business`, `idx_service_business`, `idx_service_professional`, `idx_service_type`,
 `idx_schedule_service`, `idx_appointment_client`, `idx_appointment_business`,
 `idx_appointment_starts_at` e `idx_appointment_status`.
+
+La migración `0003` (2026-11-16) suma `password_reset_pkey` e `idx_password_reset_user_active`, parcial
+sobre `password_reset (user_id, created_at DESC) WHERE used_at IS NULL`.
 
 ### 7.3 Índices que faltan — pendiente
 
@@ -440,11 +481,12 @@ migración nueva (D-07). Cada índice se paga en cada escritura de cita.
 
 | Tabla | `created_at` | `updated_at` |
 |-------|--------------|--------------|
-| `user_account`, `business`, `professional` | Sí | Sí, pero hoy nada las modifica |
+| `user_account`, `business`, `professional` | Sí | Sí. En `user_account` la cambia E-24 al poner la contraseña nueva (2026-11-16); en `professional`, E-19 |
 | `service` | Sí | Sí: editar y pausar/publicar |
 | `appointment` | Sí | Sí: confirmar, rechazar, cancelar |
 | `schedule` | No | No: sus filas no se actualizan, se reemplazan al editar el servicio |
 | `revoked_refresh_token` | `revoked_at` | No: una fila no cambia nunca |
+| `password_reset` | Sí | No: cambian `attempts` y `used_at`, que ya dicen lo que pasó |
 | `schema_migration` | `applied_at` | No |
 
 - **Quién las escribe:** al insertar, el **motor** (`DEFAULT now()`). Al actualizar, **solo
@@ -471,11 +513,14 @@ migración nueva (D-07). Cada índice se paga en cada escritura de cita.
 | `business.name`, `professional.name` | Se muestran en el catálogo | Mientras existan | **pendiente** (D-09) |
 | `appointment` (clienta + servicio + hora) | La agenda del negocio y Mis citas. Revela hábitos de la persona | Indefinido: es historia de dinero y de agenda | **pendiente**: decidir si se anonimiza la clienta y se conserva la cita (D-09) |
 | `revoked_refresh_token.user_id` | Mantener revocado el token | Hasta `expires_at`; hoy nadie borra las filas vencidas | Se puede borrar sin consecuencia pasado `expires_at` (D-10) |
+| `password_reset` (cuenta + hash del código + fechas) | Cambiar la contraseña olvidada | 15 minutos de vigencia; hoy nadie borra las filas vencidas o usadas | Se borra en cascada con la cuenta; pasado `expires_at` se puede borrar sin consecuencia (D-11) |
 
 Reglas que se revisan:
 
 - **Las contraseñas no se guardan.** Se guarda el resultado de **bcrypt** (función de derivación
-  con sal incluida, costo 10). No es cifrado: no hay forma de recuperar la contraseña.
+  con sal incluida, costo 10). No es cifrado: no hay forma de recuperar la contraseña. Por eso
+  "¿Olvidaste tu contraseña?" (2026-11-16) no la devuelve: envía un código al correo para poner una
+  nueva, y de ese código también se guarda solo un HMAC.
 - **No se recogen** ubicación, identificador del dispositivo, token de notificaciones, foto ni
   documento de identidad. Si alguna feature los necesita, se declaran aquí antes de guardarlos.
 - La agenda del negocio (nombre y celular de clientas) **no se guarda en el dispositivo**; ver
@@ -505,6 +550,12 @@ Consultas ejecutadas el **2026-09-27** contra la base de `beauty-salon-infra`, c
 ```
 docker compose exec -T db psql -U manicita -d manicita
 ```
+
+> **Migración `0003` (2026-11-16):** las salidas de abajo son de la `0001`. La `0003_password_reset.sql`
+> suma la tabla `password_reset` (7 columnas) y `user_account.password_changed_at`: 8 filas más en
+> 11.1, 3 en 11.2 (`password_reset_pkey`, `password_reset_user_id_fkey`, `password_reset_attempts_check`),
+> 2 en 11.3 (`password_reset_pkey`, `idx_password_reset_user_active`) y 2 en 11.4 (la foránea con
+> `confdeltype = c` y la comprobación). Hay que volver a correr las consultas y pegar la salida nueva.
 
 ### 11.1 Columnas — debe devolver 57 filas
 
@@ -727,3 +778,4 @@ declara en §13.
 | D-08 | `updated_at` siempre cierto | Solo el código lo actualiza | _por asignar_ | Migración: disparador `BEFORE UPDATE` |
 | D-09 | Qué pasa si una persona pide borrar sus datos | No hay proceso ni endpoint | _por asignar_ | Decidir la política (borrar o anonimizar) y el endpoint |
 | D-10 | Filas de `revoked_refresh_token` vencidas se descartan | Se acumulan | _por asignar_ | Limpieza periódica (`DELETE … WHERE expires_at < now()`) |
+| D-11 | Filas de `password_reset` vencidas o usadas se descartan (2026-11-16) | Se acumulan | _por asignar_ | La misma limpieza periódica de D-10 |

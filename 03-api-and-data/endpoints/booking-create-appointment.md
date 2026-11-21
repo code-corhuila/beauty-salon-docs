@@ -60,12 +60,21 @@ Es el endpoint donde el MVP se cumple o no se cumple.
 
 | Código | Significado | Qué hace la app |
 |--------|-------------|-----------------|
-| **409** | **El cupo ya fue tomado** | `SlotTaken`: la pantalla pasa al estado del mismo nombre, avisa que alguien acaba de tomar esa hora y **recarga la disponibilidad automáticamente** |
+| **409** | **El cupo ya fue tomado**, o la profesional ya tiene una cita activa que se cruza con esa hora, de este u otro de sus servicios (2026-11-16) | `SlotTaken`: la pantalla pasa al estado del mismo nombre, avisa que alguien acaba de tomar esa hora y **recarga la disponibilidad automáticamente** |
 | 401 | Sesión expirada | El interceptor refresca y reintenta una vez; si falla, cierra sesión |
 | 403 | Sesión de negocio intentando agendar | `Unauthorized`; la guarda no debería haber dejado llegar hasta aquí |
 | 410 | El servicio fue pausado mientras se agendaba | Mensaje y vuelta al catálogo |
 | 422 | Cupo inexistente o vencido | Se recarga la disponibilidad |
 | 5xx o timeout | Transitorio | **Sin reintento automático.** Error con botón de reintentar, que reenvía el mismo `clientRequestId` |
+
+**Citas que se cruzan entre servicios (2026-11-16).** Desde que dos servicios de la misma profesional
+pueden compartir horario, no basta con que no haya otra cita a la misma hora exacta: la API revisa
+que el intervalo `[inicio, inicio + duración)` de la cita nueva no se cruce con ninguna cita
+`pending` o `confirmed` de esa profesional. Lo hace dentro de una transacción que primero toma
+`pg_advisory_xact_lock(hashtext(professional_id))`, así que si dos clientas agendan al mismo tiempo
+horas que se cruzan de dos servicios distintos, entra una y la otra recibe 409 `SLOT_TAKEN`. El índice
+único parcial `uq_appointment_professional_slot_active` sigue debajo como red. Para la app no cambia
+nada: es el mismo 409 de siempre.
 
 ---
 

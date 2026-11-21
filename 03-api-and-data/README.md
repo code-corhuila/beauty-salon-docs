@@ -23,7 +23,7 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 
 | Archivo | Para qué sirve |
 |---------|----------------|
-| [api-contract.md](./api-contract.md) | **Contrato de API:** convenciones, forma única del error (`problem+json`), códigos de estado, las 21 fichas E-01..E-21 (E-19..E-21 diseñadas el 2026-10-28 e implementadas el 2026-11-06), idempotencia, concurrencia, versionado, sondas y huecos. Manda sobre la API y sobre el cliente HTTP de la app |
+| [api-contract.md](./api-contract.md) | **Contrato de API:** convenciones, forma única del error (`problem+json`), códigos de estado, las 24 fichas E-01..E-24 (E-19..E-21 diseñadas el 2026-10-28 e implementadas el 2026-11-06; E-22 a E-24 del 2026-11-16), idempotencia, concurrencia, versionado, sondas y huecos. Manda sobre la API y sobre el cliente HTTP de la app |
 | [data-model.md](./data-model.md) | Modelo de datos del servidor: entidades, invariantes con su marca (motor / solo dominio / pendiente), tablas, restricciones, índices y deuda. Verificado contra la base |
 | [api-networking.md](./api-networking.md) | Cliente HTTP, timeouts, reintentos, mapeo de errores |
 | [authentication.md](./authentication.md) | Tokens, refresco, roles, cierre de sesión |
@@ -44,6 +44,8 @@ se deciden una vez aquí y se aplican en la capa de datos de todas las features.
 | `POST /v1/auth/register` | [auth-register.md](./endpoints/auth-register.md) | auth | No |
 | `POST /v1/auth/refresh` | [auth-refresh.md](./endpoints/auth-refresh.md) | auth | No (requiere `refreshToken`) |
 | `POST /v1/auth/logout` | [auth-logout.md](./endpoints/auth-logout.md) | auth | No (requiere `refreshToken`) |
+| `POST /v1/auth/password/forgot` *(2026-11-16)* | [auth-password-forgot.md](./endpoints/auth-password-forgot.md) | auth | No |
+| `POST /v1/auth/password/reset` *(2026-11-16)* | [auth-password-reset.md](./endpoints/auth-password-reset.md) | auth | No (requiere el código del correo) |
 | `GET /v1/services` | [catalog-list-services.md](./endpoints/catalog-list-services.md) | catalog | No |
 | `GET /v1/services/{id}` | [catalog-service-detail.md](./endpoints/catalog-service-detail.md) | catalog | No |
 | `GET /v1/services/{id}/availability` | [booking-availability.md](./endpoints/booking-availability.md) | booking | No |

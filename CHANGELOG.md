@@ -2,6 +2,44 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [SemVer](https://semver.org/)
 ## [Unreleased]
 ### Added
+- **Recuperar la contraseña (2026-11-16, rama `fix/servicios-y-clave` en app, API e infra):** E-23
+  `POST /v1/auth/password/forgot` y E-24 `POST /v1/auth/password/reset` con un código de 6 números al
+  correo (15 minutos, 5 intentos, un solo uso, guardado como HMAC, siempre 202 para no delatar
+  cuentas) y cierre de las sesiones abiertas; error nuevo `INVALID_RESET_CODE` (400); migración
+  `0003` con `password_reset` y `user_account.password_changed_at`; Mailpit en `beauty-salon-infra`
+  (`http://localhost:8025`). En la app, enlace "¿Olvidaste tu contraseña?" en Login y pantalla nueva
+  `/forgot-password`. Docs: `api-contract.md` (24 endpoints y corrida de sondas), fichas
+  `auth-password-forgot.md` y `auth-password-reset.md`, `data-model.md` §2.8, `authentication.md`,
+  pantalla `recuperar-clave.md`, `login.md`, `navigation.md`, `features/auth.md`, `security-rules.md`,
+  `mobile-security.md` y el caso TC-011. Pruebas: 353 en Vitest (52 archivos), 84 de `node:test` y 74
+  sondas del smoke test
+
+### Changed
+- **Inicio y estilo (2026-11-16, app rama `feat/inicio-y-diseno`):** Inicio reemplaza las pestañas
+  Inicio y Servicios (saludo, categorías, lo más pedido, todos los servicios y, sin sesión, la
+  invitación para salones); la bienvenida queda solo para la primera vez, sin barra, con flecha para
+  volver desde el Inicio. Tema claro único en nude y rosa empolvado (se quita el modo oscuro de
+  Ionic), tarjetas con sombra suave y barra inferior con la pestaña actual marcada. Fotos reales de
+  Unsplash por tipo de servicio, en la cabecera del Inicio y en la bienvenida (`public/img`, 636 KB,
+  ver `CREDITOS.md`), usadas mientras el servicio no tenga foto propia (H-05). Registrarse desde
+  "Quiero ofrecer mis servicios" muestra solo el registro del salón. Actualiza `navigation.md`,
+  `bienvenida.md`, `catalogo.md` y `barra-inferior.md`
+- **Servicios con el mismo horario (2026-11-16):** dos servicios de la misma profesional ya pueden
+  compartir horario; se retira el 409 `SCHEDULE_OVERLAP` de E-14 y E-15. Lo que no se cruza son las
+  citas: la disponibilidad marca ocupado todo cupo que se cruce con una cita activa de la profesional
+  (de cualquier servicio y duración) y crear cita revisa los intervalos bajo un bloqueo por
+  profesional (409 `SLOT_TAKEN`). TC-004 reescrito ("Una profesional no tiene dos citas que se
+  crucen") y `ejecutar-pasos-api.ps1` actualizado
+
+### Fixed
+- **Mis servicios (2026-11-16):** la lista no se refrescaba al volver del formulario porque Ionic deja
+  montadas las páginas visitadas; ahora se recarga al guardar, eliminar o pausar un servicio y al
+  cambiar una profesional (`cambiosDeDatos.ts`). En el formulario, las horas son listas en formato de
+  24 horas (05:00 a 23:00 de 15 en 15) en vez del selector nativo que mostraba "05:00" sin a. m. ni
+  p. m., y un error al guardar sube la pantalla hasta el banner. Actualiza `negocio-servicio-form.md`
+  y `negocio-servicios.md`
+
+### Added
 - **Identidad visual (2026-11-09, app PR #37):** logo de ManiCita, ícono adaptativo de Android y
   pantalla de inicio clara y oscura; tipografía Poppins empaquetada; íconos de Ionicons en vez de
   emojis en los estados vacíos; teléfono de la agenda en color de marca. Actualiza
